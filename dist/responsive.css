@@ -31,6 +31,17 @@
   font-size: 12px;
   font-weight: 700;
 }
+.child-policy {
+  display: grid;
+  gap: 4px;
+  margin: 0 0 18px;
+  padding: 13px 15px;
+  border: 1px solid #b9e4da;
+  border-radius: 12px;
+  background: #edfaf6;
+}
+.child-policy b { color: #087c6c; font-size: 13px; }
+.child-policy span { color: #557177; font-size: 12px; line-height: 1.45; }
 
 @media (max-width: 1050px) {
   .included-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
