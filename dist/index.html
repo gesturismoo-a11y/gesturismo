@@ -8,7 +8,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css">
-  <link rel="stylesheet" href="responsive.css?v=gess-4">
+  <link rel="stylesheet" href="responsive.css?v=gess-5">
 </head>
 <body>
   <header class="site-header">
@@ -77,10 +77,11 @@
       <div class="included-intro"><p class="eyebrow">Tudo do roteiro incluído</p><h2>Você escolhe o destino. A gente acompanha o caminho.</h2><p>Uma experiência organizada para aproveitar o dia e ter liberdade à noite.</p></div>
       <div class="included-grid">
         <article><span>01</span><h3>Passagens aéreas</h3><p>Ida e volta em classe econômica, com saída disponível a partir de todo o Brasil e aeroporto confirmado no orçamento.</p></article>
-        <article><span>02</span><h3>Hotel + café</h3><p>Hospedagem em hotel parceiro desde a chegada no sábado ou domingo até o encerramento do roteiro, com café da manhã incluído. Nome, categoria e endereço são confirmados no orçamento.</p></article>
+        <article><span>02</span><h3>Hotel parceiro</h3><p>Hospedagem desde a chegada no sábado ou domingo até o encerramento do roteiro. Nome, categoria e endereço são confirmados no orçamento.</p></article>
         <article><span>03</span><h3>Van no roteiro</h3><p>Transporte local para os pontos programados, com encontro às 8h e retorno previsto às 18h.</p></article>
         <article><span>04</span><h3>Guia acompanhante</h3><p>Uma pessoa da nossa equipe acompanha o grupo durante as atividades e deslocamentos do dia.</p></article>
         <article><span>05</span><h3>Experiências incluídas</h3><p>Passeios de barco, piscinas naturais e mergulho já estão incluídos quando aparecem no roteiro do destino, respeitando clima, maré e segurança.</p></article>
+        <article><span>06</span><h3>Café da manhã</h3><p>O café da manhã no hotel está incluído todos os dias. Almoço, jantar, bebidas e lanches ficam por conta de cada viajante.</p></article>
       </div>
       <div class="not-included"><b>O que você paga à parte:</b> almoço, jantar, bebidas, compras, despesas pessoais e deslocamentos particulares fora do roteiro. Café da manhã, passagens aéreas, hospedagem, traslado programado, van, acompanhante e todas as atividades anunciadas no roteiro estão incluídos.</div>
       <p class="price-source">*Oferta de lote promocional: de R$ 2.799,00 por R$ 1.599,90 por pessoa. Valores e disponibilidade são confirmados no orçamento antes de qualquer pagamento.</p>
@@ -96,7 +97,7 @@
         <p class="date-help">Escolha abaixo o mês e o dia em que deseja iniciar sua viagem de 5 dias.</p>
         <div class="form-row"><label>Mês do embarque<select id="monthSelect"></select></label><label>Dia do embarque <small>sábado ou domingo</small><select id="daySelect"></select></label></div>
         <div class="form-row"><label>Adultos<select id="adultSelect"><option value="1">1 adulto</option><option value="2">2 adultos</option><option value="3">3 adultos</option><option value="4">4 adultos</option><option value="5">5 adultos</option><option value="6">6 adultos</option></select></label><label>Vai criança? <small>máximo total de 6 viajantes</small><select id="childSelect"><option value="0">Não</option><option value="1">Sim • 1 criança</option><option value="2">Sim • 2 crianças</option><option value="3">Sim • 3 crianças</option><option value="4">Sim • 4 crianças</option><option value="5">Sim • 5 crianças</option></select></label></div>
-        <div class="child-policy"><b>Criança por R$ 799,95</b><span>Na simulação, cada criança paga 50% do valor adulto. A condição depende da disponibilidade da tarifa aérea no momento da confirmação.</span></div>
+        <div class="child-policy" id="childPolicy" hidden><b>Criança por R$ 599,90</b><span>Valor promocional por criança selecionada, sujeito à disponibilidade da tarifa aérea no momento da confirmação.</span></div>
         <div class="booking-summary"><span id="summaryLabel">Total estimado • pacote de 5 dias</span><strong id="totalPrice">R$ 1.599,90</strong><small id="installmentPrice">ou até 10 parcelas mensais de R$ 159,99 sem juros</small><em id="childPriceNotice" hidden>O valor infantil será acrescentado após a confirmação da tarifa.</em></div>
         <button class="button button-whatsapp" id="whatsappButton" type="button">Pedir orçamento no WhatsApp</button>
         <small class="form-note">Não pedimos CPF ou documentos nesta etapa. O envio não cria cobrança nem reserva automática.</small>
@@ -110,7 +111,7 @@
         <details><summary>Posso trocar o passeio de um dia?</summary><p>Não. O roteiro é fixo e compartilhado com outros viajantes. Cada local está programado para um dia específico, de segunda a sexta, e todos seguem juntos com a van e o acompanhante.</p></details>
         <details><summary>O pacote pode ter mais de cinco dias?</summary><p>Esta oferta promocional tem 5 dias de roteiro, de segunda a sexta. A hospedagem necessária desde a chegada no fim de semana até o encerramento da programação já faz parte do pacote.</p></details>
         <details><summary>A passagem aérea está incluída?</summary><p>Sim. Trabalhamos com saídas de todo o Brasil. O aeroporto, horários, eventuais conexões e o traslado final são confirmados no orçamento conforme a cidade de origem.</p></details>
-        <details><summary>Quanto uma criança paga?</summary><p>A simulação calcula R$ 799,95 por criança, equivalente a 50% do valor adulto. A condição depende da disponibilidade da tarifa aérea na confirmação. Adultos e crianças juntos respeitam o limite de seis viajantes.</p></details>
+        <details><summary>Quanto uma criança paga?</summary><p>O valor promocional é de R$ 599,90 por criança. Esse valor aparece na simulação somente quando uma criança é selecionada e depende da disponibilidade da tarifa aérea na confirmação. Adultos e crianças juntos respeitam o limite de seis viajantes.</p></details>
         <details><summary>Cheguei antes da segunda-feira. O hotel está incluído?</summary><p>Sim. Quando o voo chega no sábado ou domingo, as noites necessárias no hotel parceiro antes do início do roteiro de segunda-feira já estão incluídas no pacote.</p></details>
         <details><summary>O passeio de barco está incluído?</summary><p>Sim, nos destinos em que aparece no roteiro. Em Arraial do Cabo, por exemplo, o roteiro náutico inclui pontos como Praia do Farol e Gruta Azul. Em Maragogi, a visita às piscinas naturais depende da maré.</p></details>
         <details><summary>O mergulho está incluído?</summary><p>Sim, quando o mergulho aparece no roteiro do destino, a atividade faz parte do pacote. Sua realização depende das condições locais, orientações de segurança e operação do dia.</p></details>
@@ -131,7 +132,7 @@
       <section><b>Voo e hospedagem</b><p>Inclui passagem aérea de ida e volta, traslados programados e hotel parceiro desde a chegada no sábado ou domingo até o encerramento do roteiro. Aeroporto, companhia e horários dependem da disponibilidade.</p></section>
       <section><b>O que está incluído</b><p>Hospedagem com café da manhã, van, acompanhante e todas as atividades anunciadas para o destino, inclusive barco, piscinas naturais ou mergulho quando constarem no roteiro.</p></section>
       <section><b>O que não está incluído</b><p>Almoço, jantar, bebidas, compras, despesas pessoais e deslocamentos particulares realizados fora da programação.</p></section>
-      <section><b>Valores e crianças</b><p>O lote promocional custa R$ 1.599,90 por adulto. A simulação calcula R$ 799,95 por criança, condição sujeita à disponibilidade da tarifa aérea. O limite é de 6 viajantes no total.</p></section>
+      <section><b>Valores e crianças</b><p>O lote promocional custa R$ 1.599,90 por adulto e R$ 599,90 por criança selecionada, condição sujeita à disponibilidade da tarifa aérea. O limite é de 6 viajantes no total.</p></section>
       <section><b>Reserva e pagamento</b><p>A vaga é confirmada após atendimento, conferência da disponibilidade e pagamento do sinal. O restante pode ser parcelado e deve estar quitado até 10 dias antes da viagem.</p></section>
       <section><b>Alterações e segurança</b><p>Clima, maré, segurança ou operação local podem exigir mudanças feitas pela equipe. Regras de cancelamento e remarcação serão apresentadas no contrato antes de qualquer pagamento.</p></section>
     </div>
@@ -151,6 +152,6 @@
       <br>Natal: <a href="https://commons.wikimedia.org/wiki/File:Morro_do_Careca_Natal_Brasil.jpg">Ponta Negra e Morro do Careca</a>, <a href="https://commons.wikimedia.org/wiki/File:Ponta_Negra,_Natal_(20150814-DSC05626).jpg">Matti Blume</a>, <a href="https://commons.wikimedia.org/wiki/File:Genipabu.jpg">Genipabu</a> e <a href="https://commons.wikimedia.org/wiki/File:PipaBeachView.JPG">Praia da Pipa</a>.
     </p></details>
   </footer>
-  <script src="script.js?v=gess-4"></script>
+  <script src="script.js?v=gess-5"></script>
 </body>
 </html>

@@ -1,5 +1,6 @@
 const WHATSAPP_NUMBER = "5521989833495";
 const PRICE_PER_PERSON = 1599.90;
+const CHILD_PRICE = 599.90;
 const routes = {
   rio: {
     title:"Rio de Janeiro", location:"Rio de Janeiro • RJ", select:"Rio de Janeiro",
@@ -97,19 +98,22 @@ function updateQuote(){
   const adults=Number(adultSelect.value),maxChildren=6-adults;
   Array.from(childSelect.options).forEach(option=>{option.disabled=Number(option.value)>maxChildren});
   if(Number(childSelect.value)>maxChildren)childSelect.value=String(maxChildren);
-  const children=Number(childSelect.value),adultTotal=adults*PRICE_PER_PERSON,childTotal=children*(PRICE_PER_PERSON/2),total=adultTotal+childTotal;
+  const children=Number(childSelect.value),adultTotal=adults*PRICE_PER_PERSON,childTotal=children*CHILD_PRICE,total=adultTotal+childTotal;
   q("#totalPrice").textContent=money(total);
   q("#installmentPrice").textContent=`ou até 10 parcelas mensais de ${money(total/10)} sem juros`;
   q("#summaryLabel").textContent=children>0?"Total estimado • adultos + crianças":"Total estimado • pacote de 5 dias";
-  q("#childPriceNotice").textContent=children>0?`${children} ${children===1?"criança":"crianças"} a ${money(PRICE_PER_PERSON/2)} cada`:"";
+  q("#childPriceNotice").textContent=children>0?`${children} ${children===1?"criança":"crianças"} a ${money(CHILD_PRICE)} cada`:"";
   q("#childPriceNotice").hidden=children===0;
+  q("#childPolicy").hidden=children===0;
 }
 function buildMessage(){
-  const name=q("#customerName").value.trim(),origin=q("#originCity").value.trim(),adults=Number(adultSelect.value),children=Number(childSelect.value),month=months.find(item=>item.value===monthSelect.value),adultTotal=adults*PRICE_PER_PERSON,childTotal=children*(PRICE_PER_PERSON/2),total=adultTotal+childTotal;
-  return ["Olá, tudo bem? Tenho interesse em um pacote da Gess Turismo.",`Meu nome: ${name}`,`Cidade de saída: ${origin}`,`Destino: ${destinationSelect.value}`,`Embarque desejado: dia ${daySelect.value} de ${month.label} (sábado ou domingo)`,"Pacote: 5 dias de roteiro fixo, de segunda a sexta","Hospedagem: hotel parceiro desde a chegada no fim de semana até o encerramento do roteiro","Incluso: voo, hotel com café da manhã, traslados programados e atividades anunciadas",`Adultos: ${adults} × ${money(PRICE_PER_PERSON)}`,`Crianças: ${children} × ${money(PRICE_PER_PERSON/2)}`,`Total estimado: ${money(total)}`,"Estou ciente de que a condição infantil depende da disponibilidade da tarifa aérea.","Li e aceitei o resumo das condições apresentado no site.","Tenho interesse em pagar o sinal de reserva e quitar o restante até 10 dias antes da viagem.","Quero confirmar voo, aeroporto, horários, traslado, hotel e disponibilidade. Pode me ajudar?"].join("\n");
+  const name=q("#customerName").value.trim(),origin=q("#originCity").value.trim(),adults=Number(adultSelect.value),children=Number(childSelect.value),month=months.find(item=>item.value===monthSelect.value),adultTotal=adults*PRICE_PER_PERSON,childTotal=children*CHILD_PRICE,total=adultTotal+childTotal;
+  const travelers=[`Adultos: ${adults} × ${money(PRICE_PER_PERSON)}`];
+  if(children>0)travelers.push(`Crianças: ${children} × ${money(CHILD_PRICE)}`);
+  return ["Olá, tudo bem? Tenho interesse em um pacote da Gess Turismo.",`Meu nome: ${name}`,`Cidade de saída: ${origin}`,`Destino: ${destinationSelect.value}`,`Embarque desejado: dia ${daySelect.value} de ${month.label} (sábado ou domingo)`,"Pacote: 5 dias de roteiro fixo, de segunda a sexta","Hospedagem: hotel parceiro desde a chegada no fim de semana até o encerramento do roteiro","Incluso: voo, hotel com café da manhã, traslados programados e atividades anunciadas",...travelers,`Total estimado: ${money(total)}`,"Estou ciente de que a condição infantil depende da disponibilidade da tarifa aérea.","Li e aceitei o resumo das condições apresentado no site.","Tenho interesse em pagar o sinal de reserva e quitar o restante até 10 dias antes da viagem.","Quero confirmar voo, aeroporto, horários, traslado, hotel e disponibilidade. Pode me ajudar?"].join("\n");
 }
 function renderTermsSelection(){
-  const adults=Number(adultSelect.value),children=Number(childSelect.value),total=adults*PRICE_PER_PERSON+children*(PRICE_PER_PERSON/2),month=months.find(item=>item.value===monthSelect.value);
+  const adults=Number(adultSelect.value),children=Number(childSelect.value),total=adults*PRICE_PER_PERSON+children*CHILD_PRICE,month=months.find(item=>item.value===monthSelect.value);
   q("#termsSelection").innerHTML=`<span>Seu pedido</span><b>${destinationSelect.value}</b><small>Embarque dia ${daySelect.value} de ${month.label} • ${adults} ${adults===1?"adulto":"adultos"} • ${children} ${children===1?"criança":"crianças"} • Total estimado ${money(total)}</small>`;
 }
 function openTerms(){
