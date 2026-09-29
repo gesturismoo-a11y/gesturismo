@@ -1,0 +1,19 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="robots" content="noindex,nofollow">
+  <title>Painel de reservas — Gess Turismo</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="admin.css?v=1">
+</head>
+<body>
+  <aside><img src="assets/gess-turismo-logo.png" alt="Gess Turismo"><nav><a class="active" href="#reservas">Reservas</a><a href="#pagamentos">Pagamentos</a><a href="#viajantes">Viajantes</a></nav><a class="back" href="index.html">Voltar ao site</a></aside>
+  <main>
+    <header><div><p>Painel administrativo</p><h1>Reservas e pagamentos</h1></div><span class="connection">Conexão Mercado Pago necessária</span></header>
+    <section class="metrics" aria-label="Resumo"><article><span>Pagamentos confirmados</span><strong>0</strong></article><article><span>Sinais recebidos</span><strong>R$ 0,00</strong></article><article><span>Saldo a receber</span><strong>R$ 0,00</strong></article><article><span>Viajantes confirmados</span><strong>0</strong></article></section>
+    <section class="panel" id="reservas"><div class="panel-heading"><div><span>Acompanhamento</span><h2>Reservas recentes</h2></div><button type="button" disabled>Exportar lista</button></div><div class="table-wrap"><table><thead><tr><th>Cliente</th><th>Destino</th><th>Viagem</th><th>Viajantes</th><th>Pagamento</th><th>Valor</th><th>Status</th></tr></thead><tbody><tr class="empty"><td colspan="7"><b>Nenhum pagamento sincronizado</b><span>Após a integração, os pagamentos aprovados chegarão automaticamente pelos Webhooks do Mercado Pago.</span></td></tr></tbody></table></div></section>
+    <section class="privacy"><b>Dados protegidos</b><p>O painel armazenará apenas informações da reserva e o status do pagamento. Número do cartão, validade e código de segurança continuarão sob responsabilidade do Mercado Pago.</p></section>
+  </main>
+</body>
+</html>

@@ -1,0 +1,24 @@
+.method-logo {
+  width: 28px;
+  height: 28px;
+}
+.pix-logo { fill: #32bcad; }
+.card-logo {
+  fill: none;
+  stroke: #073a70;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.method-panel-icon .method-logo {
+  width: 34px;
+  height: 34px;
+}
+body, input, select, button { font-family: "Inter", sans-serif; }
+.payment-intro h1,
+.checkout-heading h2,
+.payment-summary .total dd,
+.refund-card b { font-family: "Montserrat", sans-serif; }
+.signal-options > div { display: none; }
+.pay-button:disabled{cursor:not-allowed;background:#a8b4be;color:#f4f6f7;box-shadow:none;opacity:.82}.pay-button:disabled:hover{background:#a8b4be}.signal-options input[aria-invalid="true"]{border-color:#c9362b;box-shadow:0 0 0 3px rgba(201,54,43,.12)}.payment-feedback.is-error{color:#b72d24}
+.signal-followup{margin:12px 0 0;padding:12px 13px;border-left:3px solid var(--orange);border-radius:8px;background:#fff;color:var(--muted);font-size:12px;line-height:1.5}.signal-followup b{color:var(--navy)}
