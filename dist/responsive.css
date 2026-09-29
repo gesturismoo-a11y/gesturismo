@@ -42,6 +42,21 @@
 }
 .child-policy b { color: #087c6c; font-size: 13px; }
 .child-policy span { color: #557177; font-size: 12px; line-height: 1.45; }
+.market-comparison {
+  display: grid;
+  gap: 3px;
+  max-width: 530px;
+  margin-top: 18px;
+  padding: 13px 16px;
+  border: 1px solid rgba(86, 223, 201, .38);
+  border-radius: 14px;
+  background: rgba(3, 28, 39, .48);
+}
+.market-comparison span { color: var(--aqua); font-size: 10px; font-weight: 800; letter-spacing: .12em; text-transform: uppercase; }
+.market-comparison b { color: #dcebed; font-size: 13px; font-weight: 600; }
+.market-comparison strong { color: var(--yellow); font-size: 14px; }
+.price-source { margin: 12px 4px 0; color: #a9c1c5; font-size: 10px; line-height: 1.5; }
+.price-source a { color: var(--aqua); }
 
 @media (max-width: 1050px) {
   .included-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
