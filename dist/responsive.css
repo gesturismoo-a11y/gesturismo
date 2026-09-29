@@ -250,9 +250,13 @@ body { background: linear-gradient(180deg, #fffaf5 0, #fff 38%, #fff8f1 100%); }
 .terms-close { background: #fff0e3; }
 footer { background: linear-gradient(rgba(4, 43, 85, .95), rgba(4, 43, 85, .95)), url("assets/gess-booking-background.png") center/cover; border-top: 6px solid var(--aqua); }
 .footer-brand { display: inline-flex; padding: 0; background: transparent; }
-.footer-brand .brand-logo { width: 178px; height: 70px; }
-.instagram-link { color: inherit; font-weight: inherit; text-decoration: none; }
-.instagram-link:hover { color: #fff; text-decoration: underline; }
+.footer-brand .brand-logo {
+  width: 178px;
+  height: 70px;
+  filter: drop-shadow(0 0 2px rgba(255, 255, 255, .98)) drop-shadow(0 0 7px rgba(255, 255, 255, .58));
+}
+.instagram-link, .footer-contact-link { color: inherit; font-weight: inherit; text-decoration: none; }
+.instagram-link:hover, .footer-contact-link:hover { color: #fff; text-decoration: underline; }
 .credits a { color: #ffb16f; }
 
 @media (max-width: 560px) {

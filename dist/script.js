@@ -1,4 +1,4 @@
-const WHATSAPP_NUMBER = ""; // Adicione DDI + DDD + número, somente dígitos.
+const WHATSAPP_NUMBER = "5521989833495";
 const PRICE_PER_PERSON = 1599.90;
 const routes = {
   rio: {
@@ -106,7 +106,7 @@ function updateQuote(){
 }
 function buildMessage(){
   const name=q("#customerName").value.trim(),origin=q("#originCity").value.trim(),adults=Number(adultSelect.value),children=Number(childSelect.value),month=months.find(item=>item.value===monthSelect.value),adultTotal=adults*PRICE_PER_PERSON,childTotal=children*(PRICE_PER_PERSON/2),total=adultTotal+childTotal;
-  return ["Olá, tudo bem? Tenho interesse em um pacote da Gess Turismo.",`Meu nome: ${name}`,`Cidade de saída: ${origin}`,`Destino: ${destinationSelect.value}`,`Embarque desejado: dia ${daySelect.value} de ${month.label} (sábado ou domingo)`,"Pacote: 5 dias de roteiro fixo, de segunda a sexta","Hospedagem: hostel parceiro desde a chegada no fim de semana até o encerramento do roteiro","Incluso: voo, hostel com café da manhã, traslados programados e atividades anunciadas",`Adultos: ${adults} × ${money(PRICE_PER_PERSON)}`,`Crianças: ${children} × ${money(PRICE_PER_PERSON/2)}`,`Total estimado: ${money(total)}`,"Estou ciente de que a condição infantil depende da disponibilidade da tarifa aérea.","Li e aceitei o resumo das condições apresentado no site.","Tenho interesse em pagar o sinal de reserva e quitar o restante até 10 dias antes da viagem.","Quero confirmar voo, aeroporto, horários, traslado, hostel e disponibilidade. Pode me ajudar?"].join("\n");
+  return ["Olá, tudo bem? Tenho interesse em um pacote da Gess Turismo.",`Meu nome: ${name}`,`Cidade de saída: ${origin}`,`Destino: ${destinationSelect.value}`,`Embarque desejado: dia ${daySelect.value} de ${month.label} (sábado ou domingo)`,"Pacote: 5 dias de roteiro fixo, de segunda a sexta","Hospedagem: hotel parceiro desde a chegada no fim de semana até o encerramento do roteiro","Incluso: voo, hotel com café da manhã, traslados programados e atividades anunciadas",`Adultos: ${adults} × ${money(PRICE_PER_PERSON)}`,`Crianças: ${children} × ${money(PRICE_PER_PERSON/2)}`,`Total estimado: ${money(total)}`,"Estou ciente de que a condição infantil depende da disponibilidade da tarifa aérea.","Li e aceitei o resumo das condições apresentado no site.","Tenho interesse em pagar o sinal de reserva e quitar o restante até 10 dias antes da viagem.","Quero confirmar voo, aeroporto, horários, traslado, hotel e disponibilidade. Pode me ajudar?"].join("\n");
 }
 function renderTermsSelection(){
   const adults=Number(adultSelect.value),children=Number(childSelect.value),total=adults*PRICE_PER_PERSON+children*(PRICE_PER_PERSON/2),month=months.find(item=>item.value===monthSelect.value);
