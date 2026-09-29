@@ -1,0 +1,108 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Rota Clara Viagens — Pacotes de férias pelo Brasil</title>
+  <meta name="description" content="Pacotes promocionais de 7 dias para Rio de Janeiro, Arraial do Cabo, Florianópolis e Maragogi, com hospedagem e roteiro de passeios.">
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%23072e40'/%3E%3Cpath d='M13 38c10-2 13-17 24-15 8 1 8 10 14 10' fill='none' stroke='%235ee8d1' stroke-width='6' stroke-linecap='round'/%3E%3Ccircle cx='48' cy='17' r='6' fill='%23ffd45c'/%3E%3C/svg%3E">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header class="site-header">
+    <a class="brand" href="#top" aria-label="Rota Clara Viagens — início"><span class="brand-mark" aria-hidden="true"></span><span>Rota Clara <b>viagens</b></span></a>
+    <nav aria-label="Navegação principal"><a href="#destinos">Destinos</a><a href="#incluso">O pacote</a><a href="#duvidas">Dúvidas</a></nav>
+    <a class="header-cta" href="#reservar">Montar meu pacote</a>
+  </header>
+
+  <main id="top">
+    <section class="hero">
+      <div class="hero-copy">
+        <p class="eyebrow"><span></span>Lote promocional • vagas limitadas</p>
+        <h1>Sete dias para viver o melhor do Brasil.</h1>
+        <p class="hero-lead">Escolha um dos quatro destinos, a temporada e quantas pessoas vão viajar. Hotel e roteiro de experiências locais incluídos.</p>
+        <div class="price-line"><span>A partir de</span><strong>R$ 1.500</strong><span>por pessoa</span></div>
+        <div class="hero-actions"><a class="button button-primary" href="#destinos">Escolher destino</a><span>até <b>10x de R$ 150</b></span></div>
+        <p class="microcopy">Dez/2026, jan/2027 e jul/2027 • saída e transporte até o destino sob consulta</p>
+      </div>
+      <div class="hero-visual" role="img" aria-label="Fotografia real das Prainhas do Pontal do Atalaia, em Arraial do Cabo">
+        <div class="hero-stamp"><b>7</b><span>dias de<br>viagem</span></div>
+        <p>Prainhas do Pontal do Atalaia<br><b>Arraial do Cabo • RJ</b></p>
+      </div>
+    </section>
+
+    <section class="trust-strip" aria-label="Resumo do pacote"><span><b>7 dias</b> de viagem</span><span><b>Hotel</b> incluso</span><span><b>5 dias</b> de experiências</span><span><b>10x</b> para parcelar</span></section>
+
+    <section class="destinations" id="destinos">
+      <div class="section-heading"><p class="eyebrow">Destinos reais, memórias de verdade</p><h2>Qual Brasil você quer viver?</h2><p>Clique em um destino para conhecer as praias e os pontos previstos no roteiro.</p></div>
+      <div class="destination-layout">
+        <div class="destination-list" id="destinationList">
+          <button class="destination-card is-selected" type="button" data-destination="rio" aria-pressed="true">
+            <img src="assets/rio.jpg" alt="Vista real da Praia de Copacabana, no Rio de Janeiro" width="1600" height="1200"><span class="destination-number">01</span><span class="destination-copy"><b>Rio de Janeiro</b><small>Zona Sul • RJ</small></span>
+          </button>
+          <button class="destination-card" type="button" data-destination="arraial" aria-pressed="false">
+            <img src="assets/arraial.jpg" alt="Vista real das Prainhas do Pontal do Atalaia, em Arraial do Cabo" width="1600" height="1600"><span class="destination-number">02</span><span class="destination-copy"><b>Arraial do Cabo</b><small>Região dos Lagos • RJ</small></span>
+          </button>
+          <button class="destination-card" type="button" data-destination="santa-catarina" aria-pressed="false">
+            <img src="assets/santa-catarina.jpg" alt="Fotografia real da Ilha do Campeche, em Florianópolis" width="1600" height="1200"><span class="destination-number">03</span><span class="destination-copy"><b>Santa Catarina</b><small>Florianópolis • SC</small></span>
+          </button>
+          <button class="destination-card" type="button" data-destination="maragogi" aria-pressed="false">
+            <img src="assets/maragogi.jpg" alt="Fotografia real da Praia de Antunes, em Maragogi" width="1600" height="1068"><span class="destination-number">04</span><span class="destination-copy"><b>Maragogi</b><small>Litoral Norte • AL</small></span>
+          </button>
+        </div>
+
+        <aside class="route-card" aria-live="polite">
+          <div class="route-topline"><span>Roteiro em destaque</span><span id="routeLocation">Rio de Janeiro • RJ</span></div>
+          <h3 id="routeTitle">Rio de Janeiro</h3>
+          <p id="routeIntro">Mar, montanha e os cartões-postais mais famosos da capital carioca.</p>
+          <ol id="routeList"><li><span>Dia 1</span>Praia de Copacabana e Forte de Copacabana</li><li><span>Dia 2</span>Ipanema e pôr do sol no Arpoador</li><li><span>Dia 3</span>Urca e Pão de Açúcar</li><li><span>Dia 4</span>Cristo Redentor e Floresta da Tijuca</li><li><span>Dia 5</span>Passeio de barco pela Baía de Guanabara</li></ol>
+          <p class="route-note">Roteiro-base. A ordem e os passeios podem mudar conforme clima, maré e operação local.</p>
+          <a class="text-link" id="routeMap" href="https://www.google.com/maps/search/?api=1&query=Copacabana+Rio+de+Janeiro" target="_blank" rel="noopener">Ver localização no mapa</a>
+        </aside>
+      </div>
+    </section>
+
+    <section class="included" id="incluso">
+      <div class="included-intro"><p class="eyebrow">Uma semana bem resolvida</p><h2>Você escolhe o destino. O essencial já está no pacote.</h2></div>
+      <div class="included-grid">
+        <article><span>01</span><h3>Hospedagem</h3><p>7 dias e 6 noites em hotel ou pousada parceira. O nome e a categoria são confirmados no orçamento.</p></article>
+        <article><span>02</span><h3>Roteiro de 5 dias</h3><p>Experiências nos principais pontos do destino, com passeio de barco conforme o roteiro e as condições locais.</p></article>
+        <article><span>03</span><h3>Pagamento leve</h3><p>R$ 1.500 por pessoa, com possibilidade de parcelamento em até 10x de R$ 150.</p></article>
+      </div>
+      <div class="not-included"><b>Importante:</b> transporte de ida e volta até o destino, alimentação, ingressos não descritos e despesas pessoais não estão incluídos nesta versão da oferta.</div>
+    </section>
+
+    <section class="booking" id="reservar">
+      <div class="booking-copy"><p class="eyebrow">Monte seu pedido</p><h2>Sua próxima viagem começa aqui.</h2><p>Escolha as opções e envie o resumo pelo WhatsApp. A equipe confirma datas, hospedagem e disponibilidade antes de qualquer pagamento.</p><div class="safe-note"><b>Atendimento humano</b><span>Nenhuma compra é concluída sem confirmação dos detalhes.</span></div></div>
+      <form class="booking-card" id="bookingForm">
+        <label>Destino<select id="destinationSelect"><option value="Rio de Janeiro">Rio de Janeiro • RJ</option><option value="Arraial do Cabo">Arraial do Cabo • RJ</option><option value="Santa Catarina — Florianópolis">Santa Catarina • Florianópolis</option><option value="Maragogi">Maragogi • AL</option></select></label>
+        <fieldset><legend>Temporada</legend><div class="date-options"><label><input type="radio" name="season" value="Dezembro de 2026" checked><span>Dez<small>2026</small></span></label><label><input type="radio" name="season" value="Janeiro de 2027"><span>Jan<small>2027</small></span></label><label><input type="radio" name="season" value="Julho de 2027"><span>Jul<small>2027</small></span></label></div></fieldset>
+        <label>Viajantes<select id="travelerSelect"><option value="1">1 pessoa</option><option value="2">2 pessoas</option><option value="3">3 pessoas</option><option value="4">4 pessoas</option><option value="5">5 pessoas</option><option value="6">6 pessoas</option></select></label>
+        <div class="booking-summary"><span>Total estimado</span><strong id="totalPrice">R$ 1.500</strong><small id="installmentPrice">ou até 10x de R$ 150</small></div>
+        <a class="button button-whatsapp" id="whatsappButton" href="#" target="_blank" rel="noopener">Pedir orçamento no WhatsApp</a>
+        <small class="form-note">Oferta sujeita a vagas e confirmação. O envio não cria cobrança nem reserva automática.</small>
+      </form>
+    </section>
+
+    <section class="faq" id="duvidas">
+      <div class="section-heading"><p class="eyebrow">Antes de fazer as malas</p><h2>Dúvidas rápidas</h2></div>
+      <div class="faq-list">
+        <details><summary>Os passeios de barco acontecem todos os dias?</summary><p>O pacote prevê um roteiro de experiências em 5 dias, incluindo passeio de barco conforme o destino. Saídas náuticas dependem de maré, clima, autorização e operação local.</p></details>
+        <details><summary>Qual hotel está incluído?</summary><p>O hotel ou a pousada parceira é apresentado no orçamento, de acordo com o destino, o mês escolhido e a disponibilidade do lote.</p></details>
+        <details><summary>A passagem até o destino está incluída?</summary><p>Não nesta primeira versão da oferta. Transporte aéreo ou rodoviário pode ser consultado separadamente no atendimento.</p></details>
+        <details><summary>O valor muda para crianças?</summary><p>A condição infantil depende da idade, da hospedagem e do destino. Informe as idades no WhatsApp para receber o cálculo correto.</p></details>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div><a class="brand footer-brand" href="#top"><span class="brand-mark" aria-hidden="true"></span><span>Rota Clara <b>viagens</b></span></a><p>Uma marca provisória para sua nova operação de viagens.</p></div>
+    <div><b>Atendimento</b><p>WhatsApp: número a informar<br>CNPJ: a informar antes da divulgação</p></div>
+    <div><b>Fotografias reais</b><p><a href="https://commons.wikimedia.org/wiki/File:Copacabana_(Rio_de_Janeiro)_330.jpg" target="_blank" rel="noopener">Rio: Rodrigo Gomes da Paixão</a><br><a href="https://commons.wikimedia.org/wiki/File:Arraial_do_Cabo,_Caribe_Brasileiro.jpg" target="_blank" rel="noopener">Arraial: Rafadesantannac, CC BY-SA 4.0</a><br><a href="https://commons.wikimedia.org/wiki/File:Ilha_do_Campeche.jpg" target="_blank" rel="noopener">Campeche: Rodrigo Soldon, CC BY 2.0</a><br><a href="https://commons.wikimedia.org/wiki/File:Marco_Ankosqui_Praia_de_Antunes_Maragogi-AL_(40850130861).jpg" target="_blank" rel="noopener">Maragogi: Marco Ankosqui/MTur</a></p></div>
+  </footer>
+  <script src="script.js"></script>
+</body>
+</html>
