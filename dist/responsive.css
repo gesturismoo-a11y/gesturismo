@@ -1,0 +1,48 @@
+/* Ajustes finais de proporção e legibilidade do roteiro. */
+.route-card li {
+  display: grid;
+  grid-template-columns: 58px minmax(0, 1fr);
+  gap: 10px;
+  align-items: start;
+  line-height: 1.45;
+}
+.route-card li span {
+  display: block;
+  width: auto;
+  white-space: nowrap;
+  padding-top: 2px;
+}
+.choice-grid .choice-button:last-child:nth-child(odd) { grid-column: 1 / -1; }
+
+@media (max-width: 560px) {
+  .choice-grid .choice-button:last-child:nth-child(odd) { grid-column: auto; }
+  .site-header { padding: 0 14px; }
+  .brand { font-size: 15px; }
+  .brand-mark { width: 28px; height: 28px; }
+  .header-cta { font-size: 11px; padding: 10px 12px; }
+  .hero { padding: 36px 18px; margin: 8px; gap: 30px; }
+  .hero h1 { font-size: 37px; }
+  .hero-lead { font-size: 16px; }
+  .price-line { gap: 8px; }
+  .price-line strong { font-size: 29px; }
+  .quick-choice { padding: 23px 18px; }
+  .quick-choice h2 { font-size: 25px; }
+  .trust-strip { margin-left: 8px; margin-right: 8px; }
+  .trust-strip span { font-size: 11px; padding: 4px; }
+  .destinations, .faq { padding: 70px 12px; }
+  .section-heading h2, .included h2, .booking h2, .dates-band h2 { font-size: 36px; }
+  .destination-tabs { margin-right: -12px; }
+  .experience-grid { margin-left: 0; margin-right: 0; }
+  .gallery-main { height: 300px; }
+  .gallery-main figcaption { left: 18px; bottom: 18px; }
+  .gallery-main figcaption b { font-size: 22px; }
+  .gallery-thumbs { grid-template-columns: 1fr 1fr; }
+  .gallery-thumb { height: 100px; }
+  .route-card { padding: 22px 18px; }
+  .route-topline { gap: 12px; }
+  .route-card li { grid-template-columns: 52px minmax(0, 1fr); gap: 8px; font-size: 13px; }
+  .dates-band { padding: 60px 16px; }
+  .date-rules { padding: 20px; }
+  .booking { padding: 34px 14px; }
+  .booking-card { padding: 22px 16px; }
+}

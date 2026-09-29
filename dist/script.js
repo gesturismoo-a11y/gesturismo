@@ -1,13 +1,103 @@
-const WHATSAPP_NUMBER=""; // Substitua pelo número da empresa com DDI e DDD, somente dígitos.
-const routes={
-  rio:{title:"Rio de Janeiro",location:"Rio de Janeiro • RJ",intro:"Mar, montanha e os cartões-postais mais famosos da capital carioca.",map:"https://www.google.com/maps/search/?api=1&query=Copacabana+Rio+de+Janeiro",select:"Rio de Janeiro",days:["Praia de Copacabana e Forte de Copacabana","Ipanema e pôr do sol no Arpoador","Urca e Pão de Açúcar","Cristo Redentor e Floresta da Tijuca","Passeio de barco pela Baía de Guanabara"]},
-  arraial:{title:"Arraial do Cabo",location:"Região dos Lagos • RJ",intro:"Areia branca, água transparente e um dos roteiros náuticos mais bonitos do país.",map:"https://www.google.com/maps/search/?api=1&query=Prainhas+do+Pontal+do+Atalaia",select:"Arraial do Cabo",days:["Praia dos Anjos e embarque no cais","Praia do Farol","Prainhas do Pontal do Atalaia","Praia do Forno","Gruta Azul e Fenda de Nossa Senhora"]},
-  "santa-catarina":{title:"Florianópolis",location:"Santa Catarina • SC",intro:"O pacote catarinense tem base em Florianópolis e combina ilha, dunas e cultura local.",map:"https://www.google.com/maps/search/?api=1&query=Ilha+do+Campeche+Florianopolis",select:"Santa Catarina — Florianópolis",days:["Travessia de barco para a Ilha do Campeche","Praia do Campeche","Praia e Dunas da Joaquina","Lagoa da Conceição","Barra da Lagoa e Projeto Tamar"]},
-  maragogi:{title:"Maragogi",location:"Litoral Norte • AL",intro:"Piscinas naturais, praias tranquilas e os tons de azul mais famosos de Alagoas.",map:"https://www.google.com/maps/search/?api=1&query=Praia+de+Antunes+Maragogi",select:"Maragogi",days:["Passeio de catamarã às Galés de Maragogi","Praia de Antunes","Praia de Barra Grande e Caminho de Moisés","Praia de Ponta de Mangue","Orla de Maragogi e Praia de Burgalhau"]}
+const WHATSAPP_NUMBER = ""; // Adicione DDI + DDD + número, somente dígitos.
+const PRICE_PER_PERSON = 1499.90;
+const routes = {
+  rio: {
+    title:"Rio de Janeiro", location:"Rio de Janeiro • RJ", select:"Rio de Janeiro",
+    intro:"Mar, montanha e os cartões-postais mais famosos da capital carioca.",
+    map:"https://www.google.com/maps/dir/Copacabana,+Rio+de+Janeiro/Ipanema,+Rio+de+Janeiro/P%C3%A3o+de+A%C3%A7%C3%BAcar,+Rio+de+Janeiro/Cristo+Redentor,+Rio+de+Janeiro/Ba%C3%ADa+de+Guanabara",
+    days:["Copacabana e Forte de Copacabana","Ipanema e pôr do sol no Arpoador","Urca e Pão de Açúcar","Cristo Redentor e Floresta da Tijuca","Passeio de barco pela Baía de Guanabara"],
+    photos:[["assets/rio.jpg","Praia de Copacabana","Rio de Janeiro • RJ"],["assets/rio-ipanema.jpg","Ipanema vista do Arpoador","Zona Sul • Rio de Janeiro"],["assets/rio-pao-acucar.jpg","Pão de Açúcar","Urca • Rio de Janeiro"],["assets/rio-guanabara.jpg","Baía de Guanabara","Passeio náutico • Rio de Janeiro"]]
+  },
+  arraial: {
+    title:"Arraial do Cabo", location:"Região dos Lagos • RJ", select:"Arraial do Cabo",
+    intro:"Areia branca, água transparente e um dos roteiros náuticos mais bonitos do país.",
+    map:"https://www.google.com/maps/dir/Praia+dos+Anjos,+Arraial+do+Cabo/Praia+do+Farol,+Arraial+do+Cabo/Prainhas+do+Pontal+do+Atalaia/Praia+do+Forno,+Arraial+do+Cabo/Praia+Grande,+Arraial+do+Cabo",
+    days:["Praia dos Anjos e embarque no cais","Passeio de barco: Praia do Farol e Gruta Azul","Prainhas do Pontal do Atalaia","Trilha e banho na Praia do Forno","Praia Grande e pôr do sol"],
+    photos:[["assets/arraial.jpg","Prainhas do Pontal do Atalaia","Arraial do Cabo • RJ"],["assets/arraial-forno.jpg","Praia do Forno","Arraial do Cabo • RJ"],["assets/arraial-farol.jpg","Praia do Farol","Acesso por barco • Arraial do Cabo"],["assets/arraial-praia-grande.jpg","Praia Grande","Pôr do sol • Arraial do Cabo"]]
+  },
+  "santa-catarina": {
+    title:"Florianópolis", location:"Santa Catarina • SC", select:"Santa Catarina — Florianópolis",
+    intro:"O pacote catarinense tem base em Florianópolis e combina ilha, dunas e cultura local.",
+    map:"https://www.google.com/maps/dir/Ilha+do+Campeche,+Florian%C3%B3polis/Praia+do+Campeche,+Florian%C3%B3polis/Praia+da+Joaquina,+Florian%C3%B3polis/Lagoa+da+Concei%C3%A7%C3%A3o,+Florian%C3%B3polis/Barra+da+Lagoa,+Florian%C3%B3polis",
+    days:["Travessia de barco para a Ilha do Campeche","Praia do Campeche","Praia e Dunas da Joaquina","Lagoa da Conceição","Barra da Lagoa e piscinas naturais"],
+    photos:[["assets/santa-catarina.jpg","Ilha do Campeche","Florianópolis • SC"],["assets/floripa-joaquina.jpg","Praia da Joaquina","Florianópolis • SC"],["assets/floripa-dunas.jpg","Dunas da Joaquina","Florianópolis • SC"],["assets/floripa-barra-lagoa.jpg","Barra da Lagoa","Florianópolis • SC"]]
+  },
+  maragogi: {
+    title:"Maragogi", location:"Costa dos Corais • AL", select:"Maragogi",
+    intro:"Piscinas naturais, praias tranquilas e os tons de azul mais famosos de Alagoas.",
+    map:"https://www.google.com/maps/dir/Gal%C3%A9s+de+Maragogi/Praia+de+Antunes,+Maragogi/Praia+de+Barra+Grande,+Maragogi/Praia+de+Ponta+de+Mangue,+Maragogi/Orla+de+Maragogi",
+    days:["Catamarã às Galés de Maragogi e piscinas naturais","Praia de Antunes","Barra Grande e Caminho de Moisés","Praia de Ponta de Mangue","Orla de Maragogi e Praia de Burgalhau"],
+    photos:[["assets/maragogi.jpg","Praia de Antunes","Maragogi • AL"],["assets/maragogi-corais.jpg","Galés e piscinas naturais","Costa dos Corais • Maragogi"],["assets/maragogi-barra-grande.jpg","Praia de Barra Grande","Maragogi • AL"],["assets/maragogi-ponta-mangue.jpg","Praia de Ponta de Mangue","Maragogi • AL"]]
+  },
+  "porto-seguro": {
+    title:"Porto Seguro", location:"Costa do Descobrimento • BA", select:"Porto Seguro",
+    intro:"Praias animadas, história e vilas charmosas no litoral sul da Bahia.",
+    map:"https://www.google.com/maps/dir/Cidade+Hist%C3%B3rica,+Porto+Seguro/Praia+de+Munda%C3%AD,+Porto+Seguro/Praia+de+Taperapu%C3%A3,+Porto+Seguro/Arraial+d%27Ajuda,+Porto+Seguro/Trancoso,+Porto+Seguro",
+    days:["Centro Histórico e Passarela do Descobrimento","Praia de Mundaí","Praia de Taperapuã e complexo Tôa Tôa","Arraial d’Ajuda e Praia do Mucugê","Trancoso e Praia dos Nativos"],
+    photos:[["assets/porto-seguro.jpg","Orla de Porto Seguro","Porto Seguro • BA"],["assets/porto-seguro-mundai.jpg","Praia de Mundaí","Porto Seguro • BA"],["assets/porto-seguro-toatoa.jpg","Praia de Taperapuã","Porto Seguro • BA"],["assets/porto-seguro-trancoso.jpg","Trancoso","Porto Seguro • BA"]]
+  },
+  "porto-galinhas": {
+    title:"Porto de Galinhas", location:"Ipojuca • PE", select:"Porto de Galinhas",
+    intro:"Piscinas naturais, jangadas e praias de águas mornas no litoral pernambucano.",
+    map:"https://www.google.com/maps/dir/Piscinas+Naturais+de+Porto+de+Galinhas/Praia+de+Muro+Alto,+Ipojuca/Pontal+do+Cupe,+Ipojuca/Pontal+de+Maraca%C3%ADpe,+Ipojuca/Vila+de+Porto+de+Galinhas",
+    days:["Jangada às piscinas naturais","Praia de Muro Alto","Pontal do Cupe","Maracaípe e passeio de jangada no mangue","Vila e Praia do Centro de Porto de Galinhas"],
+    photos:[["assets/porto-galinhas.jpg","Praia de Porto de Galinhas","Ipojuca • PE"],["assets/porto-galinhas-piscinas.jpg","Piscinas naturais","Porto de Galinhas • PE"],["assets/porto-galinhas-muro-alto.jpg","Praia de Muro Alto","Ipojuca • PE"],["assets/porto-galinhas-mergulho.jpg","Mergulho em Porto de Galinhas","Ipojuca • PE"]]
+  },
+  jericoacoara: {
+    title:"Jericoacoara", location:"Jijoca de Jericoacoara • CE", select:"Jericoacoara",
+    intro:"Dunas, lagoas e mar em uma vila cercada pelas paisagens do litoral cearense.",
+    map:"https://www.google.com/maps/dir/Vila+de+Jericoacoara/Pedra+Furada,+Jericoacoara/Duna+do+P%C3%B4r+do+Sol,+Jericoacoara/Lagoa+do+Para%C3%ADso,+Jijoca+de+Jericoacoara/Buraco+Azul,+Cruz,+CE",
+    days:["Vila e Praia de Jericoacoara","Trilha até a Pedra Furada","Duna do Pôr do Sol","Lagoa do Paraíso e Árvore da Preguiça","Circuito leste com Buraco Azul"],
+    photos:[["assets/jericoacoara.jpg","Praia de Jericoacoara","Jijoca de Jericoacoara • CE"],["assets/jeri-duna.jpg","Duna do Pôr do Sol","Jericoacoara • CE"],["assets/jeri-praia.jpg","Praia e vila de Jericoacoara","Ceará"],["assets/jeri-cavalos.jpg","Dunas de Jericoacoara","Parque Nacional • CE"]]
+  }
 };
-const cards=document.querySelectorAll(".destination-card"),select=document.querySelector("#destinationSelect"),travelerSelect=document.querySelector("#travelerSelect"),totalPrice=document.querySelector("#totalPrice"),installmentPrice=document.querySelector("#installmentPrice"),whatsappButton=document.querySelector("#whatsappButton");
-function formatCurrency(value){return new Intl.NumberFormat("pt-BR",{style:"currency",currency:"BRL",maximumFractionDigits:0}).format(value)}
-function renderRoute(key,syncSelect=true){const route=routes[key];if(!route)return;document.querySelector("#routeTitle").textContent=route.title;document.querySelector("#routeLocation").textContent=route.location;document.querySelector("#routeIntro").textContent=route.intro;document.querySelector("#routeMap").href=route.map;document.querySelector("#routeList").innerHTML=route.days.map((day,index)=>`<li><span>Dia ${index+1}</span>${day}</li>`).join("");if(syncSelect)select.value=route.select;updateQuote()}
-function updateQuote(){const travelers=Number(travelerSelect.value),total=travelers*1500,installment=total/10,season=document.querySelector('input[name="season"]:checked').value;totalPrice.textContent=formatCurrency(total);installmentPrice.textContent=`ou até 10x de ${formatCurrency(installment)}`;const message=["Olá! Quero consultar o pacote promocional da Rota Clara Viagens.",`Destino: ${select.value}`,`Temporada: ${season}`,`Viajantes: ${travelers}`,`Total estimado: ${formatCurrency(total)}`,"Pode me passar as datas disponíveis, o hotel e as condições?"].join("\n");const base=WHATSAPP_NUMBER?`https://wa.me/${WHATSAPP_NUMBER}`:"https://wa.me/";whatsappButton.href=`${base}?text=${encodeURIComponent(message)}`}
-cards.forEach(card=>card.addEventListener("click",()=>{cards.forEach(item=>{item.classList.remove("is-selected");item.setAttribute("aria-pressed","false")});card.classList.add("is-selected");card.setAttribute("aria-pressed","true");renderRoute(card.dataset.destination)}));
-select.addEventListener("change",()=>{const key=Object.keys(routes).find(routeKey=>routes[routeKey].select===select.value);cards.forEach(card=>{const active=card.dataset.destination===key;card.classList.toggle("is-selected",active);card.setAttribute("aria-pressed",String(active))});renderRoute(key,false)});travelerSelect.addEventListener("change",updateQuote);document.querySelectorAll('input[name="season"]').forEach(input=>input.addEventListener("change",updateQuote));updateQuote();
+const months = [
+  {value:"2026-10",label:"Outubro de 2026",start:3,end:31},{value:"2026-11",label:"Novembro de 2026",start:3,end:30},
+  {value:"2026-12",label:"Dezembro de 2026",start:3,end:19},{value:"2027-01",label:"Janeiro de 2027",start:6,end:31},
+  {value:"2027-02",label:"Fevereiro de 2027",start:3,end:28},{value:"2027-03",label:"Março de 2027",start:3,end:31},
+  {value:"2027-04",label:"Abril de 2027",start:3,end:30},{value:"2027-05",label:"Maio de 2027",start:3,end:31},
+  {value:"2027-06",label:"Junho de 2027",start:3,end:30},{value:"2027-07",label:"Julho de 2027",start:3,end:31}
+];
+const q = selector => document.querySelector(selector);
+const destinationSelect=q("#destinationSelect"), travelerSelect=q("#travelerSelect"), monthSelect=q("#monthSelect"), daySelect=q("#daySelect"), durationSelect=q("#durationSelect"), whatsappButton=q("#whatsappButton");
+function money(value){return new Intl.NumberFormat("pt-BR",{style:"currency",currency:"BRL",minimumFractionDigits:2}).format(value)}
+function renderGallery(route){
+  const setMain=photo=>{q("#galleryMainImage").src=photo[0];q("#galleryMainImage").alt=`${photo[1]}, ${photo[2]}`;q("#galleryMainTitle").textContent=photo[1];q("#galleryMainCaption").textContent=photo[2]};
+  setMain(route.photos[0]);
+  q("#galleryThumbs").innerHTML=route.photos.map((photo,index)=>`<button type="button" class="gallery-thumb ${index===0?"is-active":""}" data-photo="${index}" aria-label="Ver ${photo[1]}"><img src="${photo[0]}" alt="${photo[1]}" loading="lazy"><span>${photo[1]}</span></button>`).join("");
+  document.querySelectorAll(".gallery-thumb").forEach(button=>button.addEventListener("click",()=>{setMain(route.photos[Number(button.dataset.photo)]);document.querySelectorAll(".gallery-thumb").forEach(item=>item.classList.toggle("is-active",item===button))}));
+}
+function selectDestination(key,scroll=false){
+  const route=routes[key]; if(!route)return;
+  q("#galleryHeading").textContent=`Seu pacote para ${route.title}`;q("#routeTitle").textContent=route.title;q("#routeLocation").textContent=route.location;q("#routeIntro").textContent=route.intro;q("#routeMap").href=route.map;
+  q("#routeList").innerHTML=route.days.map((day,index)=>`<li><span>Dia ${index+1}</span>${day}</li>`).join("");
+  destinationSelect.value=route.select;
+  document.querySelectorAll("[data-destination]").forEach(button=>{const active=button.dataset.destination===key;button.classList.toggle("is-active",active);button.setAttribute("aria-selected",String(active))});
+  document.querySelectorAll("[data-choose]").forEach(button=>button.classList.toggle("is-active",button.dataset.choose===key));
+  renderGallery(route);updateQuote();
+  if(scroll)q("#destinos").scrollIntoView({behavior:"smooth",block:"start"});
+}
+function updateDays(){
+  const month=months.find(item=>item.value===monthSelect.value)||months[0];
+  daySelect.innerHTML=Array.from({length:month.end-month.start+1},(_,index)=>`<option value="${month.start+index}">${month.start+index}</option>`).join("");
+  updateQuote();
+}
+function updateQuote(){
+  if(!monthSelect.value||!daySelect.value)return;
+  const travelers=Number(travelerSelect.value),duration=Number(durationSelect.value),baseTotal=travelers*PRICE_PER_PERSON,extended=duration>5;
+  q("#totalPrice").textContent=extended?`A partir de ${money(baseTotal)}`:money(baseTotal);
+  q("#installmentPrice").textContent=extended?"valor final após cálculo dos dias extras":`ou até 10x de ${money(baseTotal/10)} sem juros`;
+  q("#extendedNotice").hidden=!extended;
+}
+function buildMessage(){
+  const name=q("#customerName").value.trim(),origin=q("#originCity").value.trim()||"não informada",ages=q("#travelerAges").value.trim()||"não informadas",travelers=Number(travelerSelect.value),duration=Number(durationSelect.value),month=months.find(item=>item.value===monthSelect.value),baseTotal=travelers*PRICE_PER_PERSON;
+  return ["Olá, tudo bem? Tenho interesse em um pacote da Rota Clara Viagens.",`Meu nome: ${name}`,`Cidade de saída: ${origin}`,`Destino: ${destinationSelect.value}`,`Data desejada: dia ${daySelect.value} de ${month.label}`,`Duração: ${duration} dias${duration>5?" (pacote estendido)":""}`,`Viajantes: ${travelers} ${travelers===1?"pessoa":"pessoas"}`,`Idades: ${ages}`,`Valor-base promocional: ${money(PRICE_PER_PERSON)} por pessoa, em até 10x sem juros`,`Total-base: ${money(baseTotal)}${duration>5?" + acréscimo dos dias extras":""}`,"Quero confirmar as vagas, o hotel, o roteiro e fechar o orçamento. Pode me ajudar?"].join("\n");
+}
+q("#bookingForm").addEventListener("submit",event=>{event.preventDefault();if(!q("#customerName").reportValidity())return;const base=WHATSAPP_NUMBER?`https://wa.me/${WHATSAPP_NUMBER}`:"https://wa.me/";window.open(`${base}?text=${encodeURIComponent(buildMessage())}`,"_blank","noopener")});
+monthSelect.innerHTML=months.map(month=>`<option value="${month.value}">${month.label}</option>`).join("");
+document.querySelectorAll("[data-destination]").forEach(button=>button.addEventListener("click",()=>selectDestination(button.dataset.destination)));
+document.querySelectorAll("[data-choose]").forEach(button=>button.addEventListener("click",()=>selectDestination(button.dataset.choose,true)));
+destinationSelect.addEventListener("change",()=>selectDestination(Object.keys(routes).find(key=>routes[key].select===destinationSelect.value)));
+monthSelect.addEventListener("change",updateDays);
+[daySelect,travelerSelect,durationSelect].forEach(field=>field.addEventListener("change",updateQuote));
+updateDays();selectDestination("rio");
