@@ -1,5 +1,5 @@
 const WHATSAPP_NUMBER = ""; // Adicione DDI + DDD + número, somente dígitos.
-const PRICE_PER_PERSON = 1499.90;
+const PRICE_PER_PERSON = 1599.90;
 const routes = {
   rio: {
     title:"Rio de Janeiro", location:"Rio de Janeiro • RJ", select:"Rio de Janeiro",
@@ -66,7 +66,7 @@ const months = [
   {value:"2027-06",label:"Junho de 2027",start:3,end:30},{value:"2027-07",label:"Julho de 2027",start:3,end:31}
 ];
 const q = selector => document.querySelector(selector);
-const destinationSelect=q("#destinationSelect"), adultSelect=q("#adultSelect"), childSelect=q("#childSelect"), monthSelect=q("#monthSelect"), daySelect=q("#daySelect"), whatsappButton=q("#whatsappButton");
+const destinationSelect=q("#destinationSelect"), adultSelect=q("#adultSelect"), childSelect=q("#childSelect"), monthSelect=q("#monthSelect"), daySelect=q("#daySelect"), whatsappButton=q("#whatsappButton"),termsDialog=q("#termsDialog"),acceptTerms=q("#acceptTerms"),continueWhatsapp=q("#continueWhatsapp");
 const weekdayLabels=["Segunda","Terça","Quarta","Quinta","Sexta"];
 function money(value){return new Intl.NumberFormat("pt-BR",{style:"currency",currency:"BRL",minimumFractionDigits:2}).format(value)}
 function renderGallery(route){
@@ -106,9 +106,28 @@ function updateQuote(){
 }
 function buildMessage(){
   const name=q("#customerName").value.trim(),origin=q("#originCity").value.trim(),adults=Number(adultSelect.value),children=Number(childSelect.value),month=months.find(item=>item.value===monthSelect.value),adultTotal=adults*PRICE_PER_PERSON,childTotal=children*(PRICE_PER_PERSON/2),total=adultTotal+childTotal;
-  return ["Olá, tudo bem? Tenho interesse em um pacote da Rota Clara Viagens.",`Meu nome: ${name}`,`Cidade de saída: ${origin}`,`Destino: ${destinationSelect.value}`,`Embarque desejado: dia ${daySelect.value} de ${month.label} (sábado ou domingo)`,"Pacote: 5 dias de roteiro fixo, de segunda a sexta","Hospedagem: incluída desde a chegada no fim de semana até o encerramento do roteiro","Incluso: voo, hotel com café da manhã, traslados programados e atividades anunciadas",`Adultos: ${adults} × ${money(PRICE_PER_PERSON)}`,`Crianças: ${children} × ${money(PRICE_PER_PERSON/2)}`,`Total estimado: ${money(total)}`,"Estou ciente de que a condição infantil depende da disponibilidade da tarifa aérea.","Tenho interesse em pagar o sinal de reserva e quitar o restante até 10 dias antes da viagem.","Quero confirmar voo, aeroporto, horários, traslado, hotel e disponibilidade. Pode me ajudar?"].join("\n");
+  return ["Olá, tudo bem? Tenho interesse em um pacote da Gess Turismo.",`Meu nome: ${name}`,`Cidade de saída: ${origin}`,`Destino: ${destinationSelect.value}`,`Embarque desejado: dia ${daySelect.value} de ${month.label} (sábado ou domingo)`,"Pacote: 5 dias de roteiro fixo, de segunda a sexta","Hospedagem: incluída desde a chegada no fim de semana até o encerramento do roteiro","Incluso: voo, hotel com café da manhã, traslados programados e atividades anunciadas",`Adultos: ${adults} × ${money(PRICE_PER_PERSON)}`,`Crianças: ${children} × ${money(PRICE_PER_PERSON/2)}`,`Total estimado: ${money(total)}`,"Estou ciente de que a condição infantil depende da disponibilidade da tarifa aérea.","Li e aceitei o resumo das condições apresentado no site.","Tenho interesse em pagar o sinal de reserva e quitar o restante até 10 dias antes da viagem.","Quero confirmar voo, aeroporto, horários, traslado, hotel e disponibilidade. Pode me ajudar?"].join("\n");
 }
-q("#bookingForm").addEventListener("submit",event=>{event.preventDefault();if(!q("#bookingForm").reportValidity())return;const base=WHATSAPP_NUMBER?`https://wa.me/${WHATSAPP_NUMBER}`:"https://wa.me/";window.open(`${base}?text=${encodeURIComponent(buildMessage())}`,"_blank","noopener")});
+function renderTermsSelection(){
+  const adults=Number(adultSelect.value),children=Number(childSelect.value),total=adults*PRICE_PER_PERSON+children*(PRICE_PER_PERSON/2),month=months.find(item=>item.value===monthSelect.value);
+  q("#termsSelection").innerHTML=`<span>Seu pedido</span><b>${destinationSelect.value}</b><small>Embarque dia ${daySelect.value} de ${month.label} • ${adults} ${adults===1?"adulto":"adultos"} • ${children} ${children===1?"criança":"crianças"} • Total estimado ${money(total)}</small>`;
+}
+function openTerms(){
+  const form=q("#bookingForm");
+  if(!form.reportValidity())return;
+  renderTermsSelection();
+  acceptTerms.checked=false;
+  continueWhatsapp.disabled=true;
+  if(typeof termsDialog.showModal==="function")termsDialog.showModal();
+  else termsDialog.setAttribute("open","");
+}
+q("#bookingForm").addEventListener("submit",event=>{event.preventDefault();openTerms()});
+whatsappButton.addEventListener("click",openTerms);
+acceptTerms.addEventListener("change",()=>{continueWhatsapp.disabled=!acceptTerms.checked});
+q("#termsClose").addEventListener("click",()=>termsDialog.close());
+q("#cancelTerms").addEventListener("click",()=>termsDialog.close());
+continueWhatsapp.addEventListener("click",()=>{if(!acceptTerms.checked)return;const base=WHATSAPP_NUMBER?`https://wa.me/${WHATSAPP_NUMBER}`:"https://wa.me/";window.open(`${base}?text=${encodeURIComponent(buildMessage())}`,"_blank","noopener");termsDialog.close()});
+termsDialog.addEventListener("click",event=>{if(event.target===termsDialog)termsDialog.close()});
 monthSelect.innerHTML=months.map(month=>`<option value="${month.value}">${month.label}</option>`).join("");
 document.querySelectorAll("[data-destination]").forEach(button=>button.addEventListener("click",()=>selectDestination(button.dataset.destination)));
 document.querySelectorAll("[data-choose]").forEach(button=>button.addEventListener("click",()=>selectDestination(button.dataset.choose,true)));

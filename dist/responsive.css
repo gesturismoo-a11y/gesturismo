@@ -69,6 +69,39 @@
 .market-comparison strong { color: var(--yellow); font-size: 14px; }
 .price-source { margin: 12px 4px 0; color: #a9c1c5; font-size: 10px; line-height: 1.5; }
 .price-source a { color: var(--aqua); }
+.terms-dialog {
+  width: min(720px, calc(100vw - 32px));
+  max-height: min(820px, calc(100vh - 32px));
+  margin: auto;
+  padding: 0;
+  overflow: auto;
+  border: 0;
+  border-radius: 22px;
+  color: var(--ink);
+  background: #fff;
+  box-shadow: 0 28px 90px rgba(3, 30, 42, .35);
+}
+.terms-dialog::backdrop { background: rgba(3, 28, 39, .72); backdrop-filter: blur(5px); }
+.terms-header { position: sticky; top: 0; z-index: 2; display: flex; justify-content: space-between; gap: 18px; padding: 25px 28px 19px; background: #fff; border-bottom: 1px solid var(--line); }
+.terms-header span { color: #0a8a77; font-size: 10px; font-weight: 800; letter-spacing: .12em; text-transform: uppercase; }
+.terms-header h2 { margin: 5px 0 0; font-family: Manrope, sans-serif; font-size: 26px; letter-spacing: -.035em; }
+.terms-close { align-self: start; width: 34px; height: 34px; border: 0; border-radius: 50%; background: #edf4f3; color: var(--navy); font-size: 24px; cursor: pointer; }
+.terms-selection { display: grid; gap: 4px; margin: 22px 28px 0; padding: 15px 17px; border-radius: 13px; background: var(--navy); color: #fff; }
+.terms-selection span { color: var(--aqua); font-size: 10px; font-weight: 800; letter-spacing: .1em; text-transform: uppercase; }
+.terms-selection b { font-family: Manrope, sans-serif; font-size: 18px; }
+.terms-selection small { color: #cce0e3; line-height: 1.45; }
+.terms-content { display: grid; grid-template-columns: 1fr 1fr; gap: 1px; margin: 20px 28px; overflow: hidden; border: 1px solid var(--line); border-radius: 14px; background: var(--line); }
+.terms-content section { padding: 15px 17px; background: #fff; }
+.terms-content b { color: var(--navy); font-size: 13px; }
+.terms-content p { margin: 6px 0 0; color: var(--muted); font-size: 12px; line-height: 1.5; }
+.terms-accept { display: flex!important; flex-direction: row!important; align-items: flex-start; gap: 10px; margin: 0 28px 8px!important; padding: 15px; border: 1px solid #abdcd2; border-radius: 12px; background: #effaf7; text-transform: none!important; letter-spacing: 0!important; cursor: pointer; }
+.terms-accept input { width: 18px!important; min-height: 18px!important; height: 18px; margin: 1px 0 0!important; accent-color: #119b82; }
+.terms-accept span { font-size: 13px; line-height: 1.4; }
+.terms-legal { margin: 0 28px; color: var(--muted); font-size: 10px; line-height: 1.45; }
+.terms-actions { position: sticky; bottom: 0; display: grid; grid-template-columns: .8fr 1.2fr; gap: 10px; padding: 18px 28px 24px; background: #fff; border-top: 1px solid var(--line); }
+.terms-actions .button { margin: 0; padding: 14px 18px; }
+.terms-cancel { border: 1px solid #b8cbca; background: #fff; color: var(--ink); }
+.terms-actions .button-whatsapp:disabled { cursor: not-allowed; opacity: .45; }
 
 @media (max-width: 1050px) {
   .included-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
@@ -106,4 +139,107 @@
   .booking { padding: 34px 14px; }
   .booking-card { padding: 22px 16px; }
   .included-grid { grid-template-columns: 1fr; }
+  .terms-dialog { width: calc(100vw - 16px); max-height: calc(100vh - 16px); border-radius: 18px; }
+  .terms-header { padding: 20px 18px 15px; }
+  .terms-header h2 { font-size: 22px; }
+  .terms-selection { margin: 16px 18px 0; }
+  .terms-content { grid-template-columns: 1fr; margin: 16px 18px; }
+  .terms-accept { margin: 0 18px 8px!important; }
+  .terms-legal { margin: 0 18px; }
+  .terms-actions { grid-template-columns: 1fr; padding: 15px 18px 18px; }
+}
+
+/* Identidade visual Gess Turismo */
+:root {
+  --navy: #073a70;
+  --navy2: #0b5594;
+  --aqua: #ff6b00;
+  --aqua2: #fff0e3;
+  --yellow: #ffb347;
+  --cream: #fff8f1;
+  --ink: #183858;
+  --muted: #67788a;
+  --line: #eadfd5;
+  --shadow: 0 20px 55px rgba(7, 58, 112, .14);
+}
+body { background: linear-gradient(180deg, #fffaf5 0, #fff 38%, #fff8f1 100%); }
+.site-header {
+  height: 82px;
+  background: rgba(255, 255, 255, .96);
+  border-top: 4px solid var(--aqua);
+  border-bottom: 1px solid rgba(7, 58, 112, .1);
+  box-shadow: 0 8px 28px rgba(7, 58, 112, .07);
+}
+.brand-logo { display: block; width: 154px; height: 62px; object-fit: contain; }
+.site-header nav a { color: var(--navy); }
+.site-header nav a:hover, .instagram-link:hover { color: var(--aqua); }
+.header-cta, .button-primary { background: var(--aqua); color: #fff; box-shadow: 0 10px 24px rgba(255, 107, 0, .25); }
+.hero {
+  position: relative;
+  overflow: hidden;
+  background:
+    radial-gradient(circle at 10% 0%, rgba(255, 107, 0, .42), transparent 34%),
+    linear-gradient(100deg, rgba(5, 47, 92, .98), rgba(7, 58, 112, .86)),
+    url("assets/arraial.jpg") center/cover;
+}
+.hero::after {
+  content: "";
+  position: absolute;
+  right: -75px;
+  top: -90px;
+  width: 260px;
+  height: 260px;
+  border: 2px dashed rgba(255, 255, 255, .22);
+  border-radius: 50%;
+  pointer-events: none;
+}
+.hero-copy, .quick-choice { position: relative; z-index: 1; }
+.hero .eyebrow, .market-comparison span { color: #ffbd75; }
+.hero .eyebrow::before { content: "✈"; margin-right: 8px; color: #fff; }
+.price-line strong, .market-comparison strong { color: #ffb347; }
+.market-comparison { border-color: rgba(255, 166, 83, .55); background: rgba(2, 35, 70, .55); }
+.market-comparison b { color: #fff; font-size: 14px; }
+.market-comparison s { color: #ffd0ae; text-decoration-thickness: 2px; }
+.quick-choice { border: 1px solid rgba(255, 107, 0, .18); box-shadow: 0 24px 70px rgba(2, 35, 70, .28); }
+.step-label, .eyebrow { color: var(--aqua); }
+.choice-button { background: #fffaf5; border-color: #efddd0; }
+.choice-button:hover { border-color: #ff9b50; transform: translateY(-1px); }
+.choice-button.is-active { border-color: var(--aqua); background: var(--aqua2); box-shadow: inset 0 0 0 1px var(--aqua); }
+.trust-strip { border-bottom: 4px solid var(--aqua); }
+.trust-strip b, .route-topline, .route-card li span, .text-link { color: var(--aqua); }
+.destination-tab { border-color: #e2bfa6; }
+.destination-tab.is-active { background: var(--aqua); border-color: var(--aqua); }
+.gallery-thumb.is-active { border-color: var(--aqua); }
+.schedule-box { background: linear-gradient(135deg, var(--navy), #0a5594); }
+.hotel-line { border-left-color: var(--aqua); }
+.included { background: linear-gradient(135deg, #052e59, #073f79 55%, #0b5594); }
+.included .eyebrow { color: #ffb16f; }
+.included-grid article { background: rgba(4, 43, 84, .72); border-color: rgba(255, 145, 62, .34); }
+.included-grid article>span { color: #ffb347; }
+.not-included { background: rgba(3, 31, 62, .58); border-left: 4px solid var(--aqua); }
+.price-source, .price-source a { color: #c9d8e6; }
+.date-rules { border-top: 4px solid var(--aqua); }
+.booking { background: linear-gradient(135deg, #fff0e3, #fff8f1); border: 1px solid #ffd8bc; }
+.safe-note b, .child-policy b { color: #d95600; }
+.date-help, .child-policy { background: #fff4ea; border-color: #ffc99f; }
+.date-help { color: #c75000; }
+.booking-card input:focus, .booking-card select:focus { outline: 3px solid rgba(255, 107, 0, .16); border-color: var(--aqua); }
+.booking-summary small { color: #d95600; }
+.terms-header span, .terms-selection span { color: #ff9f55; }
+.terms-selection { background: linear-gradient(135deg, var(--navy), var(--navy2)); }
+.terms-accept { border-color: #ffc99f; background: #fff4ea; }
+.terms-accept input { accent-color: var(--aqua); }
+.terms-close { background: #fff0e3; }
+footer { background: #042b55; border-top: 6px solid var(--aqua); }
+.footer-brand { display: inline-flex; padding: 7px 12px; border-radius: 14px; background: #fff; }
+.footer-brand .brand-logo { width: 158px; height: 58px; }
+.instagram-link { color: #ffb16f; font-weight: 700; text-decoration: none; }
+.credits a { color: #ffb16f; }
+
+@media (max-width: 560px) {
+  .site-header { height: 70px; }
+  .brand-logo { width: 116px; height: 48px; }
+  .header-cta { font-size: 11px; padding: 10px 13px; }
+  .hero::after { width: 180px; height: 180px; right: -85px; top: -70px; }
+  .footer-brand .brand-logo { width: 145px; }
 }
