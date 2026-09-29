@@ -49,6 +49,13 @@ const routes = {
     map:"https://www.google.com/maps/dir/Vila+de+Jericoacoara/Pedra+Furada,+Jericoacoara/Duna+do+P%C3%B4r+do+Sol,+Jericoacoara/Lagoa+do+Para%C3%ADso,+Jijoca+de+Jericoacoara/Buraco+Azul,+Cruz,+CE",
     days:["Vila e Praia de Jericoacoara","Trilha até a Pedra Furada","Duna do Pôr do Sol","Lagoa do Paraíso e Árvore da Preguiça","Circuito leste com Buraco Azul"],
     photos:[["assets/jericoacoara.jpg","Praia de Jericoacoara","Jijoca de Jericoacoara • CE"],["assets/jeri-duna.jpg","Duna do Pôr do Sol","Jericoacoara • CE"],["assets/jeri-praia.jpg","Praia e vila de Jericoacoara","Ceará"],["assets/jeri-cavalos.jpg","Dunas de Jericoacoara","Parque Nacional • CE"]]
+  },
+  natal: {
+    title:"Natal", location:"Natal • RN", select:"Natal",
+    intro:"Falésias, dunas e praias marcantes em um roteiro pela capital potiguar e seus arredores.",
+    map:"https://www.google.com/maps/dir/Ponta+Negra,+Natal/Forte+dos+Reis+Magos,+Natal/Genipabu,+Extremoz/Praia+de+Pipa,+Tibau+do+Sul/Barra+do+Cunha%C3%BA,+Canguaretama",
+    days:["Ponta Negra e Morro do Careca","Forte dos Reis Magos e Via Costeira","Dunas e Praia de Genipabu","Praia da Pipa e Baía dos Golfinhos","Barra do Cunhaú e piscinas naturais"],
+    photos:[["assets/natal-ponta-negra.jpg","Ponta Negra e Morro do Careca","Natal • RN"],["assets/natal-morro-careca.jpg","Praia de Ponta Negra","Natal • RN"],["assets/natal-genipabu.jpg","Dunas de Genipabu","Extremoz • RN"],["assets/natal-pipa.jpg","Praia da Pipa","Tibau do Sul • RN"]]
   }
 };
 const months = [
@@ -59,7 +66,8 @@ const months = [
   {value:"2027-06",label:"Junho de 2027",start:3,end:30},{value:"2027-07",label:"Julho de 2027",start:3,end:31}
 ];
 const q = selector => document.querySelector(selector);
-const destinationSelect=q("#destinationSelect"), travelerSelect=q("#travelerSelect"), monthSelect=q("#monthSelect"), daySelect=q("#daySelect"), durationSelect=q("#durationSelect"), whatsappButton=q("#whatsappButton");
+const destinationSelect=q("#destinationSelect"), travelerSelect=q("#travelerSelect"), monthSelect=q("#monthSelect"), daySelect=q("#daySelect"), whatsappButton=q("#whatsappButton");
+const weekdayLabels=["Segunda","Terça","Quarta","Quinta","Sexta"];
 function money(value){return new Intl.NumberFormat("pt-BR",{style:"currency",currency:"BRL",minimumFractionDigits:2}).format(value)}
 function renderGallery(route){
   const setMain=photo=>{q("#galleryMainImage").src=photo[0];q("#galleryMainImage").alt=`${photo[1]}, ${photo[2]}`;q("#galleryMainTitle").textContent=photo[1];q("#galleryMainCaption").textContent=photo[2]};
@@ -69,8 +77,8 @@ function renderGallery(route){
 }
 function selectDestination(key,scroll=false){
   const route=routes[key]; if(!route)return;
-  q("#galleryHeading").textContent=`Seu pacote para ${route.title}`;q("#routeTitle").textContent=route.title;q("#routeLocation").textContent=route.location;q("#routeIntro").textContent=route.intro;q("#routeMap").href=route.map;
-  q("#routeList").innerHTML=route.days.map((day,index)=>`<li><span>Dia ${index+1}</span>${day}</li>`).join("");
+  q("#galleryHeading").textContent=`Veja o que você vai viver em ${route.title}`;q("#routeTitle").textContent=route.title;q("#routeLocation").textContent=route.location;q("#routeIntro").textContent=route.intro;q("#routeMap").href=route.map;
+  q("#routeList").innerHTML=route.days.map((day,index)=>`<li><span>${weekdayLabels[index]}</span>${day}</li>`).join("");
   destinationSelect.value=route.select;
   document.querySelectorAll("[data-destination]").forEach(button=>{const active=button.dataset.destination===key;button.classList.toggle("is-active",active);button.setAttribute("aria-selected",String(active))});
   document.querySelectorAll("[data-choose]").forEach(button=>button.classList.toggle("is-active",button.dataset.choose===key));
@@ -79,25 +87,26 @@ function selectDestination(key,scroll=false){
 }
 function updateDays(){
   const month=months.find(item=>item.value===monthSelect.value)||months[0];
-  daySelect.innerHTML=Array.from({length:month.end-month.start+1},(_,index)=>`<option value="${month.start+index}">${month.start+index}</option>`).join("");
+  const [year,monthNumber]=month.value.split("-").map(Number);
+  const available=Array.from({length:month.end-month.start+1},(_,index)=>month.start+index).filter(day=>{const weekday=new Date(year,monthNumber-1,day).getDay();return weekday===0||weekday===6});
+  daySelect.innerHTML=available.map(day=>{const weekday=new Date(year,monthNumber-1,day).getDay()===6?"sábado":"domingo";return `<option value="${day}">${weekday}, dia ${day}</option>`}).join("");
   updateQuote();
 }
 function updateQuote(){
   if(!monthSelect.value||!daySelect.value)return;
-  const travelers=Number(travelerSelect.value),duration=Number(durationSelect.value),baseTotal=travelers*PRICE_PER_PERSON,extended=duration>5;
-  q("#totalPrice").textContent=extended?`A partir de ${money(baseTotal)}`:money(baseTotal);
-  q("#installmentPrice").textContent=extended?"valor final após cálculo dos dias extras":`ou até 10x de ${money(baseTotal/10)} sem juros`;
-  q("#extendedNotice").hidden=!extended;
+  const travelers=Number(travelerSelect.value),baseTotal=travelers*PRICE_PER_PERSON;
+  q("#totalPrice").textContent=money(baseTotal);
+  q("#installmentPrice").textContent=`ou até 10x de ${money(baseTotal/10)} sem juros`;
 }
 function buildMessage(){
-  const name=q("#customerName").value.trim(),origin=q("#originCity").value.trim()||"não informada",ages=q("#travelerAges").value.trim()||"não informadas",travelers=Number(travelerSelect.value),duration=Number(durationSelect.value),month=months.find(item=>item.value===monthSelect.value),baseTotal=travelers*PRICE_PER_PERSON;
-  return ["Olá, tudo bem? Tenho interesse em um pacote da Rota Clara Viagens.",`Meu nome: ${name}`,`Cidade de saída: ${origin}`,`Destino: ${destinationSelect.value}`,`Data desejada: dia ${daySelect.value} de ${month.label}`,`Duração: ${duration} dias${duration>5?" (pacote estendido)":""}`,`Viajantes: ${travelers} ${travelers===1?"pessoa":"pessoas"}`,`Idades: ${ages}`,`Valor-base promocional: ${money(PRICE_PER_PERSON)} por pessoa, em até 10x sem juros`,`Total-base: ${money(baseTotal)}${duration>5?" + acréscimo dos dias extras":""}`,"Quero confirmar as vagas, o hotel, o roteiro e fechar o orçamento. Pode me ajudar?"].join("\n");
+  const name=q("#customerName").value.trim(),origin=q("#originCity").value.trim(),ages=q("#travelerAges").value.trim(),travelers=Number(travelerSelect.value),month=months.find(item=>item.value===monthSelect.value),baseTotal=travelers*PRICE_PER_PERSON;
+  return ["Olá, tudo bem? Tenho interesse em um pacote da Rota Clara Viagens.",`Meu nome: ${name}`,`Cidade de saída: ${origin}`,`Destino: ${destinationSelect.value}`,`Embarque desejado: dia ${daySelect.value} de ${month.label} (sábado ou domingo)`,"Pacote: 5 dias / 4 noites, com roteiro fixo de segunda a sexta",`Viajantes: ${travelers} — crianças incluídas na contagem`,`Idades: ${ages}`,`Valor promocional: ${money(PRICE_PER_PERSON)} por viajante, em até 10x sem juros`,`Total estimado: ${money(baseTotal)}`,"Tenho interesse em pagar o sinal de reserva e quitar o restante até 10 dias antes da viagem.","Quero confirmar voo, aeroporto, horários, traslado, hotel e disponibilidade. Pode me ajudar?"].join("\n");
 }
-q("#bookingForm").addEventListener("submit",event=>{event.preventDefault();if(!q("#customerName").reportValidity())return;const base=WHATSAPP_NUMBER?`https://wa.me/${WHATSAPP_NUMBER}`:"https://wa.me/";window.open(`${base}?text=${encodeURIComponent(buildMessage())}`,"_blank","noopener")});
+q("#bookingForm").addEventListener("submit",event=>{event.preventDefault();if(!q("#bookingForm").reportValidity())return;const base=WHATSAPP_NUMBER?`https://wa.me/${WHATSAPP_NUMBER}`:"https://wa.me/";window.open(`${base}?text=${encodeURIComponent(buildMessage())}`,"_blank","noopener")});
 monthSelect.innerHTML=months.map(month=>`<option value="${month.value}">${month.label}</option>`).join("");
 document.querySelectorAll("[data-destination]").forEach(button=>button.addEventListener("click",()=>selectDestination(button.dataset.destination)));
 document.querySelectorAll("[data-choose]").forEach(button=>button.addEventListener("click",()=>selectDestination(button.dataset.choose,true)));
 destinationSelect.addEventListener("change",()=>selectDestination(Object.keys(routes).find(key=>routes[key].select===destinationSelect.value)));
 monthSelect.addEventListener("change",updateDays);
-[daySelect,travelerSelect,durationSelect].forEach(field=>field.addEventListener("change",updateQuote));
+[daySelect,travelerSelect].forEach(field=>field.addEventListener("change",updateQuote));
 updateDays();selectDestination("rio");
