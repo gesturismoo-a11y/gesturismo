@@ -1,4 +1,4 @@
-const WHATSAPP_NUMBER = "5521989833495";
+const getWhatsappNumber = () => window.GESS_CONFIG?.getWhatsappNumber() || "5521989833495";
 const PRICE_PER_PERSON = 1599.90;
 const CHILD_PRICE = 599.90;
 const routes = {
@@ -110,7 +110,7 @@ function buildMessage(){
   const name=q("#customerName").value.trim(),origin=q("#originCity").value.trim(),adults=Number(adultSelect.value),children=Number(childSelect.value),month=months.find(item=>item.value===monthSelect.value),adultTotal=adults*PRICE_PER_PERSON,childTotal=children*CHILD_PRICE,total=adultTotal+childTotal;
   const travelers=[`Adultos: ${adults} × ${money(PRICE_PER_PERSON)}`];
   if(children>0)travelers.push(`Crianças: ${children} × ${money(CHILD_PRICE)}`);
-  return ["Olá, tudo bem? Tenho interesse em um pacote da Gess Turismo.",`Meu nome: ${name}`,`Cidade de saída: ${origin}`,`Destino: ${destinationSelect.value}`,`Embarque desejado: dia ${daySelect.value} de ${month.label} (sábado ou domingo)`,"Pacote: 5 dias de roteiro fixo, de segunda a sexta","Hospedagem: hotel parceiro desde a chegada no fim de semana até o encerramento do roteiro","Incluso: voo, hotel com café da manhã, traslados programados e atividades anunciadas",...travelers,`Total estimado: ${money(total)}`,"Estou ciente de que a condição infantil depende da disponibilidade da tarifa aérea.","Li e aceitei o resumo das condições apresentado no site.","Estou ciente do reembolso integral em até 7 dias após o pagamento e, se optar pelo sinal, da quitação do saldo até 7 dias antes da viagem.","Quero confirmar voo, aeroporto, horários, traslado, hotel e disponibilidade. Pode me ajudar?"].join("\n");
+  return ["Olá, tudo bem? Tenho interesse em um pacote da Gess Turismo.",`Meu nome: ${name}`,`Cidade de saída: ${origin}`,`Destino: ${destinationSelect.value}`,`Embarque desejado: dia ${daySelect.value} de ${month.label} (sábado ou domingo)`,"Pacote: excursão em grupo com 5 dias de roteiro fixo, de segunda a sexta","Hospedagem: hotel parceiro desde a chegada no fim de semana até o encerramento do roteiro","Incluso: voo, hotel com café da manhã, traslados programados e atividades anunciadas",...travelers,`Total estimado: ${money(total)}`,"Estou ciente de que a condição infantil depende da disponibilidade da tarifa aérea.","Li e aceitei o resumo das condições apresentado no site.","Estou ciente do reembolso integral em até 7 dias após o pagamento e, se optar pelo sinal, da quitação do saldo até 7 dias antes da viagem.","Estou ciente de que aeroporto, horários, ponto de encontro e transporte serão enviados 7 dias antes, após o planejamento da excursão em grupo.","Quero confirmar voo, aeroporto, horários, traslado, hotel e disponibilidade. Pode me ajudar?"].join("\n");
 }
 function renderTermsSelection(){
   const adults=Number(adultSelect.value),children=Number(childSelect.value),total=adults*PRICE_PER_PERSON+children*CHILD_PRICE,month=months.find(item=>item.value===monthSelect.value);
@@ -130,7 +130,7 @@ whatsappButton.addEventListener("click",openTerms);
 acceptTerms.addEventListener("change",()=>{continueWhatsapp.disabled=!acceptTerms.checked});
 q("#termsClose").addEventListener("click",()=>termsDialog.close());
 q("#cancelTerms").addEventListener("click",()=>termsDialog.close());
-continueWhatsapp.addEventListener("click",()=>{if(!acceptTerms.checked)return;const base=WHATSAPP_NUMBER?`https://wa.me/${WHATSAPP_NUMBER}`:"https://wa.me/";window.open(`${base}?text=${encodeURIComponent(buildMessage())}`,"_blank","noopener");termsDialog.close()});
+continueWhatsapp.addEventListener("click",()=>{if(!acceptTerms.checked)return;const number=getWhatsappNumber();const base=number?`https://wa.me/${number}`:"https://wa.me/";window.open(`${base}?text=${encodeURIComponent(buildMessage())}`,"_blank","noopener");termsDialog.close()});
 termsDialog.addEventListener("click",event=>{if(event.target===termsDialog)termsDialog.close()});
 monthSelect.innerHTML=months.map(month=>`<option value="${month.value}">${month.label}</option>`).join("");
 document.querySelectorAll("[data-destination]").forEach(button=>button.addEventListener("click",()=>selectDestination(button.dataset.destination)));

@@ -5,15 +5,17 @@
   <title>Painel de reservas — Gess Turismo</title>
   <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@600;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="admin.css?v=1">
+  <link rel="stylesheet" href="admin.css?v=2">
 </head>
 <body>
-  <aside><img src="assets/gess-turismo-logo.png" alt="Gess Turismo"><nav><a class="active" href="#reservas">Reservas</a><a href="#pagamentos">Pagamentos</a><a href="#viajantes">Viajantes</a></nav><a class="back" href="index.html">Voltar ao site</a></aside>
+  <aside><img src="assets/gess-turismo-logo.png" alt="Gess Turismo"><nav><a class="active" href="#reservas">Reservas</a><a href="#pagamentos">Pagamentos</a><a href="#viajantes">Viajantes</a><a href="#configuracoes">Configurações</a></nav><a class="back" href="index.html">Voltar ao site</a></aside>
   <main>
     <header><div><p>Painel administrativo</p><h1>Reservas e pagamentos</h1></div><span class="connection">Conexão Mercado Pago necessária</span></header>
     <section class="metrics" aria-label="Resumo"><article><span>Pagamentos confirmados</span><strong>0</strong></article><article><span>Sinais recebidos</span><strong>R$ 0,00</strong></article><article><span>Saldo a receber</span><strong>R$ 0,00</strong></article><article><span>Viajantes confirmados</span><strong>0</strong></article></section>
     <section class="panel" id="reservas"><div class="panel-heading"><div><span>Acompanhamento</span><h2>Reservas recentes</h2></div><button type="button" disabled>Exportar lista</button></div><div class="table-wrap"><table><thead><tr><th>Cliente</th><th>Destino</th><th>Viagem</th><th>Viajantes</th><th>Pagamento</th><th>Valor</th><th>Status</th></tr></thead><tbody><tr class="empty"><td colspan="7"><b>Nenhum pagamento sincronizado</b><span>Após a integração, os pagamentos aprovados chegarão automaticamente pelos Webhooks do Mercado Pago.</span></td></tr></tbody></table></div></section>
+    <section class="settings-panel" id="configuracoes"><div><span>Configurações do atendimento</span><h2>WhatsApp comercial</h2><p>Altere o número usado nos botões e rodapés do site.</p></div><form id="whatsappSettings"><label for="adminWhatsapp">Número com DDD</label><div class="settings-control"><input id="adminWhatsapp" name="whatsapp" type="tel" inputmode="tel" autocomplete="tel" placeholder="(21) 98983-3495" required><button type="submit">Salvar número</button></div><small>Nesta prévia, a alteração fica salva somente neste navegador. Na publicação definitiva, esta configuração será protegida por login e salva no servidor.</small><p class="settings-feedback" id="whatsappSettingsFeedback" aria-live="polite"></p></form></section>
     <section class="privacy"><b>Dados protegidos</b><p>O painel armazenará apenas informações da reserva e o status do pagamento. Número do cartão, validade e código de segurança continuarão sob responsabilidade do Mercado Pago.</p></section>
   </main>
+  <script src="site-config.js?v=2"></script><script src="admin.js?v=2"></script>
 </body>
 </html>
