@@ -42,6 +42,18 @@
 }
 .child-policy b { color: #087c6c; font-size: 13px; }
 .child-policy span { color: #557177; font-size: 12px; line-height: 1.45; }
+.form-row { align-items: end; }
+.form-row > label {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  height: 100%;
+}
+.booking-card input, .booking-card select { min-height: 48px; }
+.choice-button { min-height: 72px; }
+.included-grid article { display: flex; flex-direction: column; }
+.included-grid article h3 { min-height: 48px; margin-bottom: 10px; }
+.included-grid article p { margin-top: 0; }
 .market-comparison {
   display: grid;
   gap: 3px;

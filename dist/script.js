@@ -97,15 +97,16 @@ function updateQuote(){
   const adults=Number(adultSelect.value),maxChildren=6-adults;
   Array.from(childSelect.options).forEach(option=>{option.disabled=Number(option.value)>maxChildren});
   if(Number(childSelect.value)>maxChildren)childSelect.value=String(maxChildren);
-  const children=Number(childSelect.value),adultTotal=adults*PRICE_PER_PERSON;
-  q("#totalPrice").textContent=money(adultTotal);
-  q("#installmentPrice").textContent=`ou até 10x de ${money(adultTotal/10)} sem juros`;
-  q("#summaryLabel").textContent=children>0?"Valor dos adultos • condição infantil à parte":"Total estimado • pacote de 5 dias";
+  const children=Number(childSelect.value),adultTotal=adults*PRICE_PER_PERSON,childTotal=children*(PRICE_PER_PERSON/2),total=adultTotal+childTotal;
+  q("#totalPrice").textContent=money(total);
+  q("#installmentPrice").textContent=`ou até 10x de ${money(total/10)} sem juros`;
+  q("#summaryLabel").textContent=children>0?"Total estimado • adultos + crianças":"Total estimado • pacote de 5 dias";
+  q("#childPriceNotice").textContent=children>0?`${children} ${children===1?"criança":"crianças"} a ${money(PRICE_PER_PERSON/2)} cada`:"";
   q("#childPriceNotice").hidden=children===0;
 }
 function buildMessage(){
-  const name=q("#customerName").value.trim(),origin=q("#originCity").value.trim(),adults=Number(adultSelect.value),children=Number(childSelect.value),month=months.find(item=>item.value===monthSelect.value),adultTotal=adults*PRICE_PER_PERSON;
-  return ["Olá, tudo bem? Tenho interesse em um pacote da Rota Clara Viagens.",`Meu nome: ${name}`,`Cidade de saída: ${origin}`,`Destino: ${destinationSelect.value}`,`Embarque desejado: dia ${daySelect.value} de ${month.label} (sábado ou domingo)`,"Pacote: 5 dias de roteiro fixo, de segunda a sexta","Hospedagem: incluída desde a chegada no fim de semana até o encerramento do roteiro","Incluso: voo, hotel com café da manhã, traslados programados e atividades anunciadas",`Adultos: ${adults}`,`Crianças: ${children}`,children>0?"Quero consultar a condição infantil de até 50% de desconto.":"Não haverá crianças na viagem.",`Valor dos adultos: ${money(adultTotal)}`,"Tenho interesse em pagar o sinal de reserva e quitar o restante até 10 dias antes da viagem.","Quero confirmar voo, aeroporto, horários, traslado, hotel e disponibilidade. Pode me ajudar?"].join("\n");
+  const name=q("#customerName").value.trim(),origin=q("#originCity").value.trim(),adults=Number(adultSelect.value),children=Number(childSelect.value),month=months.find(item=>item.value===monthSelect.value),adultTotal=adults*PRICE_PER_PERSON,childTotal=children*(PRICE_PER_PERSON/2),total=adultTotal+childTotal;
+  return ["Olá, tudo bem? Tenho interesse em um pacote da Rota Clara Viagens.",`Meu nome: ${name}`,`Cidade de saída: ${origin}`,`Destino: ${destinationSelect.value}`,`Embarque desejado: dia ${daySelect.value} de ${month.label} (sábado ou domingo)`,"Pacote: 5 dias de roteiro fixo, de segunda a sexta","Hospedagem: incluída desde a chegada no fim de semana até o encerramento do roteiro","Incluso: voo, hotel com café da manhã, traslados programados e atividades anunciadas",`Adultos: ${adults} × ${money(PRICE_PER_PERSON)}`,`Crianças: ${children} × ${money(PRICE_PER_PERSON/2)}`,`Total estimado: ${money(total)}`,"Estou ciente de que a condição infantil depende da disponibilidade da tarifa aérea.","Tenho interesse em pagar o sinal de reserva e quitar o restante até 10 dias antes da viagem.","Quero confirmar voo, aeroporto, horários, traslado, hotel e disponibilidade. Pode me ajudar?"].join("\n");
 }
 q("#bookingForm").addEventListener("submit",event=>{event.preventDefault();if(!q("#bookingForm").reportValidity())return;const base=WHATSAPP_NUMBER?`https://wa.me/${WHATSAPP_NUMBER}`:"https://wa.me/";window.open(`${base}?text=${encodeURIComponent(buildMessage())}`,"_blank","noopener")});
 monthSelect.innerHTML=months.map(month=>`<option value="${month.value}">${month.label}</option>`).join("");
