@@ -1,79 +1,16 @@
-<!doctype html>
-<html lang="pt-BR">
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="robots" content="noindex, nofollow">
-  <title>Pagamento seguro — Gess Turismo</title>
-  <meta name="description" content="Área segura de pagamento da Gess Turismo.">
-  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%23fff7ee'/%3E%3Cpath d='M32 56S15 39 15 25a17 17 0 1 1 34 0c0 14-17 31-17 31Z' fill='%23ff6b00'/%3E%3Cpath d='m20 28 13-4 8-8 3 2-6 8 7 3-2 2-8-1-6 6-2-1 3-7-9 3Z' fill='%23063b72'/%3E%3C/svg%3E">
-  <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Montserrat:wght@600;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="payment.css?v=4">
-  <link rel="stylesheet" href="payment-icons.css?v=2">
-</head>
-<body>
-  <header class="payment-header">
-    <a href="index.html" aria-label="Voltar para Gess Turismo"><img src="assets/gess-turismo-logo.png" alt="Gess Turismo"></a>
-    <span>Ambiente seguro de pagamento</span>
-  </header>
-  <main class="payment-shell">
-    <section class="payment-intro">
-      <p class="eyebrow">Pagamento da reserva</p>
-      <h1>Finalize sua viagem com segurança.</h1>
-      <p>Confira os dados da viagem, escolha entre pagar o valor completo ou apenas o sinal e finalize pelo Mercado Pago.</p>
-      <div class="refund-card"><span>Pagamento protegido</span><b>Reembolso integral em até 7 dias</b><p>Se desistir, solicite a devolução do sinal ou do pagamento completo em até 7 dias corridos após o pagamento. Se escolher o sinal, quite o saldo até 7 dias antes da viagem; sem a quitação no prazo, a reserva será cancelada e a devolução do valor pago será iniciada automaticamente. As condições completas constarão no contrato da viagem.</p></div>
-    </section>
-
-    <section class="checkout-card" aria-labelledby="checkoutTitle">
-      <div class="checkout-heading"><div><span>Gess Turismo</span><h2 id="checkoutTitle">Dados e pagamento</h2></div><span class="status">Pagamento protegido</span></div>
-      <div class="traveler-fields">
-        <label>Nome completo<input id="payerName" type="text" autocomplete="name" placeholder="Responsável pela reserva"></label>
-        <label>WhatsApp<input id="payerPhone" type="tel" autocomplete="tel" placeholder="(00) 00000-0000"></label>
-        <label>E-mail<input id="payerEmail" type="email" autocomplete="email" placeholder="seuemail@exemplo.com"></label>
-        <label>Cidade de saída<input id="originCity" type="text" placeholder="Sua cidade / UF"></label>
-        <label>Destino<select id="tripDestination"><option value="Rio de Janeiro">Rio de Janeiro • RJ</option><option value="Arraial do Cabo">Arraial do Cabo • RJ</option><option value="Santa Catarina — Florianópolis">Santa Catarina • Florianópolis</option><option value="Maragogi">Maragogi • AL</option><option value="Porto Seguro">Porto Seguro • BA</option><option value="Porto de Galinhas">Porto de Galinhas • PE</option><option value="Jericoacoara">Jericoacoara • CE</option><option value="Natal">Natal • RN</option></select></label>
-        <label>Mês do roteiro<select id="tripMonth"></select></label>
-        <label>Semana disponível<select id="tripWeek"></select></label>
-        <div class="passenger-fields"><label>Adultos<select id="tripAdults"><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option><option>6</option></select></label><label>Crianças<select id="tripChildren"><option>0</option><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option></select></label></div>
-      </div>
-      <dl class="payment-summary">
-        <div><dt>Reserva</dt><dd id="bookingCode">A confirmar</dd></div>
-        <div><dt>Valor total do pacote</dt><dd id="packageAmount">Definido no atendimento</dd></div>
-        <div><dt>Restante até 7 dias antes</dt><dd id="remainingAmount">—</dd></div>
-        <div class="total"><dt>Pagar agora</dt><dd id="paymentAmount">Definido no atendimento</dd></div>
-      </dl>
-      <div class="method-label">Quanto deseja pagar agora?</div>
-      <div class="amount-mode" role="radiogroup" aria-label="Valor do pagamento">
-        <button class="amount-mode-button is-active" type="button" role="radio" aria-checked="true" data-mode="signal">Pagar apenas o sinal</button>
-        <button class="amount-mode-button" type="button" role="radio" aria-checked="false" data-mode="full">Pagar o valor completo</button>
-      </div>
-      <div class="signal-options" id="signalOptions">
-        <span>Sinal mínimo: R$ 200</span>
-        <label>Quanto deseja pagar agora?<input id="customSignal" type="number" min="200" step="0.01" inputmode="decimal" value="200" placeholder="Mínimo de R$ 200"></label>
-        <small>Digite qualquer valor a partir de R$ 200. O restante deverá ser quitado até 7 dias antes da viagem; sem a quitação no prazo, a reserva será cancelada e a devolução do valor pago será iniciada automaticamente.</small>
-        <p class="signal-followup"><b>Como será a quitação:</b> quando faltarem 7 dias para a viagem, um vendedor da Gess Turismo entrará em contato para confirmar a continuidade da reserva e enviará um novo link de pagamento para o saldo restante.</p>
-      </div>
-      <p class="group-planning"><b>Excursão planejada em grupo</b>Aeroporto, horários, ponto de encontro, transporte e hotel parceiro são definidos conforme sua cidade de saída, o destino e o encaixe dos demais viajantes. A programação final será enviada 7 dias antes da viagem, tanto no pagamento completo quanto no pagamento por sinal. Endereço e dados de identificação, como RG, serão solicitados somente depois da confirmação, na conversa privada do WhatsApp; nunca envie documentos no grupo da excursão.</p>
-      <div class="method-label">Escolha como deseja pagar</div>
-      <div class="payment-methods" role="tablist" aria-label="Forma de pagamento">
-        <button class="payment-method is-active" type="button" role="tab" aria-selected="true" data-method="pix"><span><svg class="method-logo pix-logo" viewBox="0 0 24 24" aria-hidden="true"><path d="M5.283 18.36a3.505 3.505 0 0 0 2.493-1.032l3.6-3.6a.684.684 0 0 1 .946 0l3.613 3.613a3.504 3.504 0 0 0 2.493 1.032h.71l-4.56 4.56a3.647 3.647 0 0 1-5.156 0L4.85 18.36ZM18.428 5.627a3.505 3.505 0 0 0-2.493 1.032l-3.613 3.614a.67.67 0 0 1-.946 0l-3.6-3.6A3.505 3.505 0 0 0 5.283 5.64h-.434l4.573-4.572a3.646 3.646 0 0 1 5.156 0l4.559 4.559ZM1.068 9.422 3.79 6.699h1.492a2.483 2.483 0 0 1 1.744.722l3.6 3.6a1.73 1.73 0 0 0 2.443 0l3.614-3.613a2.482 2.482 0 0 1 1.744-.723h1.767l2.737 2.737a3.646 3.646 0 0 1 0 5.156l-2.736 2.736h-1.768a2.482 2.482 0 0 1-1.744-.722l-3.613-3.613a1.77 1.77 0 0 0-2.444 0l-3.6 3.6a2.483 2.483 0 0 1-1.744.722H3.791l-2.723-2.723a3.646 3.646 0 0 1 0-5.156"/></svg></span><b>Pix</b><small>QR Code ou Pix copia e cola</small></button>
-        <button class="payment-method" type="button" role="tab" aria-selected="false" data-method="card"><span><svg class="method-logo card-logo" viewBox="0 0 24 24" aria-hidden="true"><rect width="20" height="14" x="2" y="5" rx="2"/><line x1="2" x2="22" y1="10" y2="10"/><path d="M6 14h2"/></svg></span><b>Cartão de crédito</b><small>Em até 10 parcelas sem juros</small></button>
-      </div>
-      <div class="method-panel" id="methodPanel">
-        <div class="method-panel-icon"><svg class="method-logo pix-logo" viewBox="0 0 24 24" aria-hidden="true"><path d="M5.283 18.36a3.505 3.505 0 0 0 2.493-1.032l3.6-3.6a.684.684 0 0 1 .946 0l3.613 3.613a3.504 3.504 0 0 0 2.493 1.032h.71l-4.56 4.56a3.647 3.647 0 0 1-5.156 0L4.85 18.36ZM18.428 5.627a3.505 3.505 0 0 0-2.493 1.032l-3.613 3.614a.67.67 0 0 1-.946 0l-3.6-3.6A3.505 3.505 0 0 0 5.283 5.64h-.434l4.573-4.572a3.646 3.646 0 0 1 5.156 0l4.559 4.559ZM1.068 9.422 3.79 6.699h1.492a2.483 2.483 0 0 1 1.744.722l3.6 3.6a1.73 1.73 0 0 0 2.443 0l3.614-3.613a2.482 2.482 0 0 1 1.744-.723h1.767l2.737 2.737a3.646 3.646 0 0 1 0 5.156l-2.736 2.736h-1.768a2.482 2.482 0 0 1-1.744-.722l-3.613-3.613a1.77 1.77 0 0 0-2.444 0l-3.6 3.6a2.483 2.483 0 0 1-1.744.722H3.791l-2.723-2.723a3.646 3.646 0 0 1 0-5.156"/></svg></div>
-        <div><b>Pagamento instantâneo por Pix</b><p>O Mercado Pago exibirá o QR Code e o código Pix copia e cola na próxima etapa.</p></div>
-      </div>
-      <button class="pay-button" id="payButton" type="button">Continuar com Pix</button>
-      <p class="payment-feedback" id="paymentFeedback" aria-live="polite"></p>
-      <p class="security-note">Não informe dados de cartão pelo WhatsApp. O pagamento será processado no ambiente seguro do Mercado Pago.</p>
-    </section>
-  </main>
-  <footer class="payment-footer">
-    <div><a class="footer-brand" href="index.html"><img src="assets/gess-turismo-logo.png" alt="Gess Turismo"></a><p>Viagens, conforto, destinos e experiências pelo Brasil.</p></div>
-    <div><b>Atendimento</b><p><a data-gess-whatsapp="label" href="https://wa.me/5521989833495" target="_blank" rel="noopener">WhatsApp: (21) 98983-3495</a><br><a href="https://www.instagram.com/gess_turismo/" target="_blank" rel="noopener">Instagram: @gess_turismo</a><br>Temos hotéis parceiros nos destinos do pacote</p></div>
-    <div><b>Pagamento seguro</b><p>Pix e cartão processados pelo Mercado Pago. Nunca envie número do cartão, validade ou código de segurança pelo WhatsApp.</p></div>
-  </footer>
-  <script src="site-config.js?v=2"></script><script src="payment.js?v=5"></script>
-</body>
-</html>
+<!doctype html><html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex,nofollow"><title>Pagamento Pix — Gess Turismo</title><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@600;700;800&display=swap" rel="stylesheet"><link rel="stylesheet" href="payment.css?v=6"><link rel="stylesheet" href="payment-icons.css?v=2"></head>
+<body><header class="payment-header"><a href="index.html"><img src="assets/gess-turismo-logo.png" alt="Gess Turismo"></a><span>Cobrança individual da reserva</span></header>
+<main class="payment-shell"><section class="payment-intro"><p class="eyebrow">Pagamento por Pix</p><h1>Confira tudo antes de pagar.</h1><p>Esta cobrança foi preparada pela equipe após o atendimento. Confirme destino, data, valor e recebedor no aplicativo do seu banco.</p><div class="refund-card"><span>Próxima etapa</span><b>Envie o comprovante no WhatsApp</b><p>Depois de pagar, preencha seus dados, selecione uma imagem ou PDF do comprovante e abra a conversa. O WhatsApp receberá a mensagem pronta; por segurança, você deverá anexar o arquivo manualmente antes de enviar.</p></div></section>
+  <section class="checkout-card" id="checkoutCard"><div class="checkout-heading"><div><span>Gess Turismo</span><h2>Dados da cobrança</h2></div><span class="status" id="chargeStatus">Aguardando pagamento</span></div>
+    <div class="invalid-charge" id="invalidCharge" hidden><b>Link de cobrança inválido</b><p>Peça um novo link diretamente no WhatsApp oficial da Gess Turismo.</p></div>
+    <div id="chargeContent"><dl class="payment-summary charge-summary"><div><dt>Reserva</dt><dd id="bookingCode">—</dd></div><div><dt>Destino</dt><dd id="tripDestination">—</dd></div><div><dt>Data</dt><dd id="tripDate">—</dd></div><div><dt>Embarque</dt><dd id="tripPickup">—</dd></div><div><dt>Viajantes</dt><dd id="tripTravelers">—</dd></div><div><dt>Valor total</dt><dd id="packageAmount">—</dd></div><div><dt>Saldo depois deste Pix</dt><dd id="remainingAmount">—</dd></div><div class="total"><dt>Pagar agora</dt><dd id="paymentAmount">—</dd></div></dl>
+      <p class="charge-note" id="chargeNote" hidden></p>
+      <div class="pix-payment"><div class="pix-qr"><img id="pixQr" alt="QR Code Pix" referrerpolicy="no-referrer"></div><div><span>Pix</span><h3>Escaneie ou copie o código</h3><p>Abra o aplicativo do seu banco, confira o recebedor e o valor antes de confirmar.</p><textarea id="pixCode" readonly></textarea><button id="copyPix" type="button">Copiar código Pix</button></div></div>
+      <div class="due-warning"><b>Vencimento deste link</b><span id="chargeDue">—</span></div>
+      <form id="proofForm"><div class="traveler-fields"><label>Nome completo<input id="payerName" required autocomplete="name"></label><label>WhatsApp<input id="payerPhone" required type="tel" autocomplete="tel"></label><label>E-mail<input id="payerEmail" required type="email" autocomplete="email"></label><label>Cidade onde mora<input id="payerCity" required></label><label>Endereço residencial<input id="payerAddress" required autocomplete="street-address"></label><label>Nome dos demais viajantes<textarea id="travelerNames" rows="3" placeholder="Um nome por linha, se houver"></textarea></label></div>
+        <label class="proof-upload">Comprovante do pagamento<input id="proofFile" type="file" accept="image/*,.pdf,application/pdf" required><span id="proofName">Selecione uma imagem, print ou PDF</span></label><label class="terms-check"><input id="paymentTerms" type="checkbox" required><span>Conferi os dados da cobrança e estou ciente de que devo anexar o comprovante na conversa do WhatsApp.</span></label><button class="pay-button" id="sendProof" type="submit">Abrir WhatsApp para enviar comprovante</button><p class="payment-feedback" id="paymentFeedback"></p></form>
+      <p class="security-note">Não envie número do cartão, senha bancária ou código de segurança. RG e documentos pessoais serão solicitados separadamente no atendimento privado.</p>
+    </div>
+  </section></main>
+<footer class="payment-footer"><div><a class="footer-brand" href="index.html"><img src="assets/gess-turismo-logo.png" alt="Gess Turismo"></a><p>Excursões, destinos e experiências pelo Brasil.</p></div><div><b>Atendimento</b><p><a data-gess-whatsapp="label" href="https://wa.me/5521989833495">WhatsApp: (21) 98983-3495</a><br><a href="https://www.instagram.com/gess_turismo/">Instagram: @gess_turismo</a></p></div><div><b>Pagamento consciente</b><p>Confira o nome do recebedor no banco. Em caso de dúvida, não pague e fale com a equipe.</p></div></footer>
+<script src="site-config.js?v=2"></script><script src="payment.js?v=6"></script></body></html>

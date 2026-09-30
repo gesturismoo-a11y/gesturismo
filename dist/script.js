@@ -1,141 +1,114 @@
 const getWhatsappNumber = () => window.GESS_CONFIG?.getWhatsappNumber() || "5521989833495";
-const PRICE_PER_PERSON = 1599.90;
-const CHILD_PRICE = 599.90;
-const routes = {
-  rio: {
-    title:"Rio de Janeiro", location:"Rio de Janeiro • RJ", select:"Rio de Janeiro",
-    intro:"Mar, montanha e os cartões-postais mais famosos da capital carioca.",
-    map:"https://www.google.com/maps/dir/Copacabana,+Rio+de+Janeiro/Ipanema,+Rio+de+Janeiro/P%C3%A3o+de+A%C3%A7%C3%BAcar,+Rio+de+Janeiro/Cristo+Redentor,+Rio+de+Janeiro/Ba%C3%ADa+de+Guanabara",
-    days:["Manhã: Cristo Redentor • Tarde: Praia de Copacabana","Manhã: Pão de Açúcar • Tarde: Praia Vermelha e Urca","Dia inteiro: Ipanema e Arpoador","Dia inteiro: Praia da Barra da Tijuca","Manhã: passeio pela Baía de Guanabara • Tarde: Praia do Leblon"],
-    photos:[["assets/rio.jpg","Praia de Copacabana","Rio de Janeiro • RJ"],["assets/rio-ipanema.jpg","Ipanema vista do Arpoador","Zona Sul • Rio de Janeiro"],["assets/rio-pao-acucar.jpg","Pão de Açúcar","Urca • Rio de Janeiro"],["assets/rio-guanabara.jpg","Baía de Guanabara","Passeio náutico • Rio de Janeiro"]]
-  },
+const money = value => new Intl.NumberFormat("pt-BR", {style:"currency", currency:"BRL"}).format(value);
+
+const packages = {
   arraial: {
-    title:"Arraial do Cabo", location:"Região dos Lagos • RJ", select:"Arraial do Cabo",
-    intro:"Areia branca, água transparente e um dos roteiros náuticos mais bonitos do país.",
-    map:"https://www.google.com/maps/dir/Praia+dos+Anjos,+Arraial+do+Cabo/Praia+do+Farol,+Arraial+do+Cabo/Prainhas+do+Pontal+do+Atalaia/Praia+do+Forno,+Arraial+do+Cabo/Praia+Grande,+Arraial+do+Cabo",
-    days:["Dia inteiro: Praia dos Anjos e Praia do Forno","Passeio de barco: Praia do Farol, Gruta Azul e paradas para banho","Dia inteiro: Prainhas do Pontal do Atalaia","Dia inteiro: Praia do Forno, com acesso por trilha ou barco","Dia inteiro: Praia Grande e pôr do sol"],
-    photos:[["assets/arraial.jpg","Prainhas do Pontal do Atalaia","Arraial do Cabo • RJ"],["assets/arraial-forno.jpg","Praia do Forno","Arraial do Cabo • RJ"],["assets/arraial-farol.jpg","Praia do Farol","Acesso por barco • Arraial do Cabo"],["assets/arraial-praia-grande.jpg","Praia Grande","Pôr do sol • Arraial do Cabo"]]
+    title:"Arraial do Cabo", location:"Região dos Lagos • RJ", price:500, duration:"2 dias • sábado e domingo", transport:"Ônibus de excursão", returnTime:"Saída de Arraial no domingo, às 20h", hotel:true,
+    intro:"Fim de semana de mar cristalino com hotel, café da manhã, mergulho, passeio de buggy e experiências anunciadas no roteiro.",
+    days:["Sábado • Praia do Forno, Prainhas do Pontal do Atalaia, mergulho e check-in no hotel","Domingo • Passeio de barco com Praia do Farol e Gruta Azul, passeio panorâmico de buggy e saída às 20h"],
+    pickups:["São Paulo: Jabaquara, Barra Funda e Tietê — conexão conforme a formação do grupo","Minas Gerais: Belo Horizonte, Barbacena e Juiz de Fora — pontos centrais a confirmar","Rio de Janeiro: Petrópolis, Rodoviária Novo Rio, Niterói e São Gonçalo — conforme a rota final"],
+    photos:[["assets/arraial.jpg","Prainhas do Pontal do Atalaia","Arraial do Cabo • RJ"],["assets/arraial-forno.jpg","Praia do Forno","Arraial do Cabo • RJ"],["assets/arraial-farol.jpg","Praia do Farol","Acesso por barco"],["assets/arraial-praia-grande.jpg","Praia Grande","Arraial do Cabo • RJ"]]
   },
-  "santa-catarina": {
-    title:"Florianópolis", location:"Santa Catarina • SC", select:"Santa Catarina — Florianópolis",
-    intro:"O pacote catarinense tem base em Florianópolis e combina ilha, dunas e cultura local.",
-    map:"https://www.google.com/maps/dir/Ilha+do+Campeche,+Florian%C3%B3polis/Praia+do+Campeche,+Florian%C3%B3polis/Praia+da+Joaquina,+Florian%C3%B3polis/Lagoa+da+Concei%C3%A7%C3%A3o,+Florian%C3%B3polis/Barra+da+Lagoa,+Florian%C3%B3polis",
-    days:["Dia inteiro: travessia e praia na Ilha do Campeche","Dia inteiro: Praia do Campeche","Manhã: Dunas da Joaquina • Tarde: Praia da Joaquina","Manhã: Lagoa da Conceição • Tarde: Praia Mole","Dia inteiro: Barra da Lagoa e piscinas naturais"],
-    photos:[["assets/santa-catarina.jpg","Ilha do Campeche","Florianópolis • SC"],["assets/floripa-joaquina.jpg","Praia da Joaquina","Florianópolis • SC"],["assets/floripa-dunas.jpg","Dunas da Joaquina","Florianópolis • SC"],["assets/floripa-barra-lagoa.jpg","Barra da Lagoa","Florianópolis • SC"]]
+  campos: {
+    title:"Campos do Jordão", location:"Serra da Mantiqueira • SP", price:150, duration:"1 dia • bate-volta", transport:"Ônibus de excursão", returnTime:"Saída de Campos no fim do dia, prevista para 20h", hotel:false,
+    intro:"Um dia inteiro na serra, sem hospedagem, com aproximadamente 3 horas de estrada a partir da capital paulista, além do tempo dos embarques.",
+    days:["Manhã • Portal, Ducha de Prata e Morro do Elefante","Tarde • Vila Capivari, Boulevard Geneve e tempo livre para conhecer a gastronomia local","Noite • Encontro do grupo e saída prevista de Campos do Jordão às 20h"],
+    pickups:["São Paulo: Jabaquara — ponto exato e horário confirmados pela equipe","Centro/Barra Funda — ponto autorizado a confirmar","Terminal Tietê — último embarque previsto antes da Rodovia Ayrton Senna"],
+    photos:[["https://commons.wikimedia.org/wiki/Special:Redirect/file/Montagem%20Campos%20do%20Jord%C3%A3o.jpg","Vila Capivari e paisagens da serra","Campos do Jordão • SP"],["https://commons.wikimedia.org/wiki/Special:Redirect/file/Boulevard%20Geneve%2C%20Campos%20do%20Jord%C3%A3o.jpg","Boulevard Geneve","Campos do Jordão • SP"],["https://commons.wikimedia.org/wiki/Special:Redirect/file/P%C3%B3rtico%20de%20Campos%20do%20Jord%C3%A3o.jpg","Portal de Campos do Jordão","Serra da Mantiqueira • SP"],["https://commons.wikimedia.org/wiki/Special:Redirect/file/Rua%20Djalma%20Forjaz%2C%20Campos%20do%20Jord%C3%A3o%2C%20SP.jpg","Centro turístico","Campos do Jordão • SP"]]
   },
-  maragogi: {
-    title:"Maragogi", location:"Costa dos Corais • AL", select:"Maragogi",
-    intro:"Piscinas naturais, praias tranquilas e os tons de azul mais famosos de Alagoas.",
-    map:"https://www.google.com/maps/dir/Gal%C3%A9s+de+Maragogi/Praia+de+Antunes,+Maragogi/Praia+de+Barra+Grande,+Maragogi/Praia+de+Ponta+de+Mangue,+Maragogi/Orla+de+Maragogi",
-    days:["Catamarã às Galés e piscinas naturais, em horário definido pela maré • Restante do dia: Praia de Maragogi","Dia inteiro: Praia de Antunes","Caminho de Moisés, conforme a maré • Restante do dia: Praia de Barra Grande","Dia inteiro: Praia de Ponta de Mangue","Dia inteiro: Praia de Burgalhau e orla de Maragogi"],
-    photos:[["assets/maragogi.jpg","Praia de Antunes","Maragogi • AL"],["assets/maragogi-corais.jpg","Galés e piscinas naturais","Costa dos Corais • Maragogi"],["assets/maragogi-barra-grande.jpg","Praia de Barra Grande","Maragogi • AL"],["assets/maragogi-ponta-mangue.jpg","Praia de Ponta de Mangue","Maragogi • AL"]]
+  guaruja: {
+    title:"Guarujá", location:"Baixada Santista • SP", price:150, duration:"2 dias • sábado e domingo", transport:"Ônibus de excursão", returnTime:"Saída do Guarujá no domingo, às 20h", hotel:true,
+    intro:"Dois dias nas praias mais conhecidas da Ilha de Santo Amaro, com hotel parceiro e café da manhã incluídos.",
+    days:["Sábado • Praia da Enseada, Mirante da Campina e check-in no hotel","Domingo • Pitangueiras, Astúrias e Praia do Tombo, com saída às 20h"],
+    pickups:["Jabaquara — embarque principal para a Baixada Santista","Centro de São Paulo — ponto autorizado a confirmar","Barra Funda, Tietê e São Bernardo do Campo — conforme a quantidade de viajantes"],
+    photos:[["https://commons.wikimedia.org/wiki/Special:Redirect/file/IMG%208291%20Praia%20da%20Enseada%2C%20Guaruj%C3%A1.jpg","Praia da Enseada","Guarujá • SP"],["https://commons.wikimedia.org/wiki/Special:Redirect/file/Enseada%20beach%20guaruja.jpg","Enseada","Guarujá • SP"],["https://commons.wikimedia.org/wiki/Special:Redirect/file/Guaruj%C3%A1%20Praia%20da%20Enseada-20080502-RM-101255.jpg","Orla do Guarujá","Baixada Santista • SP"],["https://commons.wikimedia.org/wiki/Special:Redirect/file/IMG%208298%20Praia%20da%20Enseada%2C%20Guaruj%C3%A1.jpg","Litoral do Guarujá","São Paulo"]]
   },
-  "porto-seguro": {
-    title:"Porto Seguro", location:"Costa do Descobrimento • BA", select:"Porto Seguro",
-    intro:"Praias animadas, história e vilas charmosas no litoral sul da Bahia.",
-    map:"https://www.google.com/maps/dir/Cidade+Hist%C3%B3rica,+Porto+Seguro/Praia+de+Munda%C3%AD,+Porto+Seguro/Praia+de+Taperapu%C3%A3,+Porto+Seguro/Arraial+d%27Ajuda,+Porto+Seguro/Trancoso,+Porto+Seguro",
-    days:["Manhã: Centro Histórico • Tarde: Praia de Mundaí","Dia inteiro: Praia de Taperapuã","Dia inteiro: Taperapuã e complexo Tôa Tôa","Manhã: centro de Arraial d’Ajuda • Tarde: Praia do Mucugê","Manhã: Quadrado de Trancoso • Tarde: Praia dos Nativos"],
-    photos:[["assets/porto-seguro.jpg","Orla de Porto Seguro","Porto Seguro • BA"],["assets/porto-seguro-mundai.jpg","Praia de Mundaí","Porto Seguro • BA"],["assets/porto-seguro-toatoa.jpg","Praia de Taperapuã","Porto Seguro • BA"],["assets/porto-seguro-trancoso.jpg","Trancoso","Porto Seguro • BA"]]
+  bertioga: {
+    title:"Bertioga", location:"Litoral paulista • SP", price:150, duration:"2 dias • sábado e domingo", transport:"Ônibus de excursão", returnTime:"Saída de Bertioga no domingo, às 20h", hotel:true,
+    intro:"Fim de semana entre praias, Mata Atlântica e história, com hotel parceiro e café da manhã incluídos.",
+    days:["Sábado • Praia da Enseada, Riviera de São Lourenço e check-in no hotel","Domingo • Forte São João pela manhã e tarde de praia em Itaguaré, com saída às 20h"],
+    pickups:["Terminal Tietê e Barra Funda — horários conforme a rota","Jabaquara — conexão definida pela equipe","Guarulhos e Mogi das Cruzes — pontos centrais conforme a formação do grupo"],
+    photos:[["https://commons.wikimedia.org/wiki/Special:Redirect/file/Praia%20em%20Bertioga.jpg","Praia em Bertioga","Bertioga • SP"],["https://commons.wikimedia.org/wiki/Special:Redirect/file/Bertioga%20praia.jpg","Litoral de Bertioga","Bertioga • SP"],["https://commons.wikimedia.org/wiki/Special:Redirect/file/Forte%20S%C3%A3o%20Jo%C3%A3o%20-%20BERTIOGA%20SP.jpg","Forte São João","Bertioga • SP"],["https://commons.wikimedia.org/wiki/Special:Redirect/file/Praia%20em%20Bertioga.jpg","Praias e Mata Atlântica","Bertioga • SP"]]
   },
-  "porto-galinhas": {
-    title:"Porto de Galinhas", location:"Ipojuca • PE", select:"Porto de Galinhas",
-    intro:"Piscinas naturais, jangadas e praias de águas mornas no litoral pernambucano.",
-    map:"https://www.google.com/maps/dir/Piscinas+Naturais+de+Porto+de+Galinhas/Praia+de+Muro+Alto,+Ipojuca/Pontal+do+Cupe,+Ipojuca/Pontal+de+Maraca%C3%ADpe,+Ipojuca/Vila+de+Porto+de+Galinhas",
-    days:["Jangada às piscinas naturais, em horário definido pela maré • Restante do dia: Praia do Centro","Dia inteiro: Praia de Muro Alto","Dia inteiro: Pontal do Cupe","Manhã: jangada no mangue • Tarde: Praia de Maracaípe","Manhã: vila e artesanato • Tarde: Praia do Centro"],
-    photos:[["assets/porto-galinhas.jpg","Praia de Porto de Galinhas","Ipojuca • PE"],["assets/porto-galinhas-piscinas.jpg","Piscinas naturais","Porto de Galinhas • PE"],["assets/porto-galinhas-muro-alto.jpg","Praia de Muro Alto","Ipojuca • PE"],["assets/porto-galinhas-mergulho.jpg","Mergulho em Porto de Galinhas","Ipojuca • PE"]]
-  },
-  jericoacoara: {
-    title:"Jericoacoara", location:"Jijoca de Jericoacoara • CE", select:"Jericoacoara",
-    intro:"Dunas, lagoas e mar em uma vila cercada pelas paisagens do litoral cearense.",
-    map:"https://www.google.com/maps/dir/Vila+de+Jericoacoara/Pedra+Furada,+Jericoacoara/Duna+do+P%C3%B4r+do+Sol,+Jericoacoara/Lagoa+do+Para%C3%ADso,+Jijoca+de+Jericoacoara/Buraco+Azul,+Cruz,+CE",
-    days:["Manhã: vila de Jericoacoara • Tarde: Praia de Jericoacoara","Manhã: trilha até a Pedra Furada • Tarde: Praia da Malhada","Dia inteiro: Praia de Jericoacoara, com pôr do sol nas dunas","Manhã: Árvore da Preguiça • Tarde: Lagoa do Paraíso","Dia inteiro: circuito de lagoas e banho no Buraco Azul"],
-    photos:[["assets/jericoacoara.jpg","Praia de Jericoacoara","Jijoca de Jericoacoara • CE"],["assets/jeri-duna.jpg","Duna do Pôr do Sol","Jericoacoara • CE"],["assets/jeri-praia.jpg","Praia e vila de Jericoacoara","Ceará"],["assets/jeri-cavalos.jpg","Dunas de Jericoacoara","Parque Nacional • CE"]]
-  },
-  natal: {
-    title:"Natal", location:"Natal • RN", select:"Natal",
-    intro:"Falésias, dunas e praias marcantes em um roteiro pela capital potiguar e seus arredores.",
-    map:"https://www.google.com/maps/dir/Ponta+Negra,+Natal/Forte+dos+Reis+Magos,+Natal/Genipabu,+Extremoz/Praia+de+Pipa,+Tibau+do+Sul/Barra+do+Cunha%C3%BA,+Canguaretama",
-    days:["Dia inteiro: Praia de Ponta Negra e vista do Morro do Careca","Manhã: Forte dos Reis Magos • Tarde: Praia do Forte","Manhã: passeio pelas dunas de Genipabu • Tarde: Praia de Genipabu","Dia inteiro: Praia da Pipa e Baía dos Golfinhos","Dia inteiro: Barra do Cunhaú e piscinas naturais"],
-    photos:[["assets/natal-ponta-negra.jpg","Ponta Negra e Morro do Careca","Natal • RN"],["assets/natal-morro-careca.jpg","Praia de Ponta Negra","Natal • RN"],["assets/natal-genipabu.jpg","Dunas de Genipabu","Extremoz • RN"],["assets/natal-pipa.jpg","Praia da Pipa","Tibau do Sul • RN"]]
+  buzios: {
+    title:"Búzios", location:"Região dos Lagos • RJ", price:500, duration:"2 dias • sábado e domingo", transport:"Ônibus de excursão", returnTime:"Saída de Búzios no domingo, às 20h", hotel:true,
+    intro:"Fim de semana em praias famosas e na orla mais charmosa da Região dos Lagos, com hotel parceiro e café da manhã.",
+    days:["Sábado • Praia de Geribá, Orla Bardot, Rua das Pedras e check-in no hotel","Domingo • João Fernandes, Azeda e Azedinha, com saída às 20h"],
+    pickups:["São Paulo: Jabaquara, Barra Funda e Tietê — conexão conforme o grupo","Rio de Janeiro: Rodoviária Novo Rio, Niterói e São Gonçalo","Outros pontos no caminho poderão ser confirmados pela equipe até 7 dias antes"],
+    photos:[["https://commons.wikimedia.org/wiki/Special:Redirect/file/Arma%C3%A7%C3%A3o%20dos%20B%C3%BAzios%2C%20Brazil%20%28164718149%29.jpg","Armação dos Búzios","Região dos Lagos • RJ"],["https://commons.wikimedia.org/wiki/Special:Redirect/file/Arma%C3%A7%C3%A3o%20de%20B%C3%BAzios-RJ.jpg","Praia da Armação","Búzios • RJ"],["https://commons.wikimedia.org/wiki/Special:Redirect/file/Vista%20da%20Praia%20de%20Jo%C3%A3o%20Fernandes%2C%20Arma%C3%A7%C3%A3o%20de%20B%C3%BAzios%2C%20RJ%2C%20Brasil.jpg","Praia de João Fernandes","Búzios • RJ"],["https://commons.wikimedia.org/wiki/Special:Redirect/file/Praia%20de%20Jo%C3%A3o%20Fernandes%2001.jpg","João Fernandes","Búzios • RJ"]]
   }
 };
-const months = [
-  {value:"2026-10",label:"Outubro de 2026",start:3,end:31},{value:"2026-11",label:"Novembro de 2026",start:3,end:30},
-  {value:"2026-12",label:"Dezembro de 2026",start:3,end:19},{value:"2027-01",label:"Janeiro de 2027",start:6,end:31},
-  {value:"2027-02",label:"Fevereiro de 2027",start:3,end:28},{value:"2027-03",label:"Março de 2027",start:3,end:31},
-  {value:"2027-04",label:"Abril de 2027",start:3,end:30},{value:"2027-05",label:"Maio de 2027",start:3,end:31},
-  {value:"2027-06",label:"Junho de 2027",start:3,end:30},{value:"2027-07",label:"Julho de 2027",start:3,end:31}
-];
+
 const q = selector => document.querySelector(selector);
-const destinationSelect=q("#destinationSelect"), adultSelect=q("#adultSelect"), childSelect=q("#childSelect"), monthSelect=q("#monthSelect"), daySelect=q("#daySelect"), whatsappButton=q("#whatsappButton"),termsDialog=q("#termsDialog"),acceptTerms=q("#acceptTerms"),continueWhatsapp=q("#continueWhatsapp");
-const weekdayLabels=["Segunda","Terça","Quarta","Quinta","Sexta"];
-function money(value){return new Intl.NumberFormat("pt-BR",{style:"currency",currency:"BRL",minimumFractionDigits:2}).format(value)}
-function renderGallery(route){
+const destinationSelect=q("#destinationSelect"), travelerSelect=q("#travelerSelect"), departureSelect=q("#departureSelect"), dateSelect=q("#dateSelect"), termsDialog=q("#termsDialog"), acceptTerms=q("#acceptTerms"), continueWhatsapp=q("#continueWhatsapp");
+const packageKeys=Object.keys(packages);
+let selectedKey="arraial";
+
+function renderGallery(pkg){
   const setMain=photo=>{q("#galleryMainImage").src=photo[0];q("#galleryMainImage").alt=`${photo[1]}, ${photo[2]}`;q("#galleryMainTitle").textContent=photo[1];q("#galleryMainCaption").textContent=photo[2]};
-  setMain(route.photos[0]);
-  q("#galleryThumbs").innerHTML=route.photos.map((photo,index)=>`<button type="button" class="gallery-thumb ${index===0?"is-active":""}" data-photo="${index}" aria-label="Ver ${photo[1]}"><img src="${photo[0]}" alt="${photo[1]}" loading="lazy"><span>${photo[1]}</span></button>`).join("");
-  document.querySelectorAll(".gallery-thumb").forEach(button=>button.addEventListener("click",()=>{setMain(route.photos[Number(button.dataset.photo)]);document.querySelectorAll(".gallery-thumb").forEach(item=>item.classList.toggle("is-active",item===button))}));
+  setMain(pkg.photos[0]);
+  q("#galleryThumbs").innerHTML=pkg.photos.map((photo,index)=>`<button class="gallery-thumb ${index===0?"is-active":""}" type="button" data-photo="${index}"><img src="${photo[0]}" alt="${photo[1]}" loading="lazy"><span>${photo[1]}</span></button>`).join("");
+  document.querySelectorAll(".gallery-thumb").forEach(button=>button.addEventListener("click",()=>{setMain(pkg.photos[Number(button.dataset.photo)]);document.querySelectorAll(".gallery-thumb").forEach(item=>item.classList.toggle("is-active",item===button))}));
 }
-function selectDestination(key,scroll=false){
-  const route=routes[key]; if(!route)return;
-  q("#galleryHeading").textContent=`Veja o que você vai viver em ${route.title}`;q("#routeTitle").textContent=route.title;q("#routeLocation").textContent=route.location;q("#routeIntro").textContent=route.intro;q("#routeMap").href=route.map;
-  q("#routeList").innerHTML=route.days.map((day,index)=>`<li><span>${weekdayLabels[index]}</span>${day}</li>`).join("");
-  destinationSelect.value=route.select;
-  document.querySelectorAll("[data-destination]").forEach(button=>{const active=button.dataset.destination===key;button.classList.toggle("is-active",active);button.setAttribute("aria-selected",String(active))});
-  document.querySelectorAll("[data-choose]").forEach(button=>button.classList.toggle("is-active",button.dataset.choose===key));
-  renderGallery(route);updateQuote();
+
+function buildDates(pkg){
+  const dates=[];const cursor=new Date();cursor.setHours(12,0,0,0);
+  for(let offset=1;offset<=240&&dates.length<18;offset++){
+    const date=new Date(cursor);date.setDate(cursor.getDate()+offset);
+    const valid=pkg.hotel?date.getDay()===6:[0,6].includes(date.getDay());
+    if(valid) dates.push(date);
+  }
+  dateSelect.innerHTML=dates.map(date=>`<option value="${date.toISOString().slice(0,10)}">${date.toLocaleDateString("pt-BR",{weekday:"long",day:"2-digit",month:"long",year:"numeric"})}</option>`).join("");
+}
+
+function updateBooking(resetOptions=true){
+  const pkg=packages[selectedKey];
+  if(resetOptions){
+    departureSelect.innerHTML=pkg.pickups.map(item=>`<option value="${item.split(" — ")[0]}">${item.split(" — ")[0]}</option>`).join("");
+    buildDates(pkg);
+  }
+  const travelers=Number(travelerSelect.value||1),total=pkg.price*travelers;
+  q("#summaryLabel").textContent=`${pkg.duration} • ${travelers} ${travelers===1?"viajante":"viajantes"}`;
+  q("#totalPrice").textContent=money(total);
+  q("#installmentPrice").textContent=`${money(pkg.price)} por pessoa • cobrança personalizada após o atendimento`;
+}
+
+function selectPackage(key,scroll=false){
+  selectedKey=key;const pkg=packages[key];
+  q("#galleryHeading").textContent=`Conheça o pacote para ${pkg.title}`;
+  q("#routeTitle").textContent=pkg.title;q("#routeLocation").textContent=pkg.location;q("#routeIntro").textContent=pkg.intro;
+  q("#routeMeta").innerHTML=`<b>${pkg.duration}</b><span>${pkg.transport}</span><span>${pkg.returnTime}</span>`;
+  q("#routeList").innerHTML=pkg.days.map((day,index)=>`<li><span>${String(index+1).padStart(2,"0")}</span>${day}</li>`).join("");
+  q("#pickupList").innerHTML=pkg.pickups.map(point=>`<li>${point}</li>`).join("");
+  q("#hotelLine").innerHTML=pkg.hotel?`<span>Hospedagem incluída</span><b>Hotel parceiro + café da manhã • nome e endereço a confirmar</b>`:`<span>Bate-volta de um dia</span><b>Este pacote não inclui hotel nem pernoite</b>`;
+  q("#routePrice").textContent=`${money(pkg.price)} por pessoa`;
+  renderGallery(pkg);
+  document.querySelectorAll("[data-destination],[data-choose]").forEach(button=>button.classList.toggle("is-active",(button.dataset.destination||button.dataset.choose)===key));
+  destinationSelect.value=key;updateBooking();
   if(scroll)q("#destinos").scrollIntoView({behavior:"smooth",block:"start"});
 }
-function updateDays(){
-  const month=months.find(item=>item.value===monthSelect.value)||months[0];
-  const [year,monthNumber]=month.value.split("-").map(Number);
-  const available=Array.from({length:month.end-month.start+1},(_,index)=>month.start+index).filter(day=>{const weekday=new Date(year,monthNumber-1,day).getDay();return weekday===0||weekday===6});
-  daySelect.innerHTML=available.map(day=>{const weekday=new Date(year,monthNumber-1,day).getDay()===6?"sábado":"domingo";return `<option value="${day}">${weekday}, dia ${day}</option>`}).join("");
-  updateQuote();
-}
-function updateQuote(){
-  if(!monthSelect.value||!daySelect.value)return;
-  const adults=Number(adultSelect.value),maxChildren=6-adults;
-  Array.from(childSelect.options).forEach(option=>{option.disabled=Number(option.value)>maxChildren});
-  if(Number(childSelect.value)>maxChildren)childSelect.value=String(maxChildren);
-  const children=Number(childSelect.value),adultTotal=adults*PRICE_PER_PERSON,childTotal=children*CHILD_PRICE,total=adultTotal+childTotal;
-  q("#totalPrice").textContent=money(total);
-  q("#installmentPrice").textContent=`ou até 10 parcelas mensais de ${money(total/10)} sem juros`;
-  q("#summaryLabel").textContent=children>0?"Total estimado • adultos + crianças":"Total estimado • pacote de 5 dias";
-  q("#childPriceNotice").textContent=children>0?`${children} ${children===1?"criança":"crianças"} a ${money(CHILD_PRICE)} cada`:"";
-  q("#childPriceNotice").hidden=children===0;
-  q("#childPolicy").hidden=children===0;
-}
+
 function buildMessage(){
-  const name=q("#customerName").value.trim(),origin=q("#originCity").value.trim(),adults=Number(adultSelect.value),children=Number(childSelect.value),month=months.find(item=>item.value===monthSelect.value),adultTotal=adults*PRICE_PER_PERSON,childTotal=children*CHILD_PRICE,total=adultTotal+childTotal;
-  const travelers=[`Adultos: ${adults} × ${money(PRICE_PER_PERSON)}`];
-  if(children>0)travelers.push(`Crianças: ${children} × ${money(CHILD_PRICE)}`);
-  return ["Olá, tudo bem? Tenho interesse em um pacote da Gess Turismo.",`Meu nome: ${name}`,`Cidade de saída: ${origin}`,`Destino: ${destinationSelect.value}`,`Embarque desejado: dia ${daySelect.value} de ${month.label} (sábado ou domingo)`,"Pacote: excursão em grupo com 5 dias de roteiro fixo, de segunda a sexta","Hospedagem: hotel parceiro desde a chegada no fim de semana até o encerramento do roteiro","Incluso: voo, hotel com café da manhã, traslados programados e atividades anunciadas",...travelers,`Total estimado: ${money(total)}`,"Estou ciente de que a condição infantil depende da disponibilidade da tarifa aérea.","Li e aceitei o resumo das condições apresentado no site.","Estou ciente do reembolso integral em até 7 dias após o pagamento e, se optar pelo sinal, da quitação do saldo até 7 dias antes da viagem.","Estou ciente de que aeroporto, horários, ponto de encontro e transporte serão enviados 7 dias antes, após o planejamento da excursão em grupo.","Se a reserva for confirmada, enviarei endereço e dados de identificação solicitados em conversa privada no WhatsApp. Entendi que o grupo será usado apenas para avisos gerais da excursão.","Quero confirmar voo, aeroporto, horários, traslado, hotel e disponibilidade. Pode me ajudar?"].join("\n");
+  const pkg=packages[selectedKey],travelers=Number(travelerSelect.value),total=pkg.price*travelers;
+  return ["Olá, tudo bem? Tenho interesse em um pacote da Gess Turismo.",`Nome: ${q("#customerName").value.trim()}`,`WhatsApp: ${q("#customerPhone").value.trim()}`,`Pacote: ${pkg.title} — ${pkg.duration}`,`Data desejada: ${new Date(`${dateSelect.value}T12:00:00`).toLocaleDateString("pt-BR")}`,`Ponto de embarque preferido: ${departureSelect.value}`,`Viajantes: ${travelers}`,`Valor estimado: ${money(total)} (${money(pkg.price)} por pessoa)`,`Transporte: ${pkg.transport}`,pkg.hotel?"Hospedagem: hotel parceiro com café da manhã incluído":"Hospedagem: não incluída; pacote bate-volta","Estou ciente de que o ponto e o horário exatos serão confirmados até 7 dias antes.","Quero confirmar disponibilidade e receber as próximas orientações."].join("\n");
 }
-function renderTermsSelection(){
-  const adults=Number(adultSelect.value),children=Number(childSelect.value),total=adults*PRICE_PER_PERSON+children*CHILD_PRICE,month=months.find(item=>item.value===monthSelect.value);
-  q("#termsSelection").innerHTML=`<span>Seu pedido</span><b>${destinationSelect.value}</b><small>Embarque dia ${daySelect.value} de ${month.label} • ${adults} ${adults===1?"adulto":"adultos"} • ${children} ${children===1?"criança":"crianças"} • Total estimado ${money(total)}</small>`;
-}
+
 function openTerms(){
-  const form=q("#bookingForm");
-  if(!form.reportValidity())return;
-  renderTermsSelection();
-  acceptTerms.checked=false;
-  continueWhatsapp.disabled=true;
-  if(typeof termsDialog.showModal==="function")termsDialog.showModal();
-  else termsDialog.setAttribute("open","");
+  if(!q("#bookingForm").reportValidity())return;
+  const pkg=packages[selectedKey],travelers=Number(travelerSelect.value);
+  q("#termsSelection").innerHTML=`<span>Seu pedido</span><b>${pkg.title}</b><small>${pkg.duration} • ${departureSelect.value} • ${travelers} ${travelers===1?"viajante":"viajantes"} • ${money(pkg.price*travelers)}</small>`;
+  q("#dynamicStayTerm").textContent=pkg.hotel?"O pacote inclui hotel parceiro e café da manhã. O nome e o endereço serão informados após a confirmação operacional.":"Campos do Jordão é um passeio bate-volta de um dia e não inclui hotel ou pernoite.";
+  acceptTerms.checked=false;continueWhatsapp.disabled=true;termsDialog.showModal();
 }
+
+document.querySelectorAll("[data-destination]").forEach(button=>button.addEventListener("click",()=>selectPackage(button.dataset.destination)));
+document.querySelectorAll("[data-choose]").forEach(button=>button.addEventListener("click",()=>selectPackage(button.dataset.choose,true)));
+destinationSelect.addEventListener("change",()=>selectPackage(destinationSelect.value));
+travelerSelect.addEventListener("change",()=>updateBooking(false));
+q("#whatsappButton").addEventListener("click",openTerms);
 q("#bookingForm").addEventListener("submit",event=>{event.preventDefault();openTerms()});
-whatsappButton.addEventListener("click",openTerms);
-acceptTerms.addEventListener("change",()=>{continueWhatsapp.disabled=!acceptTerms.checked});
-q("#termsClose").addEventListener("click",()=>termsDialog.close());
-q("#cancelTerms").addEventListener("click",()=>termsDialog.close());
-continueWhatsapp.addEventListener("click",()=>{if(!acceptTerms.checked)return;const number=getWhatsappNumber();const base=number?`https://wa.me/${number}`:"https://wa.me/";window.open(`${base}?text=${encodeURIComponent(buildMessage())}`,"_blank","noopener");termsDialog.close()});
-termsDialog.addEventListener("click",event=>{if(event.target===termsDialog)termsDialog.close()});
-monthSelect.innerHTML=months.map(month=>`<option value="${month.value}">${month.label}</option>`).join("");
-document.querySelectorAll("[data-destination]").forEach(button=>button.addEventListener("click",()=>selectDestination(button.dataset.destination)));
-document.querySelectorAll("[data-choose]").forEach(button=>button.addEventListener("click",()=>selectDestination(button.dataset.choose,true)));
-destinationSelect.addEventListener("change",()=>selectDestination(Object.keys(routes).find(key=>routes[key].select===destinationSelect.value)));
-monthSelect.addEventListener("change",updateDays);
-[daySelect,adultSelect,childSelect].forEach(field=>field.addEventListener("change",updateQuote));
-updateDays();selectDestination("rio");
+acceptTerms.addEventListener("change",()=>continueWhatsapp.disabled=!acceptTerms.checked);
+q("#termsClose").addEventListener("click",()=>termsDialog.close());q("#cancelTerms").addEventListener("click",()=>termsDialog.close());
+continueWhatsapp.addEventListener("click",()=>{window.open(`https://wa.me/${getWhatsappNumber()}?text=${encodeURIComponent(buildMessage())}`,"_blank","noopener");termsDialog.close()});
+destinationSelect.innerHTML=packageKeys.map(key=>`<option value="${key}">${packages[key].title} • ${money(packages[key].price)}</option>`).join("");
+selectPackage("arraial");

@@ -303,3 +303,37 @@ footer { background: linear-gradient(rgba(4, 43, 85, .95), rgba(4, 43, 85, .95))
   .pretrip { margin-left: 18px; margin-right: 18px; padding: 48px 30px; }
   .pretrip-steps { grid-template-columns: 1fr 1fr; }
 }
+
+/* Pacotes rodoviários de fim de semana */
+.weekend-hero {
+  background:
+    radial-gradient(circle at 10% 0%, rgba(255, 107, 0, .42), transparent 34%),
+    linear-gradient(100deg, rgba(5, 47, 92, .98), rgba(7, 58, 112, .82)),
+    url("assets/arraial-praia-grande.jpg") center/cover;
+}
+.five-choices .choice-button:last-child { grid-column: 1 / -1; }
+.route-meta { display: flex; flex-wrap: wrap; gap: 7px; margin: 17px 0 6px; }
+.route-meta b, .route-meta span { padding: 7px 10px; border-radius: 999px; background: #fff3e9; color: #bc4d00; font-size: 12px; line-height: 1.2; }
+.route-meta b { background: var(--aqua); color: #fff; }
+.pickup-box { margin: 20px 0; padding: 18px; border-radius: 16px; background: #f4f7fb; border: 1px solid #dce6ef; }
+.pickup-box>b { display: block; color: var(--navy); font-family: Manrope, sans-serif; font-size: 14px; }
+.pickup-box ul { display: grid; gap: 8px; margin: 12px 0; padding-left: 18px; }
+.pickup-box li { padding: 0; border: 0; color: var(--muted); font-size: 12px; line-height: 1.45; }
+.pickup-box small { display: block; color: #7b8794; font-size: 11px; line-height: 1.45; }
+.route-price { display: block; margin: 18px 0 7px; color: var(--aqua); font: 800 22px Manrope, sans-serif; }
+.flow-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.booking-card label { font-size: 13px; }
+.booking-card input, .booking-card select { font-size: 15px; }
+.faq-list summary { font-size: 16px; }
+.faq-list p { font-size: 15px; }
+
+@media (max-width: 760px) {
+  .flow-grid { grid-template-columns: 1fr 1fr; }
+}
+
+@media (max-width: 560px) {
+  .five-choices .choice-button:last-child { grid-column: auto; }
+  .flow-grid { grid-template-columns: 1fr; }
+  .route-meta { align-items: flex-start; }
+  .route-meta b, .route-meta span { border-radius: 10px; }
+}
