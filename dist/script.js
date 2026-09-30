@@ -6,56 +6,56 @@ const routes = {
     title:"Rio de Janeiro", location:"Rio de Janeiro • RJ", select:"Rio de Janeiro",
     intro:"Mar, montanha e os cartões-postais mais famosos da capital carioca.",
     map:"https://www.google.com/maps/dir/Copacabana,+Rio+de+Janeiro/Ipanema,+Rio+de+Janeiro/P%C3%A3o+de+A%C3%A7%C3%BAcar,+Rio+de+Janeiro/Cristo+Redentor,+Rio+de+Janeiro/Ba%C3%ADa+de+Guanabara",
-    days:["Copacabana e Forte de Copacabana","Ipanema e pôr do sol no Arpoador","Urca e Pão de Açúcar","Cristo Redentor e Floresta da Tijuca","Passeio de barco pela Baía de Guanabara"],
+    days:["Manhã: Cristo Redentor • Tarde: Praia de Copacabana","Manhã: Pão de Açúcar • Tarde: Praia Vermelha e Urca","Dia inteiro: Ipanema e Arpoador","Dia inteiro: Praia da Barra da Tijuca","Manhã: passeio pela Baía de Guanabara • Tarde: Praia do Leblon"],
     photos:[["assets/rio.jpg","Praia de Copacabana","Rio de Janeiro • RJ"],["assets/rio-ipanema.jpg","Ipanema vista do Arpoador","Zona Sul • Rio de Janeiro"],["assets/rio-pao-acucar.jpg","Pão de Açúcar","Urca • Rio de Janeiro"],["assets/rio-guanabara.jpg","Baía de Guanabara","Passeio náutico • Rio de Janeiro"]]
   },
   arraial: {
     title:"Arraial do Cabo", location:"Região dos Lagos • RJ", select:"Arraial do Cabo",
     intro:"Areia branca, água transparente e um dos roteiros náuticos mais bonitos do país.",
     map:"https://www.google.com/maps/dir/Praia+dos+Anjos,+Arraial+do+Cabo/Praia+do+Farol,+Arraial+do+Cabo/Prainhas+do+Pontal+do+Atalaia/Praia+do+Forno,+Arraial+do+Cabo/Praia+Grande,+Arraial+do+Cabo",
-    days:["Praia dos Anjos e embarque no cais","Passeio de barco: Praia do Farol e Gruta Azul","Prainhas do Pontal do Atalaia","Trilha e banho na Praia do Forno","Praia Grande e pôr do sol"],
+    days:["Dia inteiro: Praia dos Anjos e Praia do Forno","Passeio de barco: Praia do Farol, Gruta Azul e paradas para banho","Dia inteiro: Prainhas do Pontal do Atalaia","Dia inteiro: Praia do Forno, com acesso por trilha ou barco","Dia inteiro: Praia Grande e pôr do sol"],
     photos:[["assets/arraial.jpg","Prainhas do Pontal do Atalaia","Arraial do Cabo • RJ"],["assets/arraial-forno.jpg","Praia do Forno","Arraial do Cabo • RJ"],["assets/arraial-farol.jpg","Praia do Farol","Acesso por barco • Arraial do Cabo"],["assets/arraial-praia-grande.jpg","Praia Grande","Pôr do sol • Arraial do Cabo"]]
   },
   "santa-catarina": {
     title:"Florianópolis", location:"Santa Catarina • SC", select:"Santa Catarina — Florianópolis",
     intro:"O pacote catarinense tem base em Florianópolis e combina ilha, dunas e cultura local.",
     map:"https://www.google.com/maps/dir/Ilha+do+Campeche,+Florian%C3%B3polis/Praia+do+Campeche,+Florian%C3%B3polis/Praia+da+Joaquina,+Florian%C3%B3polis/Lagoa+da+Concei%C3%A7%C3%A3o,+Florian%C3%B3polis/Barra+da+Lagoa,+Florian%C3%B3polis",
-    days:["Travessia de barco para a Ilha do Campeche","Praia do Campeche","Praia e Dunas da Joaquina","Lagoa da Conceição","Barra da Lagoa e piscinas naturais"],
+    days:["Dia inteiro: travessia e praia na Ilha do Campeche","Dia inteiro: Praia do Campeche","Manhã: Dunas da Joaquina • Tarde: Praia da Joaquina","Manhã: Lagoa da Conceição • Tarde: Praia Mole","Dia inteiro: Barra da Lagoa e piscinas naturais"],
     photos:[["assets/santa-catarina.jpg","Ilha do Campeche","Florianópolis • SC"],["assets/floripa-joaquina.jpg","Praia da Joaquina","Florianópolis • SC"],["assets/floripa-dunas.jpg","Dunas da Joaquina","Florianópolis • SC"],["assets/floripa-barra-lagoa.jpg","Barra da Lagoa","Florianópolis • SC"]]
   },
   maragogi: {
     title:"Maragogi", location:"Costa dos Corais • AL", select:"Maragogi",
     intro:"Piscinas naturais, praias tranquilas e os tons de azul mais famosos de Alagoas.",
     map:"https://www.google.com/maps/dir/Gal%C3%A9s+de+Maragogi/Praia+de+Antunes,+Maragogi/Praia+de+Barra+Grande,+Maragogi/Praia+de+Ponta+de+Mangue,+Maragogi/Orla+de+Maragogi",
-    days:["Catamarã às Galés de Maragogi e piscinas naturais","Praia de Antunes","Barra Grande e Caminho de Moisés","Praia de Ponta de Mangue","Orla de Maragogi e Praia de Burgalhau"],
+    days:["Catamarã às Galés e piscinas naturais, em horário definido pela maré • Restante do dia: Praia de Maragogi","Dia inteiro: Praia de Antunes","Caminho de Moisés, conforme a maré • Restante do dia: Praia de Barra Grande","Dia inteiro: Praia de Ponta de Mangue","Dia inteiro: Praia de Burgalhau e orla de Maragogi"],
     photos:[["assets/maragogi.jpg","Praia de Antunes","Maragogi • AL"],["assets/maragogi-corais.jpg","Galés e piscinas naturais","Costa dos Corais • Maragogi"],["assets/maragogi-barra-grande.jpg","Praia de Barra Grande","Maragogi • AL"],["assets/maragogi-ponta-mangue.jpg","Praia de Ponta de Mangue","Maragogi • AL"]]
   },
   "porto-seguro": {
     title:"Porto Seguro", location:"Costa do Descobrimento • BA", select:"Porto Seguro",
     intro:"Praias animadas, história e vilas charmosas no litoral sul da Bahia.",
     map:"https://www.google.com/maps/dir/Cidade+Hist%C3%B3rica,+Porto+Seguro/Praia+de+Munda%C3%AD,+Porto+Seguro/Praia+de+Taperapu%C3%A3,+Porto+Seguro/Arraial+d%27Ajuda,+Porto+Seguro/Trancoso,+Porto+Seguro",
-    days:["Centro Histórico e Passarela do Descobrimento","Praia de Mundaí","Praia de Taperapuã e complexo Tôa Tôa","Arraial d’Ajuda e Praia do Mucugê","Trancoso e Praia dos Nativos"],
+    days:["Manhã: Centro Histórico • Tarde: Praia de Mundaí","Dia inteiro: Praia de Taperapuã","Dia inteiro: Taperapuã e complexo Tôa Tôa","Manhã: centro de Arraial d’Ajuda • Tarde: Praia do Mucugê","Manhã: Quadrado de Trancoso • Tarde: Praia dos Nativos"],
     photos:[["assets/porto-seguro.jpg","Orla de Porto Seguro","Porto Seguro • BA"],["assets/porto-seguro-mundai.jpg","Praia de Mundaí","Porto Seguro • BA"],["assets/porto-seguro-toatoa.jpg","Praia de Taperapuã","Porto Seguro • BA"],["assets/porto-seguro-trancoso.jpg","Trancoso","Porto Seguro • BA"]]
   },
   "porto-galinhas": {
     title:"Porto de Galinhas", location:"Ipojuca • PE", select:"Porto de Galinhas",
     intro:"Piscinas naturais, jangadas e praias de águas mornas no litoral pernambucano.",
     map:"https://www.google.com/maps/dir/Piscinas+Naturais+de+Porto+de+Galinhas/Praia+de+Muro+Alto,+Ipojuca/Pontal+do+Cupe,+Ipojuca/Pontal+de+Maraca%C3%ADpe,+Ipojuca/Vila+de+Porto+de+Galinhas",
-    days:["Jangada às piscinas naturais","Praia de Muro Alto","Pontal do Cupe","Maracaípe e passeio de jangada no mangue","Vila e Praia do Centro de Porto de Galinhas"],
+    days:["Jangada às piscinas naturais, em horário definido pela maré • Restante do dia: Praia do Centro","Dia inteiro: Praia de Muro Alto","Dia inteiro: Pontal do Cupe","Manhã: jangada no mangue • Tarde: Praia de Maracaípe","Manhã: vila e artesanato • Tarde: Praia do Centro"],
     photos:[["assets/porto-galinhas.jpg","Praia de Porto de Galinhas","Ipojuca • PE"],["assets/porto-galinhas-piscinas.jpg","Piscinas naturais","Porto de Galinhas • PE"],["assets/porto-galinhas-muro-alto.jpg","Praia de Muro Alto","Ipojuca • PE"],["assets/porto-galinhas-mergulho.jpg","Mergulho em Porto de Galinhas","Ipojuca • PE"]]
   },
   jericoacoara: {
     title:"Jericoacoara", location:"Jijoca de Jericoacoara • CE", select:"Jericoacoara",
     intro:"Dunas, lagoas e mar em uma vila cercada pelas paisagens do litoral cearense.",
     map:"https://www.google.com/maps/dir/Vila+de+Jericoacoara/Pedra+Furada,+Jericoacoara/Duna+do+P%C3%B4r+do+Sol,+Jericoacoara/Lagoa+do+Para%C3%ADso,+Jijoca+de+Jericoacoara/Buraco+Azul,+Cruz,+CE",
-    days:["Vila e Praia de Jericoacoara","Trilha até a Pedra Furada","Duna do Pôr do Sol","Lagoa do Paraíso e Árvore da Preguiça","Circuito leste com Buraco Azul"],
+    days:["Manhã: vila de Jericoacoara • Tarde: Praia de Jericoacoara","Manhã: trilha até a Pedra Furada • Tarde: Praia da Malhada","Dia inteiro: Praia de Jericoacoara, com pôr do sol nas dunas","Manhã: Árvore da Preguiça • Tarde: Lagoa do Paraíso","Dia inteiro: circuito de lagoas e banho no Buraco Azul"],
     photos:[["assets/jericoacoara.jpg","Praia de Jericoacoara","Jijoca de Jericoacoara • CE"],["assets/jeri-duna.jpg","Duna do Pôr do Sol","Jericoacoara • CE"],["assets/jeri-praia.jpg","Praia e vila de Jericoacoara","Ceará"],["assets/jeri-cavalos.jpg","Dunas de Jericoacoara","Parque Nacional • CE"]]
   },
   natal: {
     title:"Natal", location:"Natal • RN", select:"Natal",
     intro:"Falésias, dunas e praias marcantes em um roteiro pela capital potiguar e seus arredores.",
     map:"https://www.google.com/maps/dir/Ponta+Negra,+Natal/Forte+dos+Reis+Magos,+Natal/Genipabu,+Extremoz/Praia+de+Pipa,+Tibau+do+Sul/Barra+do+Cunha%C3%BA,+Canguaretama",
-    days:["Ponta Negra e Morro do Careca","Forte dos Reis Magos e Via Costeira","Dunas e Praia de Genipabu","Praia da Pipa e Baía dos Golfinhos","Barra do Cunhaú e piscinas naturais"],
+    days:["Dia inteiro: Praia de Ponta Negra e vista do Morro do Careca","Manhã: Forte dos Reis Magos • Tarde: Praia do Forte","Manhã: passeio pelas dunas de Genipabu • Tarde: Praia de Genipabu","Dia inteiro: Praia da Pipa e Baía dos Golfinhos","Dia inteiro: Barra do Cunhaú e piscinas naturais"],
     photos:[["assets/natal-ponta-negra.jpg","Ponta Negra e Morro do Careca","Natal • RN"],["assets/natal-morro-careca.jpg","Praia de Ponta Negra","Natal • RN"],["assets/natal-genipabu.jpg","Dunas de Genipabu","Extremoz • RN"],["assets/natal-pipa.jpg","Praia da Pipa","Tibau do Sul • RN"]]
   }
 };
@@ -110,7 +110,7 @@ function buildMessage(){
   const name=q("#customerName").value.trim(),origin=q("#originCity").value.trim(),adults=Number(adultSelect.value),children=Number(childSelect.value),month=months.find(item=>item.value===monthSelect.value),adultTotal=adults*PRICE_PER_PERSON,childTotal=children*CHILD_PRICE,total=adultTotal+childTotal;
   const travelers=[`Adultos: ${adults} × ${money(PRICE_PER_PERSON)}`];
   if(children>0)travelers.push(`Crianças: ${children} × ${money(CHILD_PRICE)}`);
-  return ["Olá, tudo bem? Tenho interesse em um pacote da Gess Turismo.",`Meu nome: ${name}`,`Cidade de saída: ${origin}`,`Destino: ${destinationSelect.value}`,`Embarque desejado: dia ${daySelect.value} de ${month.label} (sábado ou domingo)`,"Pacote: excursão em grupo com 5 dias de roteiro fixo, de segunda a sexta","Hospedagem: hotel parceiro desde a chegada no fim de semana até o encerramento do roteiro","Incluso: voo, hotel com café da manhã, traslados programados e atividades anunciadas",...travelers,`Total estimado: ${money(total)}`,"Estou ciente de que a condição infantil depende da disponibilidade da tarifa aérea.","Li e aceitei o resumo das condições apresentado no site.","Estou ciente do reembolso integral em até 7 dias após o pagamento e, se optar pelo sinal, da quitação do saldo até 7 dias antes da viagem.","Estou ciente de que aeroporto, horários, ponto de encontro e transporte serão enviados 7 dias antes, após o planejamento da excursão em grupo.","Quero confirmar voo, aeroporto, horários, traslado, hotel e disponibilidade. Pode me ajudar?"].join("\n");
+  return ["Olá, tudo bem? Tenho interesse em um pacote da Gess Turismo.",`Meu nome: ${name}`,`Cidade de saída: ${origin}`,`Destino: ${destinationSelect.value}`,`Embarque desejado: dia ${daySelect.value} de ${month.label} (sábado ou domingo)`,"Pacote: excursão em grupo com 5 dias de roteiro fixo, de segunda a sexta","Hospedagem: hotel parceiro desde a chegada no fim de semana até o encerramento do roteiro","Incluso: voo, hotel com café da manhã, traslados programados e atividades anunciadas",...travelers,`Total estimado: ${money(total)}`,"Estou ciente de que a condição infantil depende da disponibilidade da tarifa aérea.","Li e aceitei o resumo das condições apresentado no site.","Estou ciente do reembolso integral em até 7 dias após o pagamento e, se optar pelo sinal, da quitação do saldo até 7 dias antes da viagem.","Estou ciente de que aeroporto, horários, ponto de encontro e transporte serão enviados 7 dias antes, após o planejamento da excursão em grupo.","Se a reserva for confirmada, enviarei endereço e dados de identificação solicitados em conversa privada no WhatsApp. Entendi que o grupo será usado apenas para avisos gerais da excursão.","Quero confirmar voo, aeroporto, horários, traslado, hotel e disponibilidade. Pode me ajudar?"].join("\n");
 }
 function renderTermsSelection(){
   const adults=Number(adultSelect.value),children=Number(childSelect.value),total=adults*PRICE_PER_PERSON+children*CHILD_PRICE,month=months.find(item=>item.value===monthSelect.value);
