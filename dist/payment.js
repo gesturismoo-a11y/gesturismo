@@ -20,7 +20,6 @@ if(charge){
   document.querySelector("#packageAmount").textContent=money(charge.total);
   document.querySelector("#remainingAmount").textContent=charge.balance>0?money(charge.balance):"Nada a pagar";
   document.querySelector("#paymentAmount").textContent=money(charge.now);
-  document.querySelector("#chargeDue").textContent=date(charge.due);
   document.querySelector("#pixCode").value=charge.pix;
   const qr=document.querySelector("#pixQr");
   qr.onerror=()=>{if(qr.dataset.fallback)return;qr.dataset.fallback="true";qr.src=`https://api.qrserver.com/v1/create-qr-code/?size=320x320&margin=8&data=${encodeURIComponent(charge.pix)}`};
@@ -46,6 +45,7 @@ document.querySelector("#proofForm").addEventListener("submit",event=>{
   const travelers=document.querySelector("#travelerNames").value.trim()||"Não informado";
   const message=["Olá, tudo bem? Realizei o pagamento da minha excursão e vou anexar o comprovante nesta conversa.",`Reserva: ${charge.code}`,`Nome: ${document.querySelector("#payerName").value.trim()}`,`WhatsApp: ${document.querySelector("#payerPhone").value.trim()}`,`E-mail: ${document.querySelector("#payerEmail").value.trim()}`,`Cidade: ${document.querySelector("#payerCity").value.trim()}`,`Endereço: ${document.querySelector("#payerAddress").value.trim()}`,`Destino: ${charge.destination}`,`Data: ${new Date(`${charge.date}T12:00:00`).toLocaleDateString("pt-BR")}`,`Embarque: ${charge.pickup}`,`Viajantes: ${charge.travelers}`,`Demais nomes: ${travelers}`,`Valor pago: ${money(charge.now)}`,`Saldo restante: ${money(charge.balance)}`,`Arquivo selecionado: ${file.name}`,"IMPORTANTE: vou anexar o comprovante manualmente antes de enviar esta mensagem.","Aguardo a confirmação da reserva."].join("\n");
   const number=charge.sellerWhatsapp||window.GESS_CONFIG.getWhatsappNumber();
+  try{const key="gessTurismo.reservas",items=JSON.parse(localStorage.getItem(key)||"[]"),item=items.find(entry=>entry.code===charge.code);if(item){item.status="Comprovante selecionado";item.proofName=file.name;item.proofSelectedAt=new Date().toISOString();localStorage.setItem(key,JSON.stringify(items))}}catch(_error){}
   document.querySelector("#paymentFeedback").textContent="O WhatsApp será aberto. Anexe o arquivo selecionado antes de enviar a mensagem.";
   window.open(`https://wa.me/${number}?text=${encodeURIComponent(message)}`,"_blank","noopener");
 });

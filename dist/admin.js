@@ -1,39 +1,42 @@
-const whatsappInput=document.querySelector("#adminWhatsapp");
-const whatsappFeedback=document.querySelector("#whatsappSettingsFeedback");
+const RESERVATIONS_KEY="gessTurismo.reservas";
+const money=value=>Number(value).toLocaleString("pt-BR",{style:"currency",currency:"BRL"});
+const date=value=>value?new Date(`${value}T12:00:00`).toLocaleDateString("pt-BR"):"Não definido";
+const escapeHtml=value=>String(value??"").replace(/[&<>'"]/g,char=>({"&":"&amp;","<":"&lt;",">":"&gt;","'":"&#39;",'"':"&quot;"}[char]));
+const readReservations=()=>{try{return JSON.parse(localStorage.getItem(RESERVATIONS_KEY)||"[]")}catch(_error){return[]}};
+const writeReservations=items=>{localStorage.setItem(RESERVATIONS_KEY,JSON.stringify(items));render()};
+const encodePayload=value=>{const bytes=new TextEncoder().encode(JSON.stringify(value));let binary="";bytes.forEach(byte=>binary+=String.fromCharCode(byte));return btoa(binary).replace(/\+/g,"-").replace(/\//g,"_").replace(/=+$/g,"")};
+
+const whatsappInput=document.querySelector("#adminWhatsapp"),whatsappFeedback=document.querySelector("#whatsappSettingsFeedback");
 whatsappInput.value=window.GESS_CONFIG.formatWhatsapp(window.GESS_CONFIG.getWhatsappNumber());
+document.querySelector("#whatsappSettings").addEventListener("submit",event=>{event.preventDefault();try{const saved=window.GESS_CONFIG.saveWhatsapp(whatsappInput.value);whatsappInput.value=window.GESS_CONFIG.formatWhatsapp(saved);whatsappFeedback.className="settings-feedback success";whatsappFeedback.textContent="WhatsApp salvo neste navegador."}catch(error){whatsappFeedback.className="settings-feedback error";whatsappFeedback.textContent=error.message}});
 
-document.querySelector("#whatsappSettings").addEventListener("submit",event=>{
-  event.preventDefault();
-  try{const saved=window.GESS_CONFIG.saveWhatsapp(whatsappInput.value);whatsappInput.value=window.GESS_CONFIG.formatWhatsapp(saved);whatsappFeedback.className="settings-feedback success";whatsappFeedback.textContent="WhatsApp salvo neste navegador."}
-  catch(error){whatsappFeedback.className="settings-feedback error";whatsappFeedback.textContent=error.message}
+function reservationCard(item){
+  const max=Number(item.total),now=Number(item.amountNow)||Math.min(100,max),hasLink=Boolean(item.paymentLink);
+  return `<article class="reservation-card" data-id="${escapeHtml(item.id)}"><div class="reservation-head"><div><span class="booking-code">${escapeHtml(item.code)}</span><h3>${escapeHtml(item.customer)}</h3><p>${escapeHtml(item.phone)}</p></div><span class="status-pill">${escapeHtml(item.status)}</span></div><dl class="reservation-data"><div><dt>Destino</dt><dd>${escapeHtml(item.destination)}</dd></div><div><dt>Data</dt><dd>${date(item.date)}</dd></div><div><dt>Embarque escolhido</dt><dd>${escapeHtml(item.pickup)}</dd></div><div><dt>Viajantes</dt><dd>${escapeHtml(item.travelers)}</dd></div><div><dt>Pacote completo</dt><dd>${money(max)}</dd></div><div><dt>Pedido recebido</dt><dd>${new Date(item.createdAt).toLocaleString("pt-BR")}</dd></div></dl><form class="charge-form" data-id="${escapeHtml(item.id)}"><div class="charge-title"><div><span>Configurar cobrança</span><b>Quanto o cliente pagará agora?</b></div><button class="full-payment" type="button">Usar valor completo</button></div><div class="charge-grid"><label>Valor para pagar agora<input class="amount-now" type="number" min="100" max="${max}" step="0.01" value="${now.toFixed(2)}" required><small>Mínimo de R$ 100,00 e máximo de ${money(max)}.</small></label><label>Lembrete interno<input class="reminder-date" type="date" value="${escapeHtml(item.reminder||"")}"><small>Somente para você lembrar; não aparece ao cliente.</small></label></div><label>Código Pix copia e cola<textarea class="pix-code" rows="3" required placeholder="Cole o código Pix desta cobrança">${escapeHtml(item.pix||"")}</textarea></label><label>Observação para o cliente<textarea class="charge-note-input" rows="2" placeholder="Ex.: sinal da reserva; saldo será combinado pela equipe">${escapeHtml(item.note||"")}</textarea></label><div class="card-actions"><button class="generate-link" type="submit">${hasLink?"Atualizar link individual":"Gerar link individual"}</button><button class="proof-action" type="button">${item.status==="Comprovante recebido"?"Comprovante recebido ✓":"Marcar comprovante recebido"}</button><button class="delete-action" type="button">Excluir reserva</button></div><p class="card-feedback" aria-live="polite"></p></form>${hasLink?`<div class="card-link"><b>Link pronto</b><div><input value="${escapeHtml(item.paymentLink)}" readonly><button class="copy-link" type="button">Copiar</button><a href="${escapeHtml(item.paymentLink)}" target="_blank" rel="noopener">Abrir</a></div></div>`:""}</article>`;
+}
+
+function render(){
+  const items=readReservations(),list=document.querySelector("#reservationList");
+  list.innerHTML=items.map(reservationCard).join("");document.querySelector("#emptyReservations").hidden=items.length>0;
+  document.querySelector("#metricTotal").textContent=items.length;document.querySelector("#metricWaiting").textContent=items.filter(item=>item.status==="Aguardando cobrança").length;document.querySelector("#metricLinks").textContent=items.filter(item=>item.paymentLink).length;document.querySelector("#metricProofs").textContent=items.filter(item=>item.status==="Comprovante recebido"||item.status==="Comprovante selecionado").length;
+}
+
+document.querySelector("#reservationList").addEventListener("click",async event=>{
+  const card=event.target.closest(".reservation-card");if(!card)return;const id=card.dataset.id,items=readReservations(),item=items.find(entry=>entry.id===id);if(!item)return;
+  if(event.target.closest(".full-payment")){card.querySelector(".amount-now").value=Number(item.total).toFixed(2);return}
+  if(event.target.closest(".delete-action")){if(confirm(`Excluir a reserva ${item.code}?`))writeReservations(items.filter(entry=>entry.id!==id));return}
+  if(event.target.closest(".proof-action")){item.status=item.status==="Comprovante recebido"?"Link gerado":"Comprovante recebido";writeReservations(items);return}
+  if(event.target.closest(".copy-link")){const field=card.querySelector(".card-link input");try{await navigator.clipboard.writeText(field.value)}catch(_error){field.select();document.execCommand("copy")}event.target.textContent="Copiado"}
 });
 
-const codeInput=document.querySelector("#chargeCode");
-codeInput.value=`GESS-${String(Date.now()).slice(-6)}`;
-const today=new Date();today.setHours(12,0,0,0);
-const nextSaturday=new Date(today);nextSaturday.setDate(today.getDate()+((6-today.getDay()+7)%7||7));
-document.querySelector("#chargeDate").value=nextSaturday.toISOString().slice(0,10);
-document.querySelector("#chargeDue").value=today.toISOString().slice(0,10);
-
-const encodePayload=value=>{
-  const bytes=new TextEncoder().encode(JSON.stringify(value));
-  let binary="";bytes.forEach(byte=>binary+=String.fromCharCode(byte));
-  return btoa(binary).replace(/\+/g,"-").replace(/\//g,"_").replace(/=+$/g,"");
-};
-
-document.querySelector("#chargeForm").addEventListener("submit",event=>{
-  event.preventDefault();
-  const total=Number(document.querySelector("#chargeTotal").value),now=Number(document.querySelector("#chargeNow").value);
-  const feedback=document.querySelector("#chargeFeedback");
-  if(!Number.isFinite(total)||!Number.isFinite(now)||now<=0||now>total){feedback.className="settings-feedback error";feedback.textContent="O valor para pagar agora deve ser maior que zero e não pode ultrapassar o total.";return}
-  const payload={v:1,code:codeInput.value.trim().toUpperCase(),customer:document.querySelector("#chargeCustomer").value.trim(),phone:document.querySelector("#chargePhone").value.trim(),destination:document.querySelector("#chargeDestination").value,date:document.querySelector("#chargeDate").value,pickup:document.querySelector("#chargePickup").value.trim(),travelers:Number(document.querySelector("#chargeTravelers").value),total,now,balance:Number((total-now).toFixed(2)),due:document.querySelector("#chargeDue").value,pix:document.querySelector("#chargePix").value.trim(),note:document.querySelector("#chargeNote").value.trim(),sellerWhatsapp:window.GESS_CONFIG.getWhatsappNumber()};
-  const url=new URL("pagamento.html",window.location.href);url.hash=`cobranca=${encodePayload(payload)}`;
-  document.querySelector("#paymentLink").value=url.href;document.querySelector("#openPaymentLink").href=url.href;document.querySelector("#generatedLink").hidden=false;
-  feedback.className="settings-feedback success";feedback.textContent="Link gerado. Confira a cobrança antes de enviar ao cliente.";
+document.querySelector("#reservationList").addEventListener("submit",event=>{
+  const form=event.target.closest(".charge-form");if(!form)return;event.preventDefault();const items=readReservations(),item=items.find(entry=>entry.id===form.dataset.id);if(!item)return;
+  const now=Number(form.querySelector(".amount-now").value),total=Number(item.total),feedback=form.querySelector(".card-feedback");
+  if(!Number.isFinite(now)||now<100||now>total){feedback.className="card-feedback error";feedback.textContent=`Informe um valor entre R$ 100,00 e ${money(total)}.`;return}
+  const pix=form.querySelector(".pix-code").value.trim();if(!pix){feedback.className="card-feedback error";feedback.textContent="Cole o código Pix para gerar a cobrança.";return}
+  const payload={v:1,code:item.code,customer:item.customer,phone:item.phone,destination:item.destination,date:item.date,pickup:item.pickup,travelers:Number(item.travelers),total,now,balance:Number((total-now).toFixed(2)),pix,note:form.querySelector(".charge-note-input").value.trim(),sellerWhatsapp:window.GESS_CONFIG.getWhatsappNumber()};
+  const url=new URL("pagamento.html",window.location.href);url.hash=`cobranca=${encodePayload(payload)}`;item.amountNow=now;item.balance=payload.balance;item.pix=pix;item.note=payload.note;item.reminder=form.querySelector(".reminder-date").value;item.paymentLink=url.href;item.status="Link gerado";writeReservations(items);
 });
 
-document.querySelector("#copyPaymentLink").addEventListener("click",async()=>{
-  const field=document.querySelector("#paymentLink");
-  try{await navigator.clipboard.writeText(field.value);document.querySelector("#copyPaymentLink").textContent="Link copiado"}
-  catch(_error){field.select();document.execCommand("copy");document.querySelector("#copyPaymentLink").textContent="Link copiado"}
-});
+document.querySelector("#createTest").addEventListener("click",()=>{const now=new Date(),trip=new Date();trip.setDate(now.getDate()+((6-now.getDay()+7)%7||7));const items=readReservations();items.unshift({id:crypto.randomUUID?crypto.randomUUID():String(Date.now()),code:`TESTE-${String(Date.now()).slice(-5)}`,customer:"Cliente de teste",phone:"(21) 99999-0000",destination:"Arraial do Cabo",date:trip.toISOString().slice(0,10),pickup:"São Paulo • Terminal Jabaquara",travelers:1,total:500,pricePerPerson:500,duration:"2 dias • sábado e domingo",hotel:true,status:"Aguardando cobrança",createdAt:new Date().toISOString(),amountNow:100,balance:500,pix:"",paymentLink:"",reminder:""});writeReservations(items)});
+window.addEventListener("storage",event=>{if(event.key===RESERVATIONS_KEY)render()});render();
