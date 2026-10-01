@@ -9,5 +9,5 @@ document.querySelector("#confirmedMethod").textContent=method;
 const hasBalance=!/^R\$\s*0,00$/.test(remaining.trim());
 document.querySelector("#balanceNotice").hidden=!hasBalance;
 const message=["Olá, tudo bem? Meu pagamento da viagem foi aprovado.",`Nome: ${name}`,`Reserva: ${code}`,`Destino: ${destination}`,`Valor pago: ${paid}`,`Forma de pagamento: ${method}`,`Saldo restante: ${remaining}`,...(hasBalance?["Estou ciente de que, quando faltarem 7 dias para a viagem, o vendedor entrará em contato e enviará um novo link para a quitação do saldo."]:[]),"Estou ciente de que aeroporto, horários, ponto de encontro e transporte serão enviados 7 dias antes, após o planejamento da excursão em grupo.","Gostaria de confirmar o cadastro da minha viagem."].join("\n");
-const whatsappNumber=window.GESS_CONFIG?.getWhatsappNumber()||"5521989833495";
+const whatsappNumber=window.GESS_CONFIG?.getWhatsappNumber()||"5511987785390";
 document.querySelector("#whatsappConfirm").href=`https://wa.me/${whatsappNumber}?text=${encodeURIComponent(message)}`;

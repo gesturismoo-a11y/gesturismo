@@ -1,6 +1,6 @@
 (() => {
   const STORAGE_KEY = "gessTurismo.whatsapp";
-  const DEFAULT_NUMBER = "5521989833495";
+  const DEFAULT_NUMBER = "5511987785390";
   let memoryNumber=DEFAULT_NUMBER;
   const normalize = value => {
     let digits=String(value||"").replace(/\D/g,"");
@@ -11,7 +11,8 @@
   const get = () => {
     let stored="";
     try{stored=window.localStorage?.getItem(STORAGE_KEY)||"";}catch(_error){stored="";}
-    const saved=normalize(stored||memoryNumber);
+    const storedNumber=normalize(stored);
+    const saved=storedNumber && storedNumber!=="5521989833495" && isValid(storedNumber)?storedNumber:memoryNumber;
     return isValid(saved)?saved:DEFAULT_NUMBER;
   };
   const format = value => {

@@ -1,4 +1,4 @@
-const getWhatsappNumber = () => window.GESS_CONFIG?.getWhatsappNumber() || "5521989833495";
+const getWhatsappNumber = () => window.GESS_CONFIG?.getWhatsappNumber() || "5511987785390";
 document.head.insertAdjacentHTML("beforeend",'<link rel="stylesheet" href="pickups.css?v=1">');
 document.head.insertAdjacentHTML("beforeend",'<link rel="stylesheet" href="site-polish.css?v=1">');
 document.head.insertAdjacentHTML("beforeend",'<link rel="stylesheet" href="mobile-polish.css?v=4">');
@@ -100,14 +100,31 @@ function renderGallery(pkg){
 }
 
 function buildDates(pkg){
-  const dates=[];const cursor=new Date();cursor.setHours(12,0,0,0);const salesEnd=new Date(2026,11,20,12,0,0,0);
+  const dates=[];const cursor=new Date();cursor.setHours(12,0,0,0);dateSelect.dataset.generatedDate=dateKey(cursor);const salesEnd=new Date(2026,11,20,12,0,0,0);
   for(let offset=1;offset<=240;offset++){
     const date=new Date(cursor);date.setDate(cursor.getDate()+offset);
     if(date>salesEnd)break;
     const valid=pkg.hotel?date.getDay()===6:[0,6].includes(date.getDay());
     if(valid) dates.push(date);
   }
-  dateSelect.innerHTML=dates.length?dates.map(date=>`<option value="${date.toISOString().slice(0,10)}">${date.toLocaleDateString("pt-BR",{weekday:"long",day:"2-digit",month:"long",year:"numeric"})}</option>`).join(""):'<option value="">Nenhuma data disponível</option>';
+  dateSelect.innerHTML=dates.length?dates.map(date=>{const value=date.toISOString().slice(0,10);return `<option value="${value}">${formatTripDate(value,pkg)}</option>`}).join(""):'<option value="">Nenhuma data disponível</option>';
+}
+
+const dateKey=date=>`${date.getFullYear()}-${String(date.getMonth()+1).padStart(2,"0")}-${String(date.getDate()).padStart(2,"0")}`;
+function refreshDates(){
+  const today=dateKey(new Date());
+  if(dateSelect.dataset.generatedDate===today)return;
+  const previous=dateSelect.value;buildDates(packages[selectedKey]);
+  if([...dateSelect.options].some(option=>option.value===previous))dateSelect.value=previous;
+  updateBooking(false);
+}
+
+function formatTripDate(value,pkg=packages[selectedKey]){
+  if(!value)return "Nenhuma data disponível";
+  const start=new Date(`${value}T12:00:00`);
+  const dayLabel=date=>date.toLocaleDateString("pt-BR",{weekday:"long",day:"2-digit",month:"2-digit"});
+  if(pkg.hotel){const end=new Date(start);end.setDate(start.getDate()+1);return `${dayLabel(start)} e ${dayLabel(end)} de ${end.getFullYear()}`}
+  return start.toLocaleDateString("pt-BR",{weekday:"long",day:"2-digit",month:"2-digit",year:"numeric"});
 }
 
 function updateBooking(resetOptions=true){
@@ -148,13 +165,13 @@ function selectPackage(key,scroll=false){
 
 function buildMessage(record){
   const pkg=packages[selectedKey],{adults,children,travelers}=party(),total=tripTotal(pkg);
-  return ["Olá, tudo bem? Preenchi meu pedido no site da Gess Turismo.",`Reserva: ${record.code}`,`Nome: ${q("#customerName").value.trim()}`,`WhatsApp: ${q("#customerPhone").value.trim()}`,`E-mail: ${q("#customerEmail").value.trim()}`,`Pacote: ${pkg.title} — ${pkg.duration}`,`Data desejada: ${new Date(`${dateSelect.value}T12:00:00`).toLocaleDateString("pt-BR")}`,`Região de referência para embarque: ${departureSelect.value}`,`Adultos/maiores de 12 anos: ${adults}`,`Crianças até 12 anos: ${children}`,`Total de viajantes: ${travelers}`,`Nomes dos demais viajantes: ${q("#travelerNames").value.trim()||"Não se aplica"}`,`Valor do pacote: ${money(total)} (adulto ${money(pkg.price)}; criança até 12 anos ${money(pkg.price/2)})`,`Caução mínima: ${money(100*travelers)} (${money(100)} por viajante)`,`Transporte: ${pkg.transport}`,"Pagamento: pode ser dividido em pagamentos via Pix; o saldo precisa estar quitado até 7 dias antes da viagem.","Acompanhamento: coordenador da equipe durante toda a excursão",pkg.hotel?"Hospedagem: hotel parceiro com café da manhã incluído":"Hospedagem: não incluída; pacote bate-volta","Estou ciente de que os pontos da rota, horários e detalhes serão divulgados no grupo da excursão.","Quero confirmar disponibilidade e receber as próximas orientações."].join("\n");
+  return ["Olá, tudo bem? Preenchi meu pedido no site da Gess Turismo.",`Reserva: ${record.code}`,`Nome: ${q("#customerName").value.trim()}`,`WhatsApp: ${q("#customerPhone").value.trim()}`,`E-mail: ${q("#customerEmail").value.trim()}`,`Pacote: ${pkg.title} — ${pkg.duration}`,`Data desejada: ${formatTripDate(dateSelect.value,pkg)}`,`Região de referência para embarque: ${departureSelect.value}`,`Adultos/maiores de 12 anos: ${adults}`,`Crianças até 12 anos: ${children}`,`Total de viajantes: ${travelers}`,`Nomes dos demais viajantes: ${q("#travelerNames").value.trim()||"Não se aplica"}`,`Valor do pacote: ${money(total)} (adulto ${money(pkg.price)}; criança até 12 anos ${money(pkg.price/2)})`,`Caução mínima: ${money(100*travelers)} (${money(100)} por viajante)`,`Transporte: ${pkg.transport}`,"Pagamento: pode ser dividido em pagamentos via Pix; o saldo precisa estar quitado até 7 dias antes da viagem.","Acompanhamento: coordenador da equipe durante toda a excursão",pkg.hotel?"Hospedagem: hotel parceiro com café da manhã incluído":"Hospedagem: não incluída; pacote bate-volta","Estou ciente de que os pontos da rota, horários e detalhes serão divulgados no grupo da excursão.","Quero confirmar disponibilidade e receber as próximas orientações."].join("\n");
 }
 
 function openTerms(){
   if(!q("#bookingForm").reportValidity())return;
   const pkg=packages[selectedKey],{adults,children}=party();
-  q("#termsSelection").innerHTML=`<span>Seu pedido</span><b>${pkg.title}</b><small>${pkg.duration} • ${departureSelect.value} • ${adults} adulto${adults===1?"":"s"}${children?` + ${children} criança${children===1?"":"s"}`:""} • ${money(tripTotal(pkg))}</small>`;
+  q("#termsSelection").innerHTML=`<span>Seu pedido</span><b>${pkg.title}</b><small>${formatTripDate(dateSelect.value,pkg)} • ${departureSelect.value} • ${adults} adulto${adults===1?"":"s"}${children?` + ${children} criança${children===1?"":"s"}`:""} • ${money(tripTotal(pkg))}</small>`;
   q("#dynamicStayTerm").textContent=pkg.hotel?"O pacote inclui hotel parceiro e café da manhã. O nome e o endereço serão informados após a confirmação operacional.":`${pkg.title} é um passeio bate-volta de um dia e não inclui hotel ou pernoite.`;
   acceptTerms.checked=false;continueWhatsapp.disabled=true;termsDialog.showModal();
 }
@@ -179,4 +196,10 @@ q(".terms-content section:nth-child(4) p").textContent="Crianças de até 12 ano
 q(".terms-content section:nth-child(8) p").textContent="Um coordenador da equipe acompanha toda a excursão. Escuna, mergulho, buggy e demais atividades só estão incluídos quando aparecem no roteiro escolhido e dependem das condições de segurança e operação.";
 q(".flow-grid article:nth-child(4) p").textContent="Após pagar, selecione o comprovante e retorne ao WhatsApp com a mensagem pronta. Seus dados já estarão preenchidos.";
 q(".terms-legal").textContent="Este aceite registra seu pedido no painel e abre o atendimento no WhatsApp. Não gera cobrança nem garante a vaga antes da confirmação da equipe.";
+q(".pickup-heading span").textContent="Rota e embarques";
+q(".pickup-heading b").textContent="Estados e pontos por onde o ônibus passa";
+q(".pickup-box>small").textContent="A lista mostra as referências de cada estado atravessado até o destino. Você escolhe a região mais conveniente e a equipe confirma o ponto e o horário no grupo da excursão.";
 selectPackage("arraial");
+window.addEventListener("focus",refreshDates);
+document.addEventListener("visibilitychange",()=>{if(!document.hidden)refreshDates()});
+window.setInterval(refreshDates,60000);
