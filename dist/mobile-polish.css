@@ -2,8 +2,19 @@
 .booking-card textarea:focus{outline:3px solid rgba(255,107,0,.16);border-color:#ff6b00}
 .traveler-counts{align-items:start}
 .field-help{display:block;margin-top:7px;line-height:1.4}
-.booking-card label{min-width:0}
+.booking-card label{min-width:0;color:#183858}
 .booking-card input,.booking-card select{width:100%;box-sizing:border-box}
+.booking-card .form-row{align-items:start}
+.booking-card .form-row>label{height:100%;margin-bottom:16px}
+.booking-card .is-hidden{display:none!important}
+.companion-names{padding:15px 16px;border:1px solid #d8e8e7;border-radius:14px;background:#f5faf9}
+.companion-names textarea{margin-top:9px}
+.booking-summary{min-height:92px;align-content:center}
+.choice-grid .choice-button{min-height:76px;display:flex;flex-direction:column;justify-content:center}
+.trust-strip span{display:flex;min-height:42px;flex-direction:column;align-items:center;justify-content:center;padding:0 12px}
+.flow-grid article{height:100%}
+.reservation-data>div{display:flex;min-height:88px;flex-direction:column;justify-content:center}
+.dates-band{margin-bottom:36px!important}
 .booking-card,.route-card,.quick-choice,.faq-list{backdrop-filter:blur(10px)}
 h1,h2,h3,.route-price,.booking-summary strong{font-family:"Manrope","DM Sans",sans-serif;letter-spacing:-.035em}
 body,input,select,textarea,button{font-family:"DM Sans",system-ui,sans-serif}
@@ -17,6 +28,8 @@ html,body{max-width:100%;overflow-x:hidden}
   .quick-choice{width:100%;max-width:100%;overflow:hidden}
   .hero-copy p,.quick-choice p{overflow-wrap:anywhere}
   .booking .form-row,.traveler-counts{grid-template-columns:1fr!important}
+  .booking-card .form-row>label{height:auto}
+  .booking-summary{min-height:0}
   .booking-card{padding:22px!important}
   .trust-strip{grid-template-columns:1fr 1fr!important}
   .site-header nav{display:none!important}

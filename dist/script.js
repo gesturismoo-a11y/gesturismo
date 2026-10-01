@@ -1,7 +1,7 @@
 const getWhatsappNumber = () => window.GESS_CONFIG?.getWhatsappNumber() || "5521989833495";
 document.head.insertAdjacentHTML("beforeend",'<link rel="stylesheet" href="pickups.css?v=1">');
 document.head.insertAdjacentHTML("beforeend",'<link rel="stylesheet" href="site-polish.css?v=1">');
-document.head.insertAdjacentHTML("beforeend",'<link rel="stylesheet" href="mobile-polish.css?v=2">');
+document.head.insertAdjacentHTML("beforeend",'<link rel="stylesheet" href="mobile-polish.css?v=3">');
 const money = value => new Intl.NumberFormat("pt-BR", {style:"currency", currency:"BRL"}).format(value);
 
 const packages = {
@@ -59,6 +59,7 @@ const writeReservations=items=>localStorage.setItem(RESERVATIONS_KEY,JSON.string
 const party=()=>{const adults=Number(travelerSelect.value||1),children=Number(childSelect.value||0);return{adults,children,travelers:adults+children}};
 const tripTotal=pkg=>{const {adults,children}=party();return pkg.price*adults+(pkg.price/2)*children};
 const enforcePartyLimit=()=>{const adults=Number(travelerSelect.value||1),maxChildren=Math.max(0,6-adults);if(Number(childSelect.value)>maxChildren)childSelect.value=String(maxChildren);[...childSelect.options].forEach(option=>option.disabled=Number(option.value)>maxChildren)};
+const updateCompanionNames=()=>{const field=q("#travelerNames"),label=field.closest("label"),others=party().travelers-1;label.childNodes[0].textContent="Nomes das outras pessoas";label.classList.toggle("is-hidden",others===0);label.classList.add("companion-names");field.required=others>0;if(others===0)field.value="";field.placeholder=others===1?"Nome completo da outra pessoa":`Informe os ${others} nomes, um por linha`};
 const reservationFingerprint=()=>[q("#customerName").value.trim(),q("#customerPhone").value.trim(),q("#customerEmail").value.trim(),q("#travelerNames").value.trim(),selectedKey,dateSelect.value,departureSelect.value,travelerSelect.value,childSelect.value].join("|");
 const createReservation=()=>{
   const pkg=packages[selectedKey],{adults,children,travelers}=party(),total=tripTotal(pkg),fingerprint=reservationFingerprint();
@@ -88,6 +89,7 @@ function buildDates(pkg){
 function updateBooking(resetOptions=true){
   const pkg=packages[selectedKey];
   enforcePartyLimit();
+  updateCompanionNames();
   if(resetOptions){
     pickupStateSelect.innerHTML=pkg.pickupGroups.map((group,index)=>`<option value="${index}">${group.region}</option>`).join("");
     updatePickupOptions();

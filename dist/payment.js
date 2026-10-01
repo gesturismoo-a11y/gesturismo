@@ -21,6 +21,7 @@ if(charge){
   document.querySelector("#tripPickup").textContent=charge.pickup;
   document.querySelector("#tripTravelers").textContent=`${charge.adults??charge.travelers} adulto${Number(charge.adults??charge.travelers)===1?"":"s"}${Number(charge.children||0)?` + ${charge.children} criança${Number(charge.children)===1?"":"s"}`:""}`;
   document.querySelector("#tripTravelerNames").textContent=charge.travelerNames||"Somente o responsável";
+  document.querySelector("#tripTravelerNames").previousElementSibling.textContent="Outros viajantes";
   document.querySelector("#packageAmount").textContent=money(charge.total);
   document.querySelector("#remainingAmount").textContent=charge.balance>0?money(charge.balance):"Nada a pagar";
   document.querySelector("#paymentAmount").textContent=money(charge.now);
