@@ -29,7 +29,8 @@
   const apply = (root=document) => {
     const number=get();
     root.querySelectorAll("[data-gess-whatsapp]").forEach(link => {
-      link.href=`https://wa.me/${number}`;
+      const message=link.dataset.gessWhatsapp==="quick"?"Olá! Tenho uma dúvida sobre os pacotes da Gess Turismo.":"";
+      link.href=`https://wa.me/${number}${message?`?text=${encodeURIComponent(message)}`:""}`;
       if(link.dataset.gessWhatsapp==="label") link.textContent=`WhatsApp: ${format(number)}`;
       if(link.dataset.gessWhatsapp==="footer") link.textContent=`Atendimento: ${format(number)}`;
     });

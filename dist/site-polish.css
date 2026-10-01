@@ -5,13 +5,13 @@
 .quick-nav>a:hover{background:#eef8f6;color:#087c6c;transform:translateY(-1px)}
 .quick-nav>a span{display:grid;place-items:center;width:22px;height:22px;border-radius:7px;background:#e7f7f3;color:#087c6c;font:800 10px Manrope,sans-serif}
 .quick-nav>a b{font-weight:800}
-.quick-nav-whatsapp{margin-left:auto!important;background:#168b58!important;color:#fff!important;padding-inline:16px!important;box-shadow:0 7px 16px rgba(22,139,88,.2)}
-.quick-nav-whatsapp:hover{background:#117047!important;color:#fff!important}
+.quick-nav-whatsapp{margin-left:auto!important;background:#fff!important;color:#128c7e!important;border:1px solid #25d366; padding-inline:16px!important;box-shadow:0 7px 16px rgba(37,211,102,.16)}
+.quick-nav-whatsapp:hover{background:#25d366!important;color:#fff!important}
 .quick-nav-icon{width:20px;height:20px;flex:0 0 20px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
 .quick-nav-question text{fill:currentColor;stroke:none;font:800 13px Manrope,sans-serif}
 .quick-nav-whatsapp .quick-nav-icon{width:24px;height:24px;flex-basis:24px;fill:#fff;stroke:#168b58;stroke-width:1.25}
 .quick-nav-whatsapp .quick-nav-whatsapp-icon{fill:#25d366!important;stroke:none!important}
-.quick-nav-whatsapp .quick-nav-whatsapp-icon path{fill:#fff}
+.quick-nav-whatsapp .quick-nav-whatsapp-icon path{fill:#25d366!important}
 .quick-nav-whatsapp-copy{display:grid!important;gap:1px!important;width:auto!important;height:auto!important;padding:0!important;border-radius:0!important;background:transparent!important;color:inherit!important;font:inherit!important}
 .quick-nav-whatsapp-copy b{font-size:12px}.quick-nav-whatsapp-copy small{font-size:10px;color:#d7f7e7}
 @media(max-width:760px){.quick-nav{top:66px;width:calc(100% - 16px);margin-top:8px;padding:6px;border-radius:14px;gap:4px}.quick-nav>a{min-height:40px;padding:7px 10px;font-size:11px}.quick-nav>a span{width:20px;height:20px}.quick-nav-whatsapp{margin-left:0!important}.quick-nav-whatsapp small{display:none}.quick-nav-whatsapp-copy{width:auto!important;height:auto!important}}
