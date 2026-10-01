@@ -11,6 +11,8 @@
 .companion-names textarea{margin-top:9px}
 .booking-summary{min-height:92px;align-content:center}
 .choice-grid .choice-button{min-height:76px;display:flex;flex-direction:column;justify-content:center}
+.package-choice-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.package-choice-grid .choice-button{width:100%;margin:0}
 .trust-strip span{display:flex;min-height:42px;flex-direction:column;align-items:center;justify-content:center;padding:0 12px}
 .flow-grid article{height:100%}
 .reservation-data>div{display:flex;min-height:88px;flex-direction:column;justify-content:center}
@@ -20,6 +22,15 @@ h1,h2,h3,.route-price,.booking-summary strong{font-family:"Manrope","DM Sans",sa
 body,input,select,textarea,button{font-family:"DM Sans",system-ui,sans-serif}
 html,body{max-width:100%;overflow-x:hidden}
 .hero-copy,.quick-choice,.experience-grid>*,.booking>*{min-width:0}
+.campaign-banner{position:relative;display:flex;min-height:430px;max-width:1180px;margin:44px auto 86px;align-items:center;justify-content:center;overflow:hidden;border-radius:32px;background:#f8efe3 url("assets/gess-weekend-banner.png") center/cover no-repeat;box-shadow:0 28px 70px rgba(5,47,65,.19);isolation:isolate}
+.campaign-banner:after{content:"";position:absolute;z-index:-1;inset:0;background:radial-gradient(circle at 54% 48%,rgba(255,251,244,.96) 0,rgba(255,248,237,.88) 27%,rgba(255,248,237,.2) 55%,transparent 72%)}
+.campaign-banner-copy{width:min(540px,56%);padding:52px 34px;text-align:center}
+.campaign-kicker{display:inline-flex;margin-bottom:14px;padding:8px 13px;border-radius:999px;background:#ff6b00;color:#fff;font-size:12px;font-weight:800;letter-spacing:.11em;text-transform:uppercase;box-shadow:0 8px 18px rgba(255,107,0,.22)}
+.campaign-banner h2{max-width:500px;margin:0 auto 14px;color:#063668;font-size:clamp(35px,4.5vw,61px);line-height:.96;letter-spacing:-.055em;text-wrap:balance}
+.campaign-banner p{max-width:510px;margin:0 auto 22px;color:#254e64;font-size:17px;line-height:1.55}
+.campaign-badges{display:flex;flex-wrap:wrap;justify-content:center;gap:8px;margin-bottom:24px}
+.campaign-badges span{padding:8px 11px;border:1px solid rgba(6,54,104,.14);border-radius:999px;background:rgba(255,255,255,.88);color:#063668;font-size:12px;font-weight:800;box-shadow:0 6px 16px rgba(5,47,65,.07)}
+.campaign-banner .button{display:inline-flex}
 @media(max-width:760px){
   .site-header{width:100%;max-width:100vw}
   .site-header .brand{flex:0 1 auto;min-width:0}
@@ -32,6 +43,11 @@ html,body{max-width:100%;overflow-x:hidden}
   .booking-summary{min-height:0}
   .booking-card{padding:22px!important}
   .trust-strip{grid-template-columns:1fr 1fr!important}
+  .campaign-banner{min-height:530px;margin:30px 8px 58px;align-items:center;border-radius:24px;background-position:center}
+  .campaign-banner:after{background:linear-gradient(180deg,rgba(255,249,240,.76),rgba(255,249,240,.97) 29%,rgba(255,249,240,.97) 75%,rgba(255,249,240,.72))}
+  .campaign-banner-copy{width:100%;padding:80px 22px 72px}
+  .campaign-banner h2{font-size:clamp(34px,10vw,48px)}
+  .campaign-banner p{font-size:16px}
   .site-header nav{display:none!important}
 }
 @media(max-width:420px){
@@ -40,4 +56,5 @@ html,body{max-width:100%;overflow-x:hidden}
   .hero h1{font-size:clamp(38px,13vw,54px)!important}
   .destination-tabs{padding-bottom:6px;overflow-x:auto;flex-wrap:nowrap!important}
   .destination-tab{white-space:nowrap}
+  .package-choice-grid{grid-template-columns:1fr}
 }

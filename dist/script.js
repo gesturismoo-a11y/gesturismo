@@ -1,7 +1,7 @@
 const getWhatsappNumber = () => window.GESS_CONFIG?.getWhatsappNumber() || "5521989833495";
 document.head.insertAdjacentHTML("beforeend",'<link rel="stylesheet" href="pickups.css?v=1">');
 document.head.insertAdjacentHTML("beforeend",'<link rel="stylesheet" href="site-polish.css?v=1">');
-document.head.insertAdjacentHTML("beforeend",'<link rel="stylesheet" href="mobile-polish.css?v=3">');
+document.head.insertAdjacentHTML("beforeend",'<link rel="stylesheet" href="mobile-polish.css?v=4">');
 const money = value => new Intl.NumberFormat("pt-BR", {style:"currency", currency:"BRL"}).format(value);
 
 const packages = {
@@ -44,6 +44,30 @@ const packages = {
     days:["Sábado • Praia de Geribá, Orla Bardot, Rua das Pedras e check-in no hotel","Domingo • João Fernandes, Azeda e Azedinha, com saída às 20h"],
     pickupGroups:[{region:"São Paulo",points:["Terminal Rodoviário Jabaquara","Terminal Rodoviário Barra Funda","Terminal Rodoviário Tietê"]},{region:"Rio de Janeiro",points:["Terminal Rodoviário Novo Rio","Terminal Roberto Silveira • Niterói","Terminal Rodoviário de Alcântara • São Gonçalo"]}],
     photos:[["assets/buzios-1.jpg","Armação dos Búzios","Região dos Lagos • RJ"],["assets/buzios-2.jpg","Praia da Armação","Búzios • RJ"],["assets/buzios-3.jpg","Praia de João Fernandes","Búzios • RJ"],["assets/buzios-4.jpg","João Fernandes","Búzios • RJ"]]
+  },
+  cananeia: {
+    title:"Cananéia", location:"Vale do Ribeira • SP", price:450, priceContext:"Lote promocional com hotel e café da manhã", duration:"2 dias • sábado e domingo", transport:"Ônibus de excursão", returnTime:"Saída de Cananéia no domingo, às 20h", hotel:true,
+    intro:"Fim de semana entre o centro histórico, a orla e a natureza do litoral sul, com hotel parceiro e café da manhã.",
+    includes:["Ônibus ida e volta","Hotel parceiro","Café da manhã","Coordenador da equipe","Traslados locais de ônibus ou van","Passeio pela orla e centro histórico"],
+    days:["Sábado • Centro histórico, Igreja Matriz de São João Batista, orla e check-in no hotel","Domingo • Dia de natureza e praia na região, conforme condições de navegação e operação; saída às 20h"],
+    pickupGroups:[{region:"São Paulo",points:["Terminal Rodoviário Jabaquara","Terminal Rodoviário Barra Funda","Terminal Rodoviário Tietê","Rodoviária de Registro"]}],
+    photos:[["assets/cananeia-1.jpg","Praia do Itacuruçá","Ilha do Cardoso • Cananéia"],["assets/cananeia-2.jpg","Baía do Trapandé","Cananéia • SP"],["assets/cananeia-3.jpg","Praia do Fole","Ilha do Cardoso • Cananéia"],["assets/cananeia-4.jpg","Praia da Laje","Ilha do Cardoso • Cananéia"]]
+  },
+  capitolio: {
+    title:"Capitólio", location:"Lago de Furnas • MG", price:300, priceContext:"Lote promocional com passeio de lancha", duration:"2 dias • sábado e domingo", transport:"Ônibus de excursão", returnTime:"Saída de Capitólio no domingo, às 20h", hotel:true,
+    intro:"Fim de semana no Lago de Furnas com hotel, café da manhã e passeio de lancha pelos cânions incluído no roteiro.",
+    includes:["Ônibus ida e volta","Hotel parceiro","Café da manhã","Coordenador da equipe","Passeio de lancha","Traslados locais de ônibus ou van"],
+    days:["Sábado • Mirantes, paisagens do Lago de Furnas e check-in no hotel","Domingo • Passeio de lancha pelos cânions e paradas autorizadas no roteiro; saída às 20h"],
+    pickupGroups:[{region:"São Paulo",points:["Terminal Rodoviário Barra Funda","Terminal Rodoviário Tietê","Terminal Rodoviário Jabaquara"]},{region:"Minas Gerais",points:["Rodoviária de Belo Horizonte • Praça Rio Branco","Terminal Rodoviário de Passos","Terminal Rodoviário de Piumhi"]}],
+    photos:[["assets/capitolio-1.jpg","Cânions do Lago de Furnas","Capitólio • MG"],["assets/capitolio-2.jpg","Paredões e águas de Furnas","Capitólio • MG"],["assets/capitolio-3.jpg","Passeio pelo Lago de Furnas","Capitólio • MG"],["assets/capitolio-4.jpg","Paisagens de Capitólio","Minas Gerais"]]
+  },
+  ilhabela: {
+    title:"Ilhabela", location:"Litoral Norte • SP", price:150, priceContext:"Valor promocional do bate-volta", duration:"1 dia • bate-volta", transport:"Ônibus de excursão", returnTime:"Saída de Ilhabela no fim do dia, prevista para 20h", hotel:false,
+    intro:"Um dia de mar, montanha e orla no Litoral Norte, com travessia de balsa e acompanhamento da equipe.",
+    includes:["Ônibus ida e volta","Travessia de balsa","Coordenador da equipe","Traslados locais de ônibus ou van","Tempo livre na praia"],
+    days:["Manhã • Travessia de balsa, Vila e Praia do Perequê","Tarde • Praia Grande e tempo livre para curtir o litoral","Noite • Encontro do grupo e saída prevista de Ilhabela às 20h"],
+    pickupGroups:[{region:"São Paulo",points:["Terminal Rodoviário Jabaquara","Terminal Rodoviário Barra Funda","Terminal Rodoviário Tietê","Shopping Internacional • Guarulhos","Terminal Rodoviário de São José dos Campos"]}],
+    photos:[["assets/ilhabela-1.jpg","Orla de Ilhabela","Ilhabela • SP"],["assets/ilhabela-2.jpg","Praias e Mata Atlântica","Ilhabela • SP"],["assets/ilhabela-3.jpg","Litoral de Ilhabela","Litoral Norte • SP"],["assets/ilhabela-4.jpg","Mar e montanhas","Ilhabela • SP"]]
   }
 };
 
@@ -98,7 +122,7 @@ function updateBooking(resetOptions=true){
   const {adults,children,travelers}=party(),total=tripTotal(pkg);
   q("#summaryLabel").textContent=`${pkg.duration} • ${adults} adulto${adults===1?"":"s"}${children?` + ${children} criança${children===1?"":"s"}`:""}`;
   q("#totalPrice").textContent=money(total);
-  q("#installmentPrice").textContent=`Criança até 10 anos: ${money(pkg.price/2)} • caução mínima: ${money(100*travelers)} (${money(100)} por viajante)`;
+  q("#installmentPrice").textContent=`Criança até 12 anos: ${money(pkg.price/2)} • caução mínima: ${money(100*travelers)} (${money(100)} por viajante)`;
 }
 
 function updatePickupOptions(){
@@ -124,14 +148,14 @@ function selectPackage(key,scroll=false){
 
 function buildMessage(record){
   const pkg=packages[selectedKey],{adults,children,travelers}=party(),total=tripTotal(pkg);
-  return ["Olá, tudo bem? Preenchi meu pedido no site da Gess Turismo.",`Reserva: ${record.code}`,`Nome: ${q("#customerName").value.trim()}`,`WhatsApp: ${q("#customerPhone").value.trim()}`,`E-mail: ${q("#customerEmail").value.trim()}`,`Pacote: ${pkg.title} — ${pkg.duration}`,`Data desejada: ${new Date(`${dateSelect.value}T12:00:00`).toLocaleDateString("pt-BR")}`,`Região de referência para embarque: ${departureSelect.value}`,`Adultos/maiores de 10 anos: ${adults}`,`Crianças até 10 anos: ${children}`,`Total de viajantes: ${travelers}`,`Nomes dos demais viajantes: ${q("#travelerNames").value.trim()||"Não se aplica"}`,`Valor do pacote: ${money(total)} (adulto ${money(pkg.price)}; criança até 10 anos ${money(pkg.price/2)})`,`Caução mínima: ${money(100*travelers)} (${money(100)} por viajante)`,`Transporte: ${pkg.transport}`,"Acompanhamento: coordenador da equipe durante toda a excursão",pkg.hotel?"Hospedagem: hotel parceiro com café da manhã incluído":"Hospedagem: não incluída; pacote bate-volta","Estou ciente de que os pontos da rota, horários e detalhes serão divulgados no grupo da excursão.","Quero confirmar disponibilidade e receber as próximas orientações."].join("\n");
+  return ["Olá, tudo bem? Preenchi meu pedido no site da Gess Turismo.",`Reserva: ${record.code}`,`Nome: ${q("#customerName").value.trim()}`,`WhatsApp: ${q("#customerPhone").value.trim()}`,`E-mail: ${q("#customerEmail").value.trim()}`,`Pacote: ${pkg.title} — ${pkg.duration}`,`Data desejada: ${new Date(`${dateSelect.value}T12:00:00`).toLocaleDateString("pt-BR")}`,`Região de referência para embarque: ${departureSelect.value}`,`Adultos/maiores de 12 anos: ${adults}`,`Crianças até 12 anos: ${children}`,`Total de viajantes: ${travelers}`,`Nomes dos demais viajantes: ${q("#travelerNames").value.trim()||"Não se aplica"}`,`Valor do pacote: ${money(total)} (adulto ${money(pkg.price)}; criança até 12 anos ${money(pkg.price/2)})`,`Caução mínima: ${money(100*travelers)} (${money(100)} por viajante)`,`Transporte: ${pkg.transport}`,"Pagamento: pode ser dividido em pagamentos via Pix; o saldo precisa estar quitado até 7 dias antes da viagem.","Acompanhamento: coordenador da equipe durante toda a excursão",pkg.hotel?"Hospedagem: hotel parceiro com café da manhã incluído":"Hospedagem: não incluída; pacote bate-volta","Estou ciente de que os pontos da rota, horários e detalhes serão divulgados no grupo da excursão.","Quero confirmar disponibilidade e receber as próximas orientações."].join("\n");
 }
 
 function openTerms(){
   if(!q("#bookingForm").reportValidity())return;
   const pkg=packages[selectedKey],{adults,children}=party();
   q("#termsSelection").innerHTML=`<span>Seu pedido</span><b>${pkg.title}</b><small>${pkg.duration} • ${departureSelect.value} • ${adults} adulto${adults===1?"":"s"}${children?` + ${children} criança${children===1?"":"s"}`:""} • ${money(tripTotal(pkg))}</small>`;
-  q("#dynamicStayTerm").textContent=pkg.hotel?"O pacote inclui hotel parceiro e café da manhã. O nome e o endereço serão informados após a confirmação operacional.":"Campos do Jordão é um passeio bate-volta de um dia e não inclui hotel ou pernoite.";
+  q("#dynamicStayTerm").textContent=pkg.hotel?"O pacote inclui hotel parceiro e café da manhã. O nome e o endereço serão informados após a confirmação operacional.":`${pkg.title} é um passeio bate-volta de um dia e não inclui hotel ou pernoite.`;
   acceptTerms.checked=false;continueWhatsapp.disabled=true;termsDialog.showModal();
 }
 
@@ -149,9 +173,9 @@ continueWhatsapp.addEventListener("click",()=>{const record=createReservation();
 destinationSelect.innerHTML=packageKeys.map(key=>`<option value="${key}">${packages[key].title} • ${money(packages[key].price)}</option>`).join("");
 q("#hotelLine").insertAdjacentHTML("beforebegin",'<div class="package-includes" id="packageIncludes"></div>');
 q(".terms-content section:nth-child(2) p").textContent="Você informa no formulário o estado e uma região de referência. A equipe monta a rota e divulga no grupo os pontos finais de coleta e horários.";
-q(".terms-content section:nth-child(5) p").textContent="A caução mínima é de R$ 100,00 por viajante. Você pode escolher pagar um valor maior, até o total do pacote; o saldo restante aparecerá na cobrança.";
+q(".terms-content section:nth-child(5) p").textContent="A caução mínima é de R$ 100,00 por viajante. Você pode dividir o valor em pagamentos via Pix; o saldo restante aparecerá na cobrança e precisa estar totalmente quitado até 7 dias antes da viagem.";
 q(".terms-content section:nth-child(4) b").textContent="Preço e crianças";
-q(".terms-content section:nth-child(4) p").textContent="Crianças de até 10 anos pagam 50% do valor do pacote. A partir de 11 anos, aplica-se o preço integral. A caução mínima é calculada por viajante, incluindo crianças.";
+q(".terms-content section:nth-child(4) p").textContent="Crianças de até 12 anos pagam 50% do valor do pacote. A partir de 13 anos, aplica-se o preço integral. A caução mínima é calculada por viajante, incluindo crianças.";
 q(".terms-content section:nth-child(8) p").textContent="Um coordenador da equipe acompanha toda a excursão. Escuna, mergulho, buggy e demais atividades só estão incluídos quando aparecem no roteiro escolhido e dependem das condições de segurança e operação.";
 q(".flow-grid article:nth-child(4) p").textContent="Após pagar, selecione o comprovante e retorne ao WhatsApp com a mensagem pronta. Seus dados já estarão preenchidos.";
 q(".terms-legal").textContent="Este aceite registra seu pedido no painel e abre o atendimento no WhatsApp. Não gera cobrança nem garante a vaga antes da confirmação da equipe.";
