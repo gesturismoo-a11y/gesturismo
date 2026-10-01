@@ -1,0 +1,8 @@
+# Arquivos temporários de visualização/backup
+mobile-check.png
+rota-clara-site*.tar.gz
+
+# Dependências e arquivos locais
+node_modules/
+.DS_Store
+Thumbs.db
