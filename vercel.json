@@ -1,0 +1,13 @@
+{
+  "rewrites": [
+    { "source": "/adm", "destination": "/painel.html" },
+    { "source": "/admin", "destination": "/painel.html" }
+  ],
+  "headers": [
+    { "source": "/adm", "headers": [{ "key": "Cache-Control", "value": "no-store" }, { "key": "X-Frame-Options", "value": "DENY" }] },
+    { "source": "/admin", "headers": [{ "key": "Cache-Control", "value": "no-store" }, { "key": "X-Frame-Options", "value": "DENY" }] },
+    { "source": "/painel.html", "headers": [{ "key": "Cache-Control", "value": "no-store" }, { "key": "X-Frame-Options", "value": "DENY" }] },
+    { "source": "/pagamento.html", "headers": [{ "key": "Cache-Control", "value": "no-store" }, { "key": "X-Frame-Options", "value": "DENY" }] },
+    { "source": "/api/(.*)", "headers": [{ "key": "Cache-Control", "value": "no-store" }, { "key": "X-Content-Type-Options", "value": "nosniff" }, { "key": "Referrer-Policy", "value": "no-referrer" }] }
+  ]
+}

@@ -112,23 +112,22 @@ for(const pkg of Object.values(packages)){
 const q = selector => document.querySelector(selector);
 const destinationSelect=q("#destinationSelect"), travelerSelect=q("#travelerSelect"), childSelect=q("#childSelect"), pickupStateSelect=q("#pickupStateSelect"), departureSelect=q("#departureSelect"), dateSelect=q("#dateSelect"), termsDialog=q("#termsDialog"), acceptTerms=q("#acceptTerms"), continueWhatsapp=q("#continueWhatsapp");
 const packageKeys=Object.keys(packages);
-const RESERVATIONS_KEY="gessTurismo.reservas";
 let selectedKey="arraial";
 let currentReservation=null;
 
-const readReservations=()=>{try{return JSON.parse(localStorage.getItem(RESERVATIONS_KEY)||"[]")}catch(_error){return[]}};
-const writeReservations=items=>localStorage.setItem(RESERVATIONS_KEY,JSON.stringify(items));
 const party=()=>{const adults=Number(travelerSelect.value||1),children=Number(childSelect.value||0);return{adults,children,travelers:adults+children}};
 const tripTotal=pkg=>{const {adults,children}=party();return pkg.price*adults+(pkg.price/2)*children};
 const enforcePartyLimit=()=>{const adults=Number(travelerSelect.value||1),maxChildren=Math.max(0,6-adults);if(Number(childSelect.value)>maxChildren)childSelect.value=String(maxChildren);[...childSelect.options].forEach(option=>option.disabled=Number(option.value)>maxChildren)};
 const updateCompanionNames=()=>{const field=q("#travelerNames"),label=field.closest("label"),others=party().travelers-1;label.childNodes[0].textContent="Nomes das outras pessoas";label.classList.toggle("is-hidden",others===0);label.classList.add("companion-names");field.required=others>0;if(others===0)field.value="";field.placeholder=others===1?"Nome completo da outra pessoa":`Informe os ${others} nomes, um por linha`};
 const reservationFingerprint=()=>[q("#customerName").value.trim(),q("#customerPhone").value.trim(),q("#customerEmail").value.trim(),q("#travelerNames").value.trim(),selectedKey,dateSelect.value,departureSelect.value,travelerSelect.value,childSelect.value].join("|");
-const createReservation=()=>{
+const createReservation=async()=>{
   const pkg=packages[selectedKey],{adults,children,travelers}=party(),total=tripTotal(pkg),fingerprint=reservationFingerprint();
   if(currentReservation?.fingerprint===fingerprint)return currentReservation.record;
-  const record={id:crypto.randomUUID?crypto.randomUUID():`${Date.now()}-${Math.random()}`,code:`GESS-${String(Date.now()).slice(-6)}`,customer:q("#customerName").value.trim(),phone:q("#customerPhone").value.trim(),email:q("#customerEmail").value.trim(),travelerNames:q("#travelerNames").value.trim(),destinationKey:selectedKey,destination:pkg.title,date:dateSelect.value,pickup:departureSelect.value,adults,children,travelers,total,minDeposit:100*travelers,pricePerPerson:pkg.price,duration:pkg.duration,hotel:pkg.hotel,status:"Aguardando cobrança",createdAt:new Date().toISOString(),amountNow:0,balance:total,pix:"",paymentLink:"",reminder:""};
-  record.minDeposit=Math.min(total,100*travelers);
-  const items=readReservations();items.unshift(record);writeReservations(items);currentReservation={fingerprint,record};return record;
+  const payload={customer:q("#customerName").value.trim(),phone:q("#customerPhone").value.trim(),email:q("#customerEmail").value.trim(),travelerNames:q("#travelerNames").value.trim(),destinationKey:selectedKey,destination:pkg.title,date:dateSelect.value,pickup:departureSelect.value,adults,children,total};
+  const response=await fetch('/api/reservations',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)});
+  const record=await response.json().catch(()=>({}));
+  if(!response.ok)throw new Error(record.error||'Não foi possível registrar o pedido. Tente novamente.');
+  currentReservation={fingerprint,record};return record;
 };
 
 function renderGallery(pkg){
@@ -211,6 +210,7 @@ function buildMessage(record){
 function openTerms(){
   if(!q("#bookingForm").reportValidity())return;
   const pkg=packages[selectedKey],{adults,children}=party();
+  q('.terms-legal').textContent='Este aceite registra seu pedido no painel e abre o atendimento no WhatsApp. Não gera cobrança nem garante a vaga antes da confirmação da equipe.';q('.terms-legal').style.color='';
   q("#termsSelection").innerHTML=`<span>Seu pedido</span><b>${pkg.title}</b><small>${formatTripDate(dateSelect.value,pkg)} • ${departureSelect.value} • ${adults} adulto${adults===1?"":"s"}${children?` + ${children} criança${children===1?"":"s"}`:""} • ${money(tripTotal(pkg))}</small>`;
   q("#dynamicStayTerm").textContent=selectedKey==='guaruja'?"Guarujá: embarque na sexta à noite, praia no sábado e domingo, uma noite de hotel de sábado para domingo e café da manhã incluídos. Retorno no domingo. Horários e hotel são confirmados pela equipe.":pkg.hotel?"O pacote inclui hotel parceiro e café da manhã. O nome e o endereço serão informados após a confirmação operacional.":`${pkg.title} é um passeio bate-volta de um dia e não inclui hotel ou pernoite.`;
   acceptTerms.checked=false;continueWhatsapp.disabled=true;termsDialog.showModal();
@@ -233,7 +233,12 @@ q("#whatsappButton").addEventListener("click",openTerms);
 q("#bookingForm").addEventListener("submit",event=>{event.preventDefault();openTerms()});
 acceptTerms.addEventListener("change",()=>continueWhatsapp.disabled=!acceptTerms.checked);
 q("#termsClose").addEventListener("click",()=>termsDialog.close());q("#cancelTerms").addEventListener("click",()=>termsDialog.close());
-continueWhatsapp.addEventListener("click",()=>{const record=createReservation();window.open(`https://wa.me/${getWhatsappNumber()}?text=${encodeURIComponent(buildMessage(record))}`,"_blank","noopener");termsDialog.close()});
+continueWhatsapp.addEventListener("click",async()=>{
+  const original=continueWhatsapp.textContent;continueWhatsapp.disabled=true;continueWhatsapp.textContent='Registrando pedido...';
+  try{const record=await createReservation();window.open(`https://wa.me/${getWhatsappNumber()}?text=${encodeURIComponent(buildMessage(record))}`,"_blank","noopener");termsDialog.close();}
+  catch(error){q('.terms-legal').textContent=error.message;q('.terms-legal').style.color='#b72d24';}
+  finally{continueWhatsapp.textContent=original;continueWhatsapp.disabled=!acceptTerms.checked;}
+});
 destinationSelect.innerHTML=packageKeys.map(key=>`<option value="${key}">${packages[key].title} • ${money(packages[key].price)}</option>`).join("");
 q("#hotelLine").insertAdjacentHTML("beforebegin",'<div class="package-includes" id="packageIncludes"></div>');
 q(".terms-content section:nth-child(2) p").textContent="Você informa no formulário o estado e uma região de referência. A equipe monta a rota e divulga no grupo os pontos finais de coleta e horários.";

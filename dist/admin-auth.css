@@ -1,0 +1,17 @@
+.admin-login{position:fixed;inset:0;z-index:1000;display:grid;place-items:center;padding:20px;background:linear-gradient(145deg,#052f5b,#0b5594 62%,#ff6b00)}
+.admin-login[hidden]{display:none}
+.admin-login-card{width:min(100%,430px);padding:36px;border-radius:24px;background:#fff;box-shadow:0 28px 80px rgba(0,20,45,.35)}
+.admin-login-card img{display:block;width:170px;height:72px;margin:0 auto 24px;object-fit:contain}
+.admin-login-card p{margin:0;color:#ff6b00;font-size:12px;font-weight:800;letter-spacing:.12em;text-align:center;text-transform:uppercase}
+.admin-login-card h1{margin:7px 0 26px;text-align:center;font-size:34px}
+.admin-login-card label{display:block;margin-bottom:8px;font-weight:800}
+.admin-login-card input{width:100%;padding:15px;border:1px solid #c7d4df;border-radius:12px;font:600 16px "DM Sans",sans-serif;outline:none}
+.admin-login-card input:focus{border-color:#0b5594;box-shadow:0 0 0 4px rgba(11,85,148,.12)}
+.admin-login-card button{width:100%;margin-top:14px;padding:15px;border:0;border-radius:12px;background:#ff6b00;color:#fff;font:800 16px "DM Sans",sans-serif;cursor:pointer}
+.admin-login-card button:disabled{opacity:.65;cursor:wait}
+.admin-login-card span{display:block;min-height:22px;margin-top:10px;color:#b72d24;font-size:14px;font-weight:700;text-align:center}
+.admin-login-card a{display:block;margin-top:12px;color:#0b5594;font-weight:700;text-align:center;text-decoration:none}
+.admin-locked>#adminSidebar,.admin-locked>#adminPanel{visibility:hidden}
+.logout-button{padding:10px 16px;border:1px solid #ccd8e2;border-radius:999px;background:#fff;color:#073a70;font-weight:800;cursor:pointer}
+#adminFeedback.error{color:#b72d24}
+@media(max-width:600px){.admin-login-card{padding:28px 22px}.admin-login-card h1{font-size:28px}.logout-button{align-self:flex-start}}
