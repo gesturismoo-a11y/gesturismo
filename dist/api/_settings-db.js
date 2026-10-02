@@ -3,9 +3,14 @@ const { Pool } = require('pg');
 let pool;
 let ensured = false;
 function getPool() {
-  const connectionString = process.env.SUPABASE_POSTGRES_URL || process.env.SUPABASE_POSTGRES_URL_NON_POOLING;
-  if (!connectionString) throw new Error('A conexão de configurações não está disponível.');
-  if (!pool) pool = new Pool({ connectionString, ssl: { rejectUnauthorized: false }, max: 1, idleTimeoutMillis: 10000 });
+  const rawConnectionString = process.env.SUPABASE_POSTGRES_URL || process.env.SUPABASE_POSTGRES_URL_NON_POOLING;
+  if (!rawConnectionString) throw new Error('A conexão de configurações não está disponível.');
+  const parsed = new URL(rawConnectionString);
+  parsed.searchParams.delete('sslmode');
+  parsed.searchParams.delete('sslcert');
+  parsed.searchParams.delete('sslkey');
+  parsed.searchParams.delete('sslrootcert');
+  if (!pool) pool = new Pool({ connectionString: parsed.toString(), ssl: { rejectUnauthorized: false }, max: 1, idleTimeoutMillis: 10000 });
   return pool;
 }
 
