@@ -234,9 +234,9 @@ q("#bookingForm").addEventListener("submit",event=>{event.preventDefault();openT
 acceptTerms.addEventListener("change",()=>continueWhatsapp.disabled=!acceptTerms.checked);
 q("#termsClose").addEventListener("click",()=>termsDialog.close());q("#cancelTerms").addEventListener("click",()=>termsDialog.close());
 continueWhatsapp.addEventListener("click",async()=>{
-  const original=continueWhatsapp.textContent;continueWhatsapp.disabled=true;continueWhatsapp.textContent='Registrando pedido...';
-  try{const record=await createReservation();window.open(`https://wa.me/${getWhatsappNumber()}?text=${encodeURIComponent(buildMessage(record))}`,"_blank","noopener");termsDialog.close();}
-  catch(error){q('.terms-legal').textContent=error.message;q('.terms-legal').style.color='#b72d24';}
+  const original=continueWhatsapp.textContent,whatsappWindow=window.open('about:blank','_blank');continueWhatsapp.disabled=true;continueWhatsapp.textContent='Registrando pedido...';
+  try{await window.GESS_CONFIG.ready;const record=await createReservation(),url=`https://wa.me/${getWhatsappNumber()}?text=${encodeURIComponent(buildMessage(record))}`;if(whatsappWindow)whatsappWindow.location.href=url;else location.href=url;termsDialog.close();}
+  catch(error){if(whatsappWindow)whatsappWindow.close();q('.terms-legal').textContent=error.message;q('.terms-legal').style.color='#b72d24';}
   finally{continueWhatsapp.textContent=original;continueWhatsapp.disabled=!acceptTerms.checked;}
 });
 destinationSelect.innerHTML=packageKeys.map(key=>`<option value="${key}">${packages[key].title} • ${money(packages[key].price)}</option>`).join("");

@@ -29,7 +29,7 @@
 
   <aside id="adminSidebar"><img src="assets/gess-turismo-logo.png" alt="Gess Turismo"><nav><a class="active" href="#reservas">Reservas</a><a href="#configuracoes">Configurações</a></nav><a class="back" href="/">Voltar ao site</a></aside>
   <main id="adminPanel">
-    <header><div><p>Painel administrativo</p><h1>Reservas e cobranças</h1></div><button class="logout-button" id="logoutButton" type="button">Sair</button></header>
+    <header><div><p>Painel administrativo</p><h1>Reservas e cobranças</h1></div><div class="admin-header-actions"><button class="site-health" id="siteHealth" type="button"><i></i><span>Verificando site...</span></button><button class="logout-button" id="logoutButton" type="button">Sair</button></div></header>
     <section class="metrics"><article><span>Total de reservas</span><strong id="metricTotal">0</strong></article><article><span>Com saldo pendente</span><strong id="metricWaiting">0</strong></article><article><span>Links gerados</span><strong id="metricLinks">0</strong></article><article><span>Recebimentos confirmados</span><strong id="metricProofs">R$ 0,00</strong></article></section>
     <section class="reservation-panel" id="reservas">
       <div class="queue-heading"><div><span>Fila online</span><h2>Pedidos recebidos pelo site</h2><p>Confira os dados do cliente, prepare o Pix e acompanhe o saldo.</p></div><span class="local-badge">Banco online</span></div>
@@ -38,10 +38,10 @@
       <div id="reservationList" class="reservation-list"></div>
       <div id="emptyReservations" class="empty-reservations"><b>Nenhuma reserva por enquanto</b><span>Os pedidos enviados pela landing page aparecerão aqui.</span></div>
     </section>
-    <section class="settings-panel" id="configuracoes"><div><span>Configurações</span><h2>WhatsApp comercial</h2><p>Número que receberá as confirmações e comprovantes.</p></div><form id="whatsappSettings"><label for="adminWhatsapp">Número com DDD</label><div class="settings-control"><input id="adminWhatsapp" type="tel" required><button type="submit">Salvar número</button></div><small>O número é atualizado neste navegador. A integração global poderá ser adicionada posteriormente.</small><p class="settings-feedback" id="whatsappSettingsFeedback"></p></form></section>
+    <section class="settings-panel" id="configuracoes"><div><span>Configurações globais</span><h2>Contato e redes sociais</h2><p>As alterações ficam salvas online e aparecem para todos os visitantes.</p></div><form id="whatsappSettings"><label for="adminWhatsapp">WhatsApp com DDD</label><input id="adminWhatsapp" type="tel" required placeholder="(11) 98778-5390"><label for="adminInstagram">Arroba do Instagram</label><input id="adminInstagram" type="text" required placeholder="gess_turismo"><label class="visibility-toggle"><input id="showInstagram" type="checkbox"><span><b>Mostrar Instagram no site</b><small>Desative para esconder o link de todos os visitantes.</small></span></label><button class="save-global-settings" type="submit">Salvar para todo o site</button><p class="settings-feedback" id="whatsappSettingsFeedback"></p></form></section>
     <section class="privacy"><b>Segurança do painel</b><p>O acesso exige a senha administrativa. Confirme cada Pix no aplicativo do banco antes de marcar uma cobrança como recebida. O comprovante enviado pelo cliente não confirma o pagamento automaticamente.</p></section>
   </main>
-  <script src="site-config.js?v=5"></script>
-  <script src="admin-workflow.js?v=25"></script>
+  <script src="site-config.js?v=6"></script>
+  <script src="admin-workflow.js?v=26"></script>
 </body>
 </html>

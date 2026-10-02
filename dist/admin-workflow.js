@@ -56,14 +56,31 @@ async function loadReservations(){
   catch(error){feedback(error.message,true);}
 }
 
+async function loadSettings(){
+  try{
+    const settings=await request('/api/settings');
+    window.GESS_CONFIG.update(settings);
+    $('#adminWhatsapp').value=window.GESS_CONFIG.formatWhatsapp(settings.whatsapp);
+    $('#adminInstagram').value=settings.instagramHandle;
+    $('#showInstagram').checked=settings.showInstagram;
+  }catch(error){$('#whatsappSettingsFeedback').textContent=error.message;$('#whatsappSettingsFeedback').className='settings-feedback error';}
+}
+
+async function checkHealth(){
+  const button=$('#siteHealth'),label=button.querySelector('span');button.classList.remove('is-online','is-offline');label.textContent='Verificando site...';
+  try{const result=await request('/api/health');button.classList.add('is-online');label.textContent=`Site online • banco ${result.databaseMs} ms`;button.title=`Última verificação: ${new Date(result.checkedAt).toLocaleString('pt-BR')}`;}
+  catch(error){button.classList.add('is-offline');label.textContent='Verificar conexão';button.title=error.message;}
+}
+
 $('#loginForm').addEventListener('submit',async event=>{
   event.preventDefault();const button=event.currentTarget.querySelector('button');button.disabled=true;$('#loginFeedback').textContent='Verificando...';
-  try{await request('/api/admin-session',{method:'POST',body:JSON.stringify({password:$('#adminPassword').value})});$('#adminPassword').value='';$('#loginFeedback').textContent='';showPanel();await loadReservations();}
+  try{await request('/api/admin-session',{method:'POST',body:JSON.stringify({password:$('#adminPassword').value})});$('#adminPassword').value='';$('#loginFeedback').textContent='';showPanel();await Promise.all([loadReservations(),loadSettings(),checkHealth()]);}
   catch(error){$('#loginFeedback').textContent=error.message;}
   finally{button.disabled=false;}
 });
 
 $('#logoutButton').addEventListener('click',async()=>{await fetch('/api/admin-session',{method:'DELETE'});showLogin();});
+$('#siteHealth').addEventListener('click',checkHealth);
 $('#refreshReservations').addEventListener('click',loadReservations);
 $('#reservationSearch').addEventListener('input',render);
 
@@ -105,7 +122,13 @@ $('#reservationList').addEventListener('click',async event=>{
   }
 });
 
-$('#whatsappSettings').addEventListener('submit',event=>{event.preventDefault();try{window.GESS_CONFIG.setWhatsappNumber($('#adminWhatsapp').value);$('#whatsappSettingsFeedback').textContent='Número salvo neste navegador.';}catch(error){$('#whatsappSettingsFeedback').textContent=error.message;}});
-$('#adminWhatsapp').value=window.GESS_CONFIG.getWhatsappDisplay();
+$('#whatsappSettings').addEventListener('submit',async event=>{
+  event.preventDefault();const button=event.currentTarget.querySelector('button[type="submit"]'),feedbackElement=$('#whatsappSettingsFeedback');button.disabled=true;feedbackElement.textContent='Salvando para todo o site...';feedbackElement.className='settings-feedback';
+  try{
+    const settings=await request('/api/settings',{method:'PATCH',body:JSON.stringify({whatsapp:$('#adminWhatsapp').value,instagramHandle:$('#adminInstagram').value,showInstagram:$('#showInstagram').checked})});
+    window.GESS_CONFIG.update(settings);$('#adminWhatsapp').value=window.GESS_CONFIG.formatWhatsapp(settings.whatsapp);$('#adminInstagram').value=settings.instagramHandle;feedbackElement.textContent='Configurações atualizadas para todos os visitantes.';feedbackElement.classList.add('success');
+  }catch(error){feedbackElement.textContent=error.message;feedbackElement.classList.add('error');}
+  finally{button.disabled=false;}
+});
 
-(async()=>{try{const status=await request('/api/admin-session');if(status.authenticated){showPanel();await loadReservations();}else showLogin();}catch{showLogin();}})();
+(async()=>{try{const status=await request('/api/admin-session');if(status.authenticated){showPanel();await Promise.all([loadReservations(),loadSettings(),checkHealth()]);}else showLogin();}catch{showLogin();}})();

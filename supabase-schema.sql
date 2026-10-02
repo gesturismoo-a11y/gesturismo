@@ -98,3 +98,15 @@ revoke all on table public.reservations from anon, authenticated;
 revoke all on table public.charges from anon, authenticated;
 revoke all on table public.payments from anon, authenticated;
 revoke all on table public.admins from anon, authenticated;
+
+create table if not exists public.site_settings (
+  id smallint primary key default 1 check (id = 1),
+  whatsapp varchar(15) not null default '5511987785390',
+  instagram_handle varchar(64) not null default 'gess_turismo',
+  show_instagram boolean not null default true,
+  updated_at timestamptz not null default now()
+);
+
+alter table public.site_settings enable row level security;
+revoke all on table public.site_settings from anon, authenticated;
+insert into public.site_settings (id) values (1) on conflict (id) do nothing;
