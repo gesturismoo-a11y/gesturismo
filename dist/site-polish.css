@@ -5,18 +5,48 @@
 .quick-nav>a:hover{background:#eef8f6;color:#087c6c;transform:translateY(-1px)}
 .quick-nav>a span{display:grid;place-items:center;width:22px;height:22px;border-radius:7px;background:#e7f7f3;color:#087c6c;font:800 10px Manrope,sans-serif}
 .quick-nav>a b{font-weight:800}
-.quick-nav-whatsapp{margin-left:auto!important;background:#fff!important;color:#128c7e!important;border:1px solid #25d366; padding-inline:16px!important;box-shadow:0 7px 16px rgba(37,211,102,.16)}
-.quick-nav-whatsapp:hover{background:#25d366!important;color:#fff!important}
+.quick-nav-whatsapp{margin-left:0}
 .quick-nav-icon{width:20px;height:20px;flex:0 0 20px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
 .quick-nav-question text{fill:currentColor;stroke:none;font:800 13px Manrope,sans-serif}
-.quick-nav-whatsapp .quick-nav-icon{width:24px;height:24px;flex-basis:24px;fill:#fff;stroke:#168b58;stroke-width:1.25}
-.quick-nav-whatsapp .quick-nav-whatsapp-icon{fill:#25d366!important;stroke:none!important}
-.quick-nav-whatsapp .quick-nav-whatsapp-icon path{fill:#25d366!important}
+.quick-nav-whatsapp .quick-nav-whatsapp-icon{fill:currentColor;stroke:none}
 .quick-nav-whatsapp-copy{display:grid!important;gap:1px!important;width:auto!important;height:auto!important;padding:0!important;border-radius:0!important;background:transparent!important;color:inherit!important;font:inherit!important}
 .quick-nav-whatsapp-copy b{font-size:12px}.quick-nav-whatsapp-copy small{font-size:10px;color:#d7f7e7}
 @media(max-width:760px){.quick-nav{top:66px;width:calc(100% - 16px);margin-top:8px;padding:6px;border-radius:14px;gap:4px}.quick-nav>a{min-height:40px;padding:7px 10px;font-size:11px}.quick-nav>a span{width:20px;height:20px}.quick-nav-whatsapp{margin-left:0!important}.quick-nav-whatsapp small{display:none}.quick-nav-whatsapp-copy{width:auto!important;height:auto!important}}
 @media(max-width:420px){.quick-nav{margin-top:6px}.quick-nav>a{padding-inline:9px}.quick-nav>a:nth-child(3) b{max-width:84px;overflow:hidden;text-overflow:ellipsis}.quick-nav-whatsapp{padding-inline:13px!important}}
 
+/* Navegação presa à janela, inclusive quando o body limita overflow. */
+body{padding-top:144px}
+.site-header{position:fixed!important;inset:0 0 auto!important;height:76px!important;width:100%;z-index:30}
+.quick-nav{position:fixed;top:80px;left:50%;transform:translateX(-50%);margin:0;z-index:29;background:#fff;display:grid;grid-template-columns:repeat(5,minmax(0,1fr))}
+.quick-nav>a{justify-content:center;min-width:0}
+.quick-nav>a:hover{background:#f4f6f8;color:var(--ink);transform:none}
+.quick-nav>a:focus-visible{outline:2px solid #ff6b00;outline-offset:-2px}
+#top,#destinos,#embarques,#incluso,#reservar{scroll-margin-top:156px}
+@media(max-width:760px){body{padding-top:132px}.site-header{height:66px!important}.quick-nav{top:70px;margin:0;gap:2px}.quick-nav>a{min-height:44px;padding:8px 10px;font-size:12px}.quick-nav-whatsapp{margin-left:0!important}#top,#destinos,#embarques,#incluso,#reservar{scroll-margin-top:144px}}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}.quick-nav>a{transition:none}}
+
+.quick-nav .quick-nav-bus{width:38px;flex-basis:38px;height:24px;stroke-width:1.7}
+.quick-nav .quick-nav-whatsapp-icon{width:23px;height:23px;flex-basis:23px}
+.quick-nav-question text{font-size:20px}
+#pontos-do-pacote{scroll-margin-top:156px}
+.quick-nav>a{font-size:14px}
+@media(min-width:761px) and (max-width:1050px){.quick-nav>a{font-size:12px;padding-inline:5px;gap:5px;flex-direction:column;white-space:normal;text-align:center;min-height:65px}.quick-nav-icon,.quick-nav .quick-nav-bus,.quick-nav .quick-nav-whatsapp-icon{flex-basis:24px}body{padding-top:169px}#destinos,#incluso,#reservar,#pontos-do-pacote{scroll-margin-top:176px}}
+@media(max-width:760px){
+  .quick-nav{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));overflow:visible;padding:5px 3px;gap:0}
+  .quick-nav>a{flex-direction:column;justify-content:center;gap:4px;padding:5px 2px!important;min-width:0;min-height:65px;white-space:normal;text-align:center;font-size:11px;line-height:1.2}
+  .quick-nav>a b{max-width:none!important;overflow:visible!important;text-overflow:clip!important}
+  .quick-nav-icon{flex-basis:22px;height:22px}
+  .quick-nav .quick-nav-bus{flex-basis:22px;height:22px;width:35px}
+  .quick-nav .quick-nav-whatsapp-icon{flex-basis:22px;height:22px;width:22px}
+  body{padding-top:151px}
+  #top,#destinos,#embarques,#incluso,#reservar,#pontos-do-pacote{scroll-margin-top:157px}
+}
+.destination-tabs{display:grid!important;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;overflow:visible!important}
+.destination-tab{width:100%;min-width:0!important;min-height:46px;white-space:normal!important;text-align:center}
+.gallery-card:has(.gallery-thumbs[hidden]){grid-template-rows:1fr}
+.gallery-thumbs[hidden]{display:none!important}
+@media(max-width:760px){.destination-tabs{grid-template-columns:repeat(3,minmax(0,1fr))}.destination-tab{font-size:12px;padding:10px 6px}}
+@media(max-width:420px){.destination-tabs{grid-template-columns:repeat(2,minmax(0,1fr))}.quick-nav>a{font-size:10px}}
 /* Acabamento visual: imagens ocupam toda a composição, sem áreas vazias. */
 .experience-grid{align-items:stretch!important}.gallery-card{display:grid;grid-template-rows:minmax(535px,1fr) auto;height:100%;background:#062f42}.gallery-main{height:auto!important;min-height:535px}.gallery-main img{position:absolute;inset:0}.route-card{height:100%}.route-price{padding:15px 17px;border-radius:14px;background:linear-gradient(135deg,#073a70,#0b5594);color:#fff!important}.route-price small{display:block;margin-top:5px;color:#ffbd87;font:700 11px "DM Sans",sans-serif;letter-spacing:.02em}.destinations{position:relative}.destinations:before{content:"";position:absolute;z-index:-1;inset:62px 0 45px;border-radius:38px;background:linear-gradient(145deg,rgba(255,255,255,.88),rgba(236,246,246,.94));box-shadow:0 24px 70px rgba(5,47,65,.08)}.faq{position:relative;margin-bottom:70px;padding:58px!important;border-radius:30px;background:linear-gradient(90deg,rgba(246,243,233,.96),rgba(246,243,233,.76)),url("assets/gess-travel-collage.png") center/cover;box-shadow:var(--shadow)}.faq-list{padding:8px 24px;border-radius:20px;background:rgba(255,255,255,.94);box-shadow:0 15px 40px rgba(5,47,65,.1)}@media(max-width:900px){.gallery-card{grid-template-rows:auto auto}.gallery-main{height:440px!important;min-height:0}.destinations:before{inset:38px 12px 28px}.faq{margin:0 12px 55px;padding:36px 24px!important}}@media(max-width:560px){.gallery-main{height:340px!important}.destinations:before{inset:28px 6px 18px;border-radius:24px}.faq{padding:28px 14px!important}.faq-list{padding:4px 14px}}
 .package-includes{margin:18px 0;padding:16px;border:1px solid #d9e6e8;border-radius:16px;background:linear-gradient(145deg,#f9fcfc,#eef7f6)}.includes-heading{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:11px}.includes-heading span{color:#d65a00;font-size:10px;font-weight:800;letter-spacing:.1em;text-transform:uppercase}.includes-heading b{color:var(--navy);font-size:11px}.package-includes>div:last-child{display:flex;flex-wrap:wrap;gap:6px}.package-includes>div:last-child span{padding:7px 9px;border-radius:999px;background:#fff;color:#315966;font-size:11px;font-weight:700;box-shadow:0 3px 10px rgba(5,47,65,.06)}.package-includes>div:last-child span:before{content:"✓";margin-right:5px;color:#0a9a83;font-weight:900}@media(max-width:560px){.includes-heading{align-items:flex-start;flex-direction:column}.package-includes>div:last-child{display:grid}.package-includes>div:last-child span{border-radius:9px}}

@@ -7,8 +7,14 @@ const decodePayload=value=>{
 };
 const hashParams=new URLSearchParams(location.hash.slice(1));
 let charge=null;
-try{charge=decodePayload(hashParams.get("cobranca")||"");if(!charge||charge.v!==1||!charge.code||!charge.pix||!(charge.now>0)||charge.now>charge.total)throw new Error("invalid")}
-catch(_error){document.querySelector("#invalidCharge").hidden=false;document.querySelector("#chargeContent").hidden=true}
+try{
+  if(hashParams.has('local')){
+    charge=JSON.parse(localStorage.getItem('gessTurismo.cobrancas')||'[]').find(c=>c.id===hashParams.get('local'));
+    const reservation=JSON.parse(localStorage.getItem('gessTurismo.reservas')||'[]').find(r=>r.id===charge?.reservationId);
+    if(!reservation||charge.cancelled)throw new Error('invalid');
+  }else charge=decodePayload(hashParams.get("cobranca")||"");
+  if(!charge||![1,2].includes(charge.v)||!charge.code||!charge.pix||!(charge.now>0)||charge.now>charge.total)throw new Error("invalid");
+}catch(_error){charge=null;document.querySelector("#invalidCharge").hidden=false;document.querySelector("#chargeContent").hidden=true}
 
 if(charge){
   const date=value=>new Date(`${value}T12:00:00`).toLocaleDateString("pt-BR");
@@ -27,8 +33,9 @@ if(charge){
   document.querySelector("#paymentAmount").textContent=money(charge.now);
   document.querySelector("#pixCode").value=charge.pix;
   const qr=document.querySelector("#pixQr");
-  qr.onerror=()=>{if(qr.dataset.fallback)return;qr.dataset.fallback="true";qr.src=`https://api.qrserver.com/v1/create-qr-code/?size=320x320&margin=8&data=${encodeURIComponent(charge.pix)}`};
-  qr.src=`https://quickchart.io/qr?size=320&margin=2&text=${encodeURIComponent(charge.pix)}`;
+  if(/^data:image\/(png|jpeg|webp);base64,/.test(charge.qrImage||''))qr.src=charge.qrImage;
+  else{qr.parentElement.hidden=true;document.querySelector('.pix-payment h3').textContent='Copie o código Pix';}
+  if(charge.confirmed){document.querySelector('#chargeStatus').textContent='Pagamento confirmado';document.querySelector('.pix-payment').hidden=true;document.querySelector('#proofForm').hidden=true;}
   if(charge.note){document.querySelector("#chargeNote").hidden=false;document.querySelector("#chargeNote").textContent=charge.note}
 }
 
