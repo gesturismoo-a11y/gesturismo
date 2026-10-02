@@ -12,21 +12,32 @@ const asReservation = row => ({
     confirmed: c.status === 'confirmed', cancelled: ['cancelled', 'replaced'].includes(c.status), createdAt: c.created_at }))
 });
 
+const fullNamePattern = /^[A-Za-zÀ-ÖØ-öø-ÿ'’-]{2,}(?:\s+[A-Za-zÀ-ÖØ-öø-ÿ'’-]{2,})+$/;
+const emailPattern = /^[^\s@]+@[^\s@]+\.com(?:\.[a-z]{2})?$/i;
+function normalizePhone(value) {
+  let digits = String(value || '').replace(/\D/g, '');
+  if (digits.length === 13 && digits.startsWith('55')) digits = digits.slice(2);
+  return digits;
+}
+const formatPhone = digits => `(${digits.slice(0, 2)}) ${digits.slice(2, 7)}-${digits.slice(7)}`;
+
 module.exports = async function handler(req, res) {
   try {
     if (req.method === 'POST') {
       const body = await readBody(req);
       const adults = Number(body.adults), children = Number(body.children || 0), total = Number(body.total);
-      const customer = clean(body.customer, 160), phone = clean(body.phone, 32), destination = clean(body.destination, 120);
+      const customer = clean(body.customer, 160).replace(/\s+/g, ' '), phoneDigits = normalizePhone(body.phone), email = clean(body.email, 254).toLowerCase(), destination = clean(body.destination, 120);
       const destinationKey = clean(body.destinationKey, 64), date = clean(body.date, 10), pickup = clean(body.pickup, 300);
-      if (!customer || !phone || !destination || !destinationKey || !/^\d{4}-\d{2}-\d{2}$/.test(date) || !pickup || !Number.isInteger(adults) || !Number.isInteger(children) || adults < 1 || children < 0 || adults + children > 6 || !Number.isFinite(total) || total <= 0) {
+      const travelerNames = clean(body.travelerNames, 1500), otherTravelers = adults + children - 1;
+      const names = travelerNames.split(/\n+/).map(value => value.trim().replace(/\s+/g, ' ')).filter(Boolean);
+      if (!fullNamePattern.test(customer) || !/^\d{2}9\d{8}$/.test(phoneDigits) || !emailPattern.test(email) || !destination || !destinationKey || !/^\d{4}-\d{2}-\d{2}$/.test(date) || !pickup || !Number.isInteger(adults) || !Number.isInteger(children) || adults < 1 || children < 0 || adults + children > 6 || names.length !== otherTravelers || names.some(name => !fullNamePattern.test(name)) || !Number.isFinite(total) || total <= 0) {
         return json(res, 400, { error: 'Confira os dados do pedido.' });
       }
       const code = `GESS-${Date.now().toString(36).slice(-5).toUpperCase()}${crypto.randomBytes(2).toString('hex').toUpperCase()}`;
       const rows = await db('reservations', {
         method: 'POST', headers: { Prefer: 'return=representation' }, body: JSON.stringify({
-          code, customer_name: customer, phone, email: clean(body.email, 254) || null,
-          traveler_names: clean(body.travelerNames, 1500) || null, destination_key: destinationKey,
+          code, customer_name: customer, phone: formatPhone(phoneDigits), email,
+          traveler_names: names.join('\n') || null, destination_key: destinationKey,
           destination, travel_date: date, pickup, adults, children, total_cents: Math.round(total * 100)
         })
       });
@@ -42,9 +53,9 @@ module.exports = async function handler(req, res) {
       const body = await readBody(req), id = clean(body.id, 36);
       if (!/^[0-9a-f-]{36}$/i.test(id)) return json(res, 400, { error: 'Reserva inválida.' });
       const updates = {};
-      if ('customer' in body) updates.customer_name = clean(body.customer, 160);
-      if ('phone' in body) updates.phone = clean(body.phone, 32);
-      if ('email' in body) updates.email = clean(body.email, 254) || null;
+      if ('customer' in body) { const value = clean(body.customer, 160).replace(/\s+/g, ' '); if (!fullNamePattern.test(value)) return json(res, 400, { error: 'Informe nome e sobrenome completos.' }); updates.customer_name = value; }
+      if ('phone' in body) { const value = normalizePhone(body.phone); if (!/^\d{2}9\d{8}$/.test(value)) return json(res, 400, { error: 'Informe um celular válido com DDD.' }); updates.phone = formatPhone(value); }
+      if ('email' in body) { const value = clean(body.email, 254).toLowerCase(); if (!emailPattern.test(value)) return json(res, 400, { error: 'Informe um e-mail válido terminado em .com ou .com.br.' }); updates.email = value; }
       if ('pickup' in body) updates.pickup = clean(body.pickup, 300);
       if ('travelerNames' in body) updates.traveler_names = clean(body.travelerNames, 1500) || null;
       const rows = await db(`reservations?id=eq.${encodeURIComponent(id)}`, { method: 'PATCH', headers: { Prefer: 'return=representation' }, body: JSON.stringify(updates) });

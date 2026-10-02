@@ -111,14 +111,30 @@ for(const pkg of Object.values(packages)){
 }
 const q = selector => document.querySelector(selector);
 const destinationSelect=q("#destinationSelect"), travelerSelect=q("#travelerSelect"), childSelect=q("#childSelect"), pickupStateSelect=q("#pickupStateSelect"), departureSelect=q("#departureSelect"), dateSelect=q("#dateSelect"), termsDialog=q("#termsDialog"), acceptTerms=q("#acceptTerms"), continueWhatsapp=q("#continueWhatsapp");
+const customerName=q('#customerName'),customerPhone=q('#customerPhone'),customerEmail=q('#customerEmail'),travelerNamesField=q('#travelerNames');
 const packageKeys=Object.keys(packages);
 let selectedKey="arraial";
 let currentReservation=null;
 
 const party=()=>{const adults=Number(travelerSelect.value||1),children=Number(childSelect.value||0);return{adults,children,travelers:adults+children}};
+const fullNamePattern=/^[A-Za-zÀ-ÖØ-öø-ÿ'’-]{2,}(?:\s+[A-Za-zÀ-ÖØ-öø-ÿ'’-]{2,})+$/;
+const emailPattern=/^[^\s@]+@[^\s@]+\.com(?:\.[a-z]{2})?$/i;
+const phoneDigits=value=>String(value||'').replace(/\D/g,'').replace(/^55(?=\d{11}$)/,'').slice(0,11);
+const formatPhoneInput=value=>{const digits=phoneDigits(value);if(digits.length<=2)return digits?`(${digits}`:'';if(digits.length<=7)return `(${digits.slice(0,2)}) ${digits.slice(2)}`;return `(${digits.slice(0,2)}) ${digits.slice(2,7)}-${digits.slice(7)}`};
+function validateBookingFields(){
+  const name=customerName.value.trim().replace(/\s+/g,' '),email=customerEmail.value.trim(),phone=phoneDigits(customerPhone.value),others=party().travelers-1,names=travelerNamesField.value.split(/\n+/).map(value=>value.trim().replace(/\s+/g,' ')).filter(Boolean);
+  customerName.value=name;customerName.setCustomValidity(fullNamePattern.test(name)?'':'Informe nome e sobrenome completos.');
+  customerPhone.setCustomValidity(/^\d{2}9\d{8}$/.test(phone)?'':'Informe um celular válido com DDD: (00) 90000-0000.');
+  customerEmail.setCustomValidity(emailPattern.test(email)?'':'Informe um e-mail válido terminado em .com ou .com.br.');
+  travelerNamesField.setCustomValidity(others===0||names.length===others&&names.every(value=>fullNamePattern.test(value))?'':`Informe ${others===1?'o nome completo da outra pessoa':`os ${others} nomes completos, um por linha`}.`);
+  return customerName.checkValidity()&&customerPhone.checkValidity()&&customerEmail.checkValidity()&&travelerNamesField.checkValidity();
+}
+customerName.maxLength=120;customerPhone.maxLength=15;customerPhone.inputMode='numeric';customerEmail.maxLength=160;
+customerPhone.addEventListener('input',()=>{customerPhone.value=formatPhoneInput(customerPhone.value);customerPhone.setCustomValidity('')});
+[customerName,customerEmail,travelerNamesField].forEach(field=>field.addEventListener('input',()=>field.setCustomValidity('')));
 const tripTotal=pkg=>{const {adults,children}=party();return pkg.price*adults+(pkg.price/2)*children};
 const enforcePartyLimit=()=>{const adults=Number(travelerSelect.value||1),maxChildren=Math.max(0,6-adults);if(Number(childSelect.value)>maxChildren)childSelect.value=String(maxChildren);[...childSelect.options].forEach(option=>option.disabled=Number(option.value)>maxChildren)};
-const updateCompanionNames=()=>{const field=q("#travelerNames"),label=field.closest("label"),others=party().travelers-1;label.childNodes[0].textContent="Nomes das outras pessoas";label.classList.toggle("is-hidden",others===0);label.classList.add("companion-names");field.required=others>0;if(others===0)field.value="";field.placeholder=others===1?"Nome completo da outra pessoa":`Informe os ${others} nomes, um por linha`};
+const updateCompanionNames=()=>{const field=q("#travelerNames"),label=field.closest("label"),others=party().travelers-1;label.childNodes[0].textContent="Nomes das outras pessoas";label.classList.toggle("is-hidden",others===0);label.classList.add("companion-names");field.required=others>0;field.setCustomValidity('');if(others===0)field.value="";field.placeholder=others===1?"Nome completo da outra pessoa":`Informe os ${others} nomes, um por linha`};
 const reservationFingerprint=()=>[q("#customerName").value.trim(),q("#customerPhone").value.trim(),q("#customerEmail").value.trim(),q("#travelerNames").value.trim(),selectedKey,dateSelect.value,departureSelect.value,travelerSelect.value,childSelect.value].join("|");
 const createReservation=async()=>{
   const pkg=packages[selectedKey],{adults,children,travelers}=party(),total=tripTotal(pkg),fingerprint=reservationFingerprint();
@@ -204,11 +220,11 @@ function selectPackage(key,scroll=false){
 
 function buildMessage(record){
   const pkg=packages[selectedKey],{adults,children,travelers}=party(),total=tripTotal(pkg);
-  return ["Olá, tudo bem? Preenchi meu pedido no site da Gess Turismo.",`Reserva: ${record.code}`,`Nome: ${q("#customerName").value.trim()}`,`WhatsApp: ${q("#customerPhone").value.trim()}`,`E-mail: ${q("#customerEmail").value.trim()}`,`Pacote: ${pkg.title} — ${pkg.duration}`,`Data desejada: ${formatTripDate(dateSelect.value,pkg)}`,`Região de referência para embarque: ${departureSelect.value}`,`Adultos/maiores de 12 anos: ${adults}`,`Crianças até 12 anos: ${children}`,`Total de viajantes: ${travelers}`,`Nomes dos demais viajantes: ${q("#travelerNames").value.trim()||"Não se aplica"}`,`Valor do pacote: ${money(total)} (adulto ${money(pkg.price)}; criança até 12 anos ${money(pkg.price/2)})`,`Sinal mínimo: ${money(Math.min(total,100*travelers))} (R$ 100 por viajante, limitado ao total)`,`Transporte: ${pkg.transport}`,"Pagamento: pode ser dividido em pagamentos via Pix; o saldo precisa estar quitado até 7 dias antes da viagem.","Acompanhamento: coordenador da equipe durante toda a excursão",pkg.hotel?"Hospedagem: hotel parceiro com café da manhã incluído":"Hospedagem: não incluída; pacote bate-volta","Estou ciente de que os pontos da rota, horários e detalhes serão divulgados no grupo da excursão.","Quero confirmar disponibilidade e receber as próximas orientações."].join("\n");
+  return [`📋 *FORMULÁRIO DE INTERESSE PREENCHIDO*`,`*Gess Turismo*`,'',`🎫 *Reserva:* ${record.code}`,'',`👤 *DADOS DO RESPONSÁVEL*`,`• Nome: ${customerName.value.trim()}`,`• WhatsApp: ${customerPhone.value.trim()}`,`• E-mail: ${customerEmail.value.trim()}`,'',`🚌 *DETALHES DA VIAGEM*`,`• Destino: ${pkg.title}`,`• Duração: ${pkg.duration}`,`• Data desejada: ${formatTripDate(dateSelect.value,pkg)}`,`• Embarque: ${departureSelect.value}`,`• Transporte: ${pkg.transport}`,'',`👥 *VIAJANTES*`,`• Adultos/maiores de 12 anos: ${adults}`,`• Crianças até 12 anos: ${children}`,`• Total: ${travelers}`,`• Demais viajantes: ${travelerNamesField.value.trim()||'Não se aplica'}`,'',`💳 *VALORES*`,`• Total do pacote: ${money(total)}`,`• Adulto: ${money(pkg.price)}`,`• Criança até 12 anos: ${money(pkg.price/2)}`,`• Sinal mínimo: ${money(Math.min(total,100*travelers))}`,'',pkg.hotel?'🏨 Hotel parceiro e café da manhã incluídos.':'☀️ Passeio bate-volta, sem hospedagem.','🧭 Acompanhamento da equipe durante toda a excursão.','',`✅ Condições lidas e aceitas.`,`📅 Saldo integral até 7 dias antes da viagem.`,`📍 Pontos e horários finais serão informados no grupo.`,'',`*Aguardando confirmação de disponibilidade.* 🌴`].join("\n");
 }
 
 function openTerms(){
-  if(!q("#bookingForm").reportValidity())return;
+  validateBookingFields();if(!q("#bookingForm").reportValidity())return;
   const pkg=packages[selectedKey],{adults,children}=party();
   q('.terms-legal').textContent='Este aceite registra seu pedido no painel e abre o atendimento no WhatsApp. Não gera cobrança nem garante a vaga antes da confirmação da equipe.';q('.terms-legal').style.color='';
   q("#termsSelection").innerHTML=`<span>Seu pedido</span><b>${pkg.title}</b><small>${formatTripDate(dateSelect.value,pkg)} • ${departureSelect.value} • ${adults} adulto${adults===1?"":"s"}${children?` + ${children} criança${children===1?"":"s"}`:""} • ${money(tripTotal(pkg))}</small>`;

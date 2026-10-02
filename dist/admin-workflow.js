@@ -3,6 +3,8 @@ const money=value=>Number(value||0).toLocaleString('pt-BR',{style:'currency',cur
 const esc=value=>String(value??'').replace(/[&<>"']/g,char=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[char]));
 const fold=value=>String(value||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase();
 const fmtDate=value=>value?new Date(`${value}T12:00:00`).toLocaleDateString('pt-BR'):'—';
+const phoneDigits=value=>String(value||'').replace(/\D/g,'').replace(/^55(?=\d{11}$)/,'').slice(0,11);
+const formatPhoneInput=value=>{const digits=phoneDigits(value);if(digits.length<=2)return digits?`(${digits}`:'';if(digits.length<=7)return `(${digits.slice(0,2)}) ${digits.slice(2)}`;return `(${digits.slice(0,2)}) ${digits.slice(2,7)}-${digits.slice(7)}`};
 const paid=reservation=>(reservation.payments||[]).reduce((sum,item)=>sum+Number(item.amount||0),0);
 const remaining=reservation=>Math.max(0,Math.round((Number(reservation.total)-paid(reservation))*100)/100);
 const minimum=reservation=>Math.min(remaining(reservation),paid(reservation)>0?.01:100*Number(reservation.travelers||1));
@@ -31,7 +33,7 @@ function card(reservation){
     <div class="account-summary"><div><span>Total do pacote</span><b>${money(reservation.total)}</b></div><div><span>Pagamento confirmado</span><b>${money(paid(reservation))}</b></div><div><span>Falta pagar</span><b>${money(left)}</b></div></div>
     <details class="edit-details"><summary>Editar dados do pedido</summary><form class="edit-form"><div class="charge-grid">${field('Nome completo','customer',reservation.customer)}${field('WhatsApp','phone',reservation.phone,'tel')}${field('E-mail','email',reservation.email,'email')}${field('Embarque','pickup',reservation.pickup)}${field('Nomes dos outros viajantes','travelerNames',reservation.travelerNames)}</div><button type="submit">Salvar dados</button></form></details>
     ${left>0?`<form class="charge-form" data-left="${left}"><div class="charge-title"><div><span>Cobrança individual</span><b>Quanto o cliente vai pagar agora?</b></div><button class="full-payment" type="button">Cobrar saldo completo</button></div><div class="payment-workspace"><label class="amount-field">Valor do Pix<input class="amount-now" type="number" min="${min}" max="${left}" step="0.01" value="${now.toFixed(2)}" required><small>${paid(reservation)>0?'Novo pagamento do saldo restante.':`Sinal mínimo de ${money(min)} para esta reserva.`}</small></label><div class="balance-preview"><div><span>Falta pagar hoje</span><b>${money(left)}</b></div><div><span>Após este pagamento</span><strong class="projected-balance">${money(left-now)}</strong></div></div></div>
-      <div class="qr-upload-grid"><label>Imagem do QR Code<input class="qr-file" type="file" accept="image/png,image/jpeg,image/webp" required><small>PNG, JPG ou WebP • até 1 MB.</small><img class="qr-preview" alt="Prévia do QR Code" hidden></label><label>Pix copia e cola<textarea class="pix-code" rows="5" required maxlength="4096" placeholder="Cole o código do mesmo QR Code"></textarea><small>O código e o QR devem corresponder ao valor informado.</small></label></div>
+      <div class="qr-upload-grid"><label>Imagem do QR Code <em>opcional</em><input class="qr-file" type="file" accept="image/png,image/jpeg,image/webp"><small>PNG, JPG ou WebP • até 1 MB. Se você informar um Pix copia e cola, o sistema gera o QR automaticamente.</small><img class="qr-preview" alt="Prévia do QR Code" hidden></label><label>Pix copia e cola ou chave Pix<textarea class="pix-code" rows="5" required maxlength="4096" placeholder="Cole o Pix copia e cola ou informe a chave Pix"></textarea><small>Sem imagem, o cliente verá o código ou a chave para copiar. O QR automático é criado quando você cola o código Pix completo.</small></label></div>
       <div class="charge-grid"><label>Observação para o cliente<input class="charge-note-input" maxlength="300" placeholder="Ex.: sinal da excursão"></label><div class="deadline"><span>Lembrete de quitação</span><b>${due(reservation)}</b><small>7 dias antes do passeio.</small></div></div><div class="card-actions"><button class="generate-link" type="submit">Salvar e gerar link individual</button></div><p class="card-feedback" role="status"></p></form>`:'<p class="settled-note">Reserva quitada. Não há saldo para uma nova cobrança.</p>'}
     <div class="charge-history">${(reservation.charges||[]).map(charge=>{const url=`${location.origin}/pagamento.html?token=${encodeURIComponent(charge.token)}`;return `<div class="charge-item"><div><b>${money(charge.now)}</b><span>${charge.confirmed?'Pagamento confirmado':charge.cancelled?'Cobrança substituída':'Aguardando conferência'} • ${fmtDate(charge.createdAt.slice(0,10))}</span></div><div class="charge-actions">${!charge.cancelled?`<a href="${esc(url)}" target="_blank" rel="noopener">Ver cobrança</a><button type="button" data-copy="${esc(url)}">Copiar link</button>${!charge.confirmed?`<button type="button" data-confirm="${charge.id}">Confirmar recebimento</button>`:''}`:''}</div></div>`}).join('')}</div>
     <div class="delete-row"><button class="delete-action" type="button">Apagar reserva</button></div>
@@ -84,7 +86,7 @@ $('#siteHealth').addEventListener('click',checkHealth);
 $('#refreshReservations').addEventListener('click',loadReservations);
 $('#reservationSearch').addEventListener('input',render);
 
-$('#reservationList').addEventListener('input',event=>{if(event.target.matches('.amount-now')){const form=event.target.closest('form'),amount=Number(event.target.value);form.querySelector('.projected-balance').textContent=money(Math.max(0,Number(form.dataset.left)-amount));}});
+$('#reservationList').addEventListener('input',event=>{if(event.target.matches('.amount-now')){const form=event.target.closest('form'),amount=Number(event.target.value);form.querySelector('.projected-balance').textContent=money(Math.max(0,Number(form.dataset.left)-amount));}if(event.target.matches('input[name="phone"]'))event.target.value=formatPhoneInput(event.target.value);});
 $('#reservationList').addEventListener('change',event=>{
   if(!event.target.matches('.qr-file'))return;
   const file=event.target.files[0],form=event.target.closest('form'),image=form.querySelector('.qr-preview');image.hidden=true;delete form.dataset.qr;
@@ -102,7 +104,7 @@ $('#reservationList').addEventListener('submit',async event=>{
       await request('/api/reservations',{method:'PATCH',body:JSON.stringify(body)});await loadReservations();return;
     }
     const amount=Number(form.querySelector('.amount-now').value),pix=form.querySelector('.pix-code').value.trim(),qrImage=form.dataset.qr;
-    if(!form.reportValidity()||!qrImage)throw new Error('Confira o valor, envie o QR Code e preencha o Pix copia e cola.');
+    if(!form.reportValidity())throw new Error('Confira o valor e preencha o Pix copia e cola ou a chave Pix.');
     const result=await request('/api/charges',{method:'POST',body:JSON.stringify({reservationId:reservation.id,amount,pix,qrImage,note:form.querySelector('.charge-note-input').value.trim()})});
     const url=`${location.origin}/pagamento.html?token=${encodeURIComponent(result.token)}`;await navigator.clipboard.writeText(url).catch(()=>{});await loadReservations();feedback('Cobrança criada. O link individual foi copiado.');
   }catch(error){message.textContent=error.message;message.classList.add('error');}
@@ -130,5 +132,6 @@ $('#whatsappSettings').addEventListener('submit',async event=>{
   }catch(error){feedbackElement.textContent=error.message;feedbackElement.classList.add('error');}
   finally{button.disabled=false;}
 });
+$('#adminWhatsapp').maxLength=15;$('#adminWhatsapp').inputMode='numeric';$('#adminWhatsapp').addEventListener('input',()=>{$('#adminWhatsapp').value=formatPhoneInput($('#adminWhatsapp').value)});
 
 (async()=>{try{const status=await request('/api/admin-session');if(status.authenticated){showPanel();await Promise.all([loadReservations(),loadSettings(),checkHealth()]);}else showLogin();}catch{showLogin();}})();

@@ -21,7 +21,7 @@ function render(data){
   document.querySelector('#paymentAmount').textContent=money(data.now);
   document.querySelector('#pixCode').value=data.pix;
   const qr=document.querySelector('#pixQr');
-  if(/^data:image\/(png|jpeg|webp);base64,/.test(data.qrImage||''))qr.src=data.qrImage;else qr.parentElement.hidden=true;
+  if(/^data:image\/(png|jpeg|webp);base64,/.test(data.qrImage||''))qr.src=data.qrImage;else{qr.parentElement.hidden=true;document.querySelector('.pix-payment').classList.add('without-qr');document.querySelector('.pix-payment').style.gridTemplateColumns='1fr';document.querySelector('.pix-payment h3').textContent='Copie a chave ou o código Pix';}
   if(data.confirmed){document.querySelector('#chargeStatus').textContent='Pagamento confirmado';document.querySelector('.pix-payment').hidden=true;document.querySelector('#proofForm').hidden=true;}
   if(data.note){document.querySelector('#chargeNote').hidden=false;document.querySelector('#chargeNote').textContent=data.note;}
 }
@@ -38,7 +38,7 @@ document.querySelector('#proofFile').addEventListener('change',event=>{const fil
 document.querySelector('#proofForm').addEventListener('submit',event=>{
   event.preventDefault();if(!charge||!event.currentTarget.reportValidity())return;
   const file=document.querySelector('#proofFile').files[0];
-  const message=['Olá, tudo bem? Realizei o pagamento da minha excursão e vou anexar o comprovante nesta conversa.',`Reserva: ${charge.code}`,`Nome: ${charge.customer||'Não informado'}`,`WhatsApp: ${charge.phone||'Não informado'}`,`E-mail: ${charge.email||'Não informado'}`,`Destino: ${charge.destination}`,`Data: ${new Date(`${charge.date}T12:00:00`).toLocaleDateString('pt-BR')}`,`Embarque: ${charge.pickup}`,`Adultos/maiores de 12 anos: ${charge.adults}`,`Crianças até 12 anos: ${charge.children||0}`,`Nomes informados: ${charge.travelerNames||'Somente o responsável'}`,`Valor pago: ${money(charge.now)}`,`Saldo restante: ${money(charge.balance)}`,'Prazo do saldo: quitação até 7 dias antes da viagem',`Arquivo selecionado: ${file.name}`,'IMPORTANTE: vou anexar o comprovante manualmente antes de enviar esta mensagem.','Aguardo a confirmação da reserva.'].join('\n');
+  const message=[`✅ *RETORNO DO PAGAMENTO*`,`*Gess Turismo*`,'',`🎫 *Reserva:* ${charge.code}`,'',`👤 *DADOS DO VIAJANTE*`,`• Nome: ${charge.customer||'Não informado'}`,`• WhatsApp: ${charge.phone||'Não informado'}`,`• E-mail: ${charge.email||'Não informado'}`,'',`🚌 *VIAGEM*`,`• Destino: ${charge.destination}`,`• Data: ${new Date(`${charge.date}T12:00:00`).toLocaleDateString('pt-BR')}`,`• Embarque: ${charge.pickup}`,`• Adultos/maiores de 12 anos: ${charge.adults}`,`• Crianças até 12 anos: ${charge.children||0}`,`• Demais viajantes: ${charge.travelerNames||'Somente o responsável'}`,'',`💚 *PAGAMENTO*`,`• Valor enviado agora: ${money(charge.now)}`,`• Saldo restante: ${money(charge.balance)}`,`• Comprovante selecionado: ${file.name}`,'',charge.balance>0?'📅 Saldo restante com vencimento até 7 dias antes da viagem.':'🎉 Reserva com valor integral quitado.','',`📎 *O comprovante será anexado nesta conversa.*`,'',`*Aguardando conferência da equipe.*`].join('\n');
   document.querySelector('#paymentFeedback').textContent='O WhatsApp será aberto. Anexe o arquivo selecionado antes de enviar a mensagem.';
   window.open(`https://wa.me/${window.GESS_CONFIG.getWhatsappNumber()}?text=${encodeURIComponent(message)}`,'_blank','noopener');
 });

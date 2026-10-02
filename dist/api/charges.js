@@ -1,4 +1,13 @@
 const { json, readBody, db, requireAdmin, validSession, clean } = require('./_lib');
+const { runQuery } = require('./_settings-db');
+const QRCode = require('qrcode');
+
+let optionalQrReady = false;
+async function allowOptionalQr() {
+  if (optionalQrReady) return;
+  await runQuery('alter table public.charges alter column qr_image drop not null');
+  optionalQrReady = true;
+}
 
 async function getReservation(id) {
   const rows = await db(`reservations?id=eq.${encodeURIComponent(id)}&select=*,payments(*)`);
@@ -26,8 +35,10 @@ module.exports = async function handler(req, res) {
     if (!requireAdmin(req, res)) return;
     if (req.method === 'POST') {
       const body = await readBody(req), reservationId = clean(body.reservationId, 36), amount = Number(body.amount);
-      const pix = clean(body.pix, 4096), qrImage = String(body.qrImage || ''), note = clean(body.note, 300);
-      if (!/^[0-9a-f-]{36}$/i.test(reservationId) || !Number.isFinite(amount) || amount <= 0 || !pix || !/^data:image\/(png|jpeg|webp);base64,/.test(qrImage) || qrImage.length > 1_400_000) return json(res, 400, { error: 'Confira o valor, o QR Code e o Pix copia e cola.' });
+      const pix = clean(body.pix, 4096), uploadedQr = String(body.qrImage || ''), note = clean(body.note, 300);
+      if (!/^[0-9a-f-]{36}$/i.test(reservationId) || !Number.isFinite(amount) || amount <= 0 || !pix || (uploadedQr && !/^data:image\/(png|jpeg|webp);base64,/.test(uploadedQr)) || uploadedQr.length > 1_400_000) return json(res, 400, { error: 'Confira o valor e o Pix informado.' });
+      await allowOptionalQr();
+      const qrImage = uploadedQr || (/^000201/.test(pix) ? await QRCode.toDataURL(pix, { width: 420, margin: 2, errorCorrectionLevel: 'M' }) : null);
       const reservation = await getReservation(reservationId);
       if (!reservation) return json(res, 404, { error: 'Reserva não encontrada.' });
       const paid = (reservation.payments || []).reduce((sum, item) => sum + item.amount_cents, 0);

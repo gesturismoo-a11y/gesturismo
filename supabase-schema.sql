@@ -30,9 +30,11 @@ create table if not exists public.charges (
   paid_before_cents integer not null default 0 check (paid_before_cents >= 0),
   balance_after_cents integer not null check (balance_after_cents >= 0),
   pix_code text not null check (char_length(pix_code) between 5 and 4096),
-  qr_image text not null check (
-    qr_image ~ '^data:image/(png|jpeg|webp);base64,' and
-    octet_length(qr_image) <= 1400000
+  qr_image text check (
+    qr_image is null or (
+      qr_image ~ '^data:image/(png|jpeg|webp);base64,' and
+      octet_length(qr_image) <= 1400000
+    )
   ),
   note varchar(300),
   status varchar(24) not null default 'awaiting'

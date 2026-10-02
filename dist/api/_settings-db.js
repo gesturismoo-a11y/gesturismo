@@ -55,4 +55,8 @@ async function pingDatabase() {
   return Date.now() - started;
 }
 
-module.exports = { getSettings, updateSettings, pingDatabase };
+async function runQuery(sql, params = []) {
+  return getPool().query(sql, params);
+}
+
+module.exports = { getSettings, updateSettings, pingDatabase, runQuery };
