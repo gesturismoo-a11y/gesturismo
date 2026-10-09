@@ -1,5 +1,5 @@
 const getWhatsappNumber = () => window.GESS_CONFIG?.getWhatsappNumber() || "5511987785390";
-document.head.insertAdjacentHTML("beforeend",'<link rel="stylesheet" href="pickups.css?v=2">');
+document.head.insertAdjacentHTML("beforeend",'<link rel="stylesheet" href="pickups.css?v=3">');
 document.head.insertAdjacentHTML("beforeend",'<link rel="stylesheet" href="site-polish.css?v=26">');
 document.head.insertAdjacentHTML("beforeend",'<link rel="stylesheet" href="mobile-polish.css?v=4">');
 const money = value => new Intl.NumberFormat("pt-BR", {style:"currency", currency:"BRL"}).format(value);
@@ -103,7 +103,20 @@ packages.copacabana={
   pickupGroups:structuredClone(packages.buzios.pickupGroups),
   photos:[["assets/rio.jpg","Praia de Copacabana","Rio de Janeiro • RJ"]]
 };
-const sharedSaoPauloPickups=[
+const sharedCapitalPickups=[
+  "Capital • Centro • Terminal Parque Dom Pedro II — Av. do Exterior, s/n, Sé",
+  "Capital • Centro-Oeste • Terminal Palmeiras–Barra Funda — Av. Auro Soares de Moura Andrade, 664, Barra Funda",
+  "Capital • Zona Norte • Terminal Rodoviário Tietê — Av. Cruzeiro do Sul, 1.800, Santana",
+  "Capital • Zona Noroeste • Terminal Pirituba — Av. Dr. Felipe Pinel, 60, Pirituba",
+  "Capital • Zona Sul • Terminal Metropolitano Jabaquara — Rua Nelson Fernandes, s/n, Jabaquara",
+  "Capital • Zona Sul • Terminal Santo Amaro — Av. Padre José Maria, 400, Santo Amaro",
+  "Capital • Zona Leste • Terminal Corinthians–Itaquera — Av. Dr. Luís Aires, s/n, Itaquera",
+  "Capital • Extremo Leste • Terminal Metropolitano São Mateus — Av. Adélia Chohfi, 100, Jardim Vera Cruz",
+  "Capital • Zona Oeste • Terminal Lapa — Praça Miguel Dell’Erba, 50, Lapa",
+  "Capital • Zona Oeste • Terminal Pinheiros — Rua Gilberto Sabino, 130, Pinheiros",
+  "Capital • Zona Sudeste • Terminal Vila Prudente — Av. Prof. Luís Ignácio de Anhaia Mello, 1.359, Vila Prudente"
+];
+const sharedRegionalSaoPauloPickups=[
   "Diadema • Terminal Metropolitano Diadema — Av. Conceição, 7.000, Parque Mamede",
   "São Bernardo do Campo • Terminal Metropolitano Ferrazópolis — Rua Pedro Henry, 250, Vila Olga",
   "Guarulhos • Internacional Shopping — Rodovia Presidente Dutra, Saída 225, Itapegica",
@@ -117,10 +130,11 @@ const sharedSaoPauloPickups=[
 ];
 for(const pkg of Object.values(packages)){
   const sp=pkg.pickupGroups.find(group=>group.region==="São Paulo");
-  if(sp)for(const point of sharedSaoPauloPickups){
-    const city=point.split(" • ")[0],existingIndex=sp.points.findIndex(existing=>existing.includes(city));
-    if(existingIndex>=0)sp.points[existingIndex]=point;else sp.points.push(point);
-  }
+  if(!sp)continue;
+  const baseTerminals=["Jabaquara","Barra Funda","Tietê"];
+  const regionalCities=sharedRegionalSaoPauloPickups.map(point=>point.split(" • ")[0]);
+  const packageSpecific=sp.points.filter(point=>!baseTerminals.some(terminal=>point.includes(terminal))&&!regionalCities.some(city=>point.includes(city)));
+  sp.points=[...sharedCapitalPickups,...sharedRegionalSaoPauloPickups,...packageSpecific];
 }
 const travelSchedule=window.GESS_TRAVEL_SCHEDULE;
 for(const [key,pkg] of Object.entries(packages))pkg.departures=travelSchedule.departures[key]||[];
@@ -242,7 +256,12 @@ function selectPackage(key,scroll=false){
   q("#routeTitle").textContent=pkg.title;q("#routeLocation").textContent=pkg.location;q("#routeIntro").textContent=pkg.intro;
   q("#routeMeta").innerHTML=`<b>${pkg.duration}</b><span>${pkg.transport}</span><span>${pkg.returnTime}</span>`;
   q("#routeList").innerHTML=pkg.days.map((day,index)=>`<li><span>${String(index+1).padStart(2,"0")}</span>${day}</li>`).join("");
-  q("#pickupList").innerHTML=pkg.pickupGroups.map(group=>`<li class="pickup-group"><b>${group.region}</b><div class="pickup-chips">${group.points.map(point=>{const [reference,address]=point.split(" — ");return `<span class="pickup-chip"><b>${reference}</b>${address?`<small>${address}</small>`:''}</span>`}).join("")}</div></li>`).join("");
+  const pickupChips=points=>`<div class="pickup-chips">${points.map(point=>{const [reference,address]=point.split(" — ");return `<span class="pickup-chip"><b>${reference}</b>${address?`<small>${address}</small>`:''}</span>`}).join("")}</div>`;
+  q("#pickupList").innerHTML=pkg.pickupGroups.map(group=>{
+    if(group.region!=="São Paulo")return `<li class="pickup-group"><b>${group.region}</b>${pickupChips(group.points)}</li>`;
+    const capital=group.points.filter(point=>point.startsWith("Capital • ")),regional=group.points.filter(point=>!point.startsWith("Capital • "));
+    return `<li class="pickup-group pickup-group-sp"><b>São Paulo</b><div class="pickup-subgroups"><section class="pickup-subgroup"><div><strong>Capital</strong><small>Centro, Norte, Sul, Leste, Oeste e Sudeste</small></div>${pickupChips(capital)}</section>${regional.length?`<section class="pickup-subgroup"><div><strong>ABC, Guarulhos e interior</strong><small>Pontos já atendidos pela rota</small></div>${pickupChips(regional)}</section>`:""}</div></li>`;
+  }).join("");
   q("#packageIncludes").innerHTML=`<div class="includes-heading"><span>Incluso no pacote</span><b>${pkg.hotel?"Fim de semana completo":"Bate-volta de um dia"}</b></div><div>${pkg.includes.map(item=>`<span>${item}</span>`).join("")}</div>`;
   q("#hotelLine").innerHTML=pkg.hotel?`<span>Hospedagem incluída</span><b>Hotel parceiro + café da manhã • nome e endereço a confirmar</b>`:`<span>Bate-volta de um dia</span><b>Este pacote não inclui hotel nem pernoite</b>`;
   q("#routePrice").innerHTML=`${money(pkg.price)} por pessoa<small>${pkg.priceContext}</small>`;
