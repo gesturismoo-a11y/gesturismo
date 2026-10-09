@@ -1,5 +1,5 @@
 const getWhatsappNumber = () => window.GESS_CONFIG?.getWhatsappNumber() || "5511987785390";
-document.head.insertAdjacentHTML("beforeend",'<link rel="stylesheet" href="pickups.css?v=1">');
+document.head.insertAdjacentHTML("beforeend",'<link rel="stylesheet" href="pickups.css?v=2">');
 document.head.insertAdjacentHTML("beforeend",'<link rel="stylesheet" href="site-polish.css?v=26">');
 document.head.insertAdjacentHTML("beforeend",'<link rel="stylesheet" href="mobile-polish.css?v=4">');
 const money = value => new Intl.NumberFormat("pt-BR", {style:"currency", currency:"BRL"}).format(value);
@@ -104,27 +104,31 @@ packages.copacabana={
   photos:[["assets/rio.jpg","Praia de Copacabana","Rio de Janeiro • RJ"]]
 };
 const sharedSaoPauloPickups=[
-  "Diadema • ponto a combinar",
-  "São Bernardo do Campo • Terminal Ferrazópolis",
-  "Guarulhos • Shopping Internacional",
-  "Campinas • ponto a combinar",
-  "Piracicaba • ponto a combinar",
-  "Americana • ponto a combinar",
-  "Limeira • ponto a combinar",
-  "Rio Claro • ponto a combinar",
-  "Valinhos • ponto a combinar",
-  "Serra Negra • ponto a combinar"
+  "Diadema • Terminal Metropolitano Diadema — Av. Conceição, 7.000, Parque Mamede",
+  "São Bernardo do Campo • Terminal Metropolitano Ferrazópolis — Rua Pedro Henry, 250, Vila Olga",
+  "Guarulhos • Internacional Shopping — Rodovia Presidente Dutra, Saída 225, Itapegica",
+  "Campinas • Terminal Multimodal Ramos de Azevedo — Rua Dr. Pereira Lima, s/n, Vila Industrial",
+  "Piracicaba • Terminal Rodoviário Intermunicipal (TRI) — Av. Armando de Salles Oliveira, 2.344, Centro",
+  "Americana • Terminal Rodoviário Francisco Luiz Bendilatti — Rua Ítalo Boscheiro, 220, Campo Limpo",
+  "Limeira • Terminal Rodoviário Comendador Agostinho Prada — Rua Barão de Campinas, 50, Centro",
+  "Rio Claro • Terminal Rodoviário de Rio Claro — Av. Presidente Tancredo de Almeida Neves, 700, Jardim Claret",
+  "Valinhos • Terminal Rodoviário Mário Rolim Telles — Av. dos Esportes, s/n, Centro",
+  "Serra Negra • Terminal Rodoviário de Serra Negra — Praça Sesquicentenário, s/n, Centro"
 ];
 for(const pkg of Object.values(packages)){
   const sp=pkg.pickupGroups.find(group=>group.region==="São Paulo");
   if(sp)for(const point of sharedSaoPauloPickups){
-    const city=point.split(" • ")[0];if(!sp.points.some(existing=>existing.includes(city)))sp.points.push(point);
+    const city=point.split(" • ")[0],existingIndex=sp.points.findIndex(existing=>existing.includes(city));
+    if(existingIndex>=0)sp.points[existingIndex]=point;else sp.points.push(point);
   }
 }
 const travelSchedule=window.GESS_TRAVEL_SCHEDULE;
 for(const [key,pkg] of Object.entries(packages))pkg.departures=travelSchedule.departures[key]||[];
 const q = selector => document.querySelector(selector);
 const destinationSelect=q("#destinationSelect"), travelerSelect=q("#travelerSelect"), childSelect=q("#childSelect"), pickupStateSelect=q("#pickupStateSelect"), departureSelect=q("#departureSelect"), dateSelect=q("#dateSelect"), dateHelp=q("#dateHelp"), termsDialog=q("#termsDialog"), acceptTerms=q("#acceptTerms"), continueWhatsapp=q("#continueWhatsapp");
+const pickupAddress=departureSelect.parentElement.querySelector(".field-help");
+pickupAddress.id="pickupAddress";pickupAddress.classList.add("pickup-address");pickupAddress.setAttribute("aria-live","polite");
+departureSelect.parentElement.childNodes[0].textContent="Local de embarque";
 const customerName=q('#customerName'),customerPhone=q('#customerPhone'),customerEmail=q('#customerEmail'),travelerNamesField=q('#travelerNames');
 const packageKeys=Object.keys(packages);
 let selectedKey="arraial";
@@ -222,7 +226,14 @@ function updateBooking(resetOptions=true){
 
 function updatePickupOptions(){
   const group=packages[selectedKey].pickupGroups[Number(pickupStateSelect.value)||0];
-  departureSelect.innerHTML=group.points.map(point=>`<option value="${group.region} • ${point}">${point}</option>`).join("");
+  departureSelect.innerHTML=group.points.map(point=>{const [reference,address]=point.split(" — ");return `<option value="${group.region} • ${point}" data-address="${address||''}">${reference}</option>`}).join("");
+  updatePickupAddress();
+}
+
+function updatePickupAddress(){
+  const option=departureSelect.selectedOptions[0],address=q("#pickupAddress");
+  if(!address||!option)return;
+  address.textContent=option.dataset.address?`Endereço de referência: ${option.dataset.address}`:"O endereço e o horário desta referência serão confirmados pela equipe no grupo.";
 }
 
 function selectPackage(key,scroll=false){
@@ -231,7 +242,7 @@ function selectPackage(key,scroll=false){
   q("#routeTitle").textContent=pkg.title;q("#routeLocation").textContent=pkg.location;q("#routeIntro").textContent=pkg.intro;
   q("#routeMeta").innerHTML=`<b>${pkg.duration}</b><span>${pkg.transport}</span><span>${pkg.returnTime}</span>`;
   q("#routeList").innerHTML=pkg.days.map((day,index)=>`<li><span>${String(index+1).padStart(2,"0")}</span>${day}</li>`).join("");
-  q("#pickupList").innerHTML=pkg.pickupGroups.map(group=>`<li class="pickup-group"><b>${group.region}</b><div class="pickup-chips">${group.points.map(point=>`<span>${point}</span>`).join("")}</div></li>`).join("");
+  q("#pickupList").innerHTML=pkg.pickupGroups.map(group=>`<li class="pickup-group"><b>${group.region}</b><div class="pickup-chips">${group.points.map(point=>{const [reference,address]=point.split(" — ");return `<span class="pickup-chip"><b>${reference}</b>${address?`<small>${address}</small>`:''}</span>`}).join("")}</div></li>`).join("");
   q("#packageIncludes").innerHTML=`<div class="includes-heading"><span>Incluso no pacote</span><b>${pkg.hotel?"Fim de semana completo":"Bate-volta de um dia"}</b></div><div>${pkg.includes.map(item=>`<span>${item}</span>`).join("")}</div>`;
   q("#hotelLine").innerHTML=pkg.hotel?`<span>Hospedagem incluída</span><b>Hotel parceiro + café da manhã • nome e endereço a confirmar</b>`:`<span>Bate-volta de um dia</span><b>Este pacote não inclui hotel nem pernoite</b>`;
   q("#routePrice").innerHTML=`${money(pkg.price)} por pessoa<small>${pkg.priceContext}</small>`;
@@ -268,6 +279,7 @@ document.querySelectorAll("[data-destination]").forEach(button=>button.addEventL
 document.querySelectorAll("[data-choose]").forEach(button=>button.addEventListener("click",()=>selectPackage(button.dataset.choose,true)));
 destinationSelect.addEventListener("change",()=>selectPackage(destinationSelect.value));
 pickupStateSelect.addEventListener("change",updatePickupOptions);
+departureSelect.addEventListener("change",updatePickupAddress);
 travelerSelect.addEventListener("change",()=>updateBooking(false));
 childSelect.addEventListener("change",()=>updateBooking(false));
 q("#whatsappButton").addEventListener("click",openTerms);
