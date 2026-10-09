@@ -1,6 +1,6 @@
 const getWhatsappNumber = () => window.GESS_CONFIG?.getWhatsappNumber() || "5511987785390";
 document.head.insertAdjacentHTML("beforeend",'<link rel="stylesheet" href="pickups.css?v=1">');
-document.head.insertAdjacentHTML("beforeend",'<link rel="stylesheet" href="site-polish.css?v=25">');
+document.head.insertAdjacentHTML("beforeend",'<link rel="stylesheet" href="site-polish.css?v=26">');
 document.head.insertAdjacentHTML("beforeend",'<link rel="stylesheet" href="mobile-polish.css?v=4">');
 const money = value => new Intl.NumberFormat("pt-BR", {style:"currency", currency:"BRL"}).format(value);
 
@@ -103,9 +103,21 @@ packages.copacabana={
   pickupGroups:structuredClone(packages.buzios.pickupGroups),
   photos:[["assets/rio.jpg","Praia de Copacabana","Rio de Janeiro • RJ"]]
 };
+const sharedSaoPauloPickups=[
+  "Diadema • ponto a combinar",
+  "São Bernardo do Campo • Terminal Ferrazópolis",
+  "Guarulhos • Shopping Internacional",
+  "Campinas • ponto a combinar",
+  "Piracicaba • ponto a combinar",
+  "Americana • ponto a combinar",
+  "Limeira • ponto a combinar",
+  "Rio Claro • ponto a combinar",
+  "Valinhos • ponto a combinar",
+  "Serra Negra • ponto a combinar"
+];
 for(const pkg of Object.values(packages)){
   const sp=pkg.pickupGroups.find(group=>group.region==="São Paulo");
-  if(sp)for(const point of ["Diadema • ponto a combinar","São Bernardo do Campo • Terminal Ferrazópolis","Guarulhos • Shopping Internacional"]){
+  if(sp)for(const point of sharedSaoPauloPickups){
     const city=point.split(" • ")[0];if(!sp.points.some(existing=>existing.includes(city)))sp.points.push(point);
   }
 }
@@ -279,7 +291,7 @@ q(".flow-grid article:nth-child(4) p").textContent="Após pagar, selecione o com
 q(".terms-legal").textContent="Este aceite registra seu pedido no painel e abre o atendimento no WhatsApp. Não gera cobrança nem garante a vaga antes da confirmação da equipe.";
 q(".pickup-heading span").textContent="Rota e embarques";
 q(".pickup-heading b").textContent="Estados e pontos por onde o ônibus passa";
-q(".pickup-box>small").textContent="A lista mostra as referências de cada estado atravessado até o destino. Você escolhe a região mais conveniente e a equipe confirma o ponto e o horário no grupo da excursão.";
+q(".pickup-box>small").textContent="A lista mostra as cidades e referências atendidas na rota. Você escolhe a opção mais conveniente; o ponto exato e o horário serão confirmados pela equipe no grupo da excursão.";
 selectPackage("arraial");
 window.addEventListener("focus",refreshDates);
 document.addEventListener("visibilitychange",()=>{if(!document.hidden)refreshDates()});

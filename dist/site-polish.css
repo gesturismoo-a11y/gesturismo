@@ -57,12 +57,22 @@ body{padding-top:144px}
 .route-departures>div>span{color:#d65a00;font-size:10px;font-weight:900;letter-spacing:.1em;text-transform:uppercase}
 .route-departures>div>b{max-width:190px;color:var(--navy);font-size:11px;line-height:1.35;text-align:right}
 .route-departures ul{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin:0;padding:0;list-style:none}
-.route-departures li{display:grid;gap:4px;min-width:0;padding:11px 12px;border:1px solid #e3eaec;border-radius:12px;background:#fff;box-shadow:0 5px 15px rgba(5,47,65,.05)}
+.route-departures li{display:grid;grid-template-columns:minmax(0,1fr)!important;gap:5px;min-width:0;padding:11px 12px;border:1px solid #e3eaec;border-radius:12px;background:#fff;box-shadow:0 5px 15px rgba(5,47,65,.05)}
 .route-departures li.is-next{border-color:#ff9b54;background:linear-gradient(145deg,#fff4e9,#fff)}
-.route-departures li span{color:#72868d;font-size:9px;font-weight:900;letter-spacing:.08em;text-transform:uppercase}
-.route-departures li strong{color:#073a70;font-size:12px;line-height:1.35}
+.route-departures li span{display:block!important;width:auto!important;color:#72868d;font-size:9px;font-weight:900;letter-spacing:.08em;text-transform:uppercase}
+.route-departures li strong{display:block;min-width:0;color:#073a70;font-size:12px;line-height:1.35;overflow-wrap:anywhere}
 .route-departures .schedule-ended{display:grid;gap:5px;margin:0}
 .route-departures .schedule-ended b{max-width:none;text-align:left}
 .choice-button em{display:block;margin-top:5px;color:#d65a00;font-size:10px;font-style:normal;font-weight:800;line-height:1.35}
 .booking-card button:disabled{cursor:not-allowed;filter:grayscale(.5);opacity:.55}
-@media(max-width:560px){.route-departures>div:first-child{display:grid}.route-departures>div>b{max-width:none;text-align:left}.route-departures ul{grid-template-columns:1fr}.route-departures li strong{font-size:11px}}
+@media(max-width:560px){
+  .route-meta{display:grid!important;grid-template-columns:minmax(0,1fr);gap:7px!important;margin:17px 0 18px!important}
+  .route-meta b,.route-meta span{display:block;width:100%;padding:9px 11px!important;text-align:center}
+  .route-departures{margin:0 0 20px;padding:14px}
+  .route-departures>div:first-child{display:grid;gap:4px;margin-bottom:11px}
+  .route-departures>div>b{max-width:none;text-align:left}
+  .route-departures ul{grid-template-columns:1fr}
+  .route-departures li{padding:12px}
+  .route-departures li strong{font-size:12px}
+  .package-choice-grid .choice-button{min-height:104px;padding:15px}
+}
