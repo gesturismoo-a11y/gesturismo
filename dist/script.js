@@ -1,6 +1,6 @@
 const getWhatsappNumber = () => window.GESS_CONFIG?.getWhatsappNumber() || "5511987785390";
 document.head.insertAdjacentHTML("beforeend",'<link rel="stylesheet" href="pickups.css?v=1">');
-document.head.insertAdjacentHTML("beforeend",'<link rel="stylesheet" href="site-polish.css?v=24">');
+document.head.insertAdjacentHTML("beforeend",'<link rel="stylesheet" href="site-polish.css?v=25">');
 document.head.insertAdjacentHTML("beforeend",'<link rel="stylesheet" href="mobile-polish.css?v=4">');
 const money = value => new Intl.NumberFormat("pt-BR", {style:"currency", currency:"BRL"}).format(value);
 
@@ -109,8 +109,10 @@ for(const pkg of Object.values(packages)){
     const city=point.split(" • ")[0];if(!sp.points.some(existing=>existing.includes(city)))sp.points.push(point);
   }
 }
+const travelSchedule=window.GESS_TRAVEL_SCHEDULE;
+for(const [key,pkg] of Object.entries(packages))pkg.departures=travelSchedule.departures[key]||[];
 const q = selector => document.querySelector(selector);
-const destinationSelect=q("#destinationSelect"), travelerSelect=q("#travelerSelect"), childSelect=q("#childSelect"), pickupStateSelect=q("#pickupStateSelect"), departureSelect=q("#departureSelect"), dateSelect=q("#dateSelect"), termsDialog=q("#termsDialog"), acceptTerms=q("#acceptTerms"), continueWhatsapp=q("#continueWhatsapp");
+const destinationSelect=q("#destinationSelect"), travelerSelect=q("#travelerSelect"), childSelect=q("#childSelect"), pickupStateSelect=q("#pickupStateSelect"), departureSelect=q("#departureSelect"), dateSelect=q("#dateSelect"), dateHelp=q("#dateHelp"), termsDialog=q("#termsDialog"), acceptTerms=q("#acceptTerms"), continueWhatsapp=q("#continueWhatsapp");
 const customerName=q('#customerName'),customerPhone=q('#customerPhone'),customerEmail=q('#customerEmail'),travelerNamesField=q('#travelerNames');
 const packageKeys=Object.keys(packages);
 let selectedKey="arraial";
@@ -155,31 +157,39 @@ function renderGallery(pkg){
 }
 
 function buildDates(pkg){
-  const dates=[];const cursor=new Date();cursor.setHours(12,0,0,0);dateSelect.dataset.generatedDate=dateKey(cursor);const salesEnd=new Date(2026,11,20,12,0,0,0);
-  for(let offset=1;offset<=240;offset++){
-    const date=new Date(cursor);date.setDate(cursor.getDate()+offset);
-    if(date>salesEnd)break;
-    const valid=pkg.fixedDate?dateKey(date)===pkg.fixedDate:pkg.hotel?date.getDay()===6:[0,6].includes(date.getDay());
-    if(valid) dates.push(date);
-  }
-  dateSelect.innerHTML=dates.length?dates.map(date=>{const value=date.toISOString().slice(0,10);return `<option value="${value}">${formatTripDate(value,pkg)}</option>`}).join(""):'<option value="">Nenhuma data disponível</option>';
+  const dates=travelSchedule.available(selectedKey);
+  dateSelect.dataset.generatedDate=travelSchedule.saoPauloDateKey();
+  dateSelect.innerHTML=dates.length?dates.map(departure=>`<option value="${departure.start}">${formatDeparture(departure)}</option>`).join(""):'<option value="">Agenda encerrada para este destino</option>';
+  dateSelect.disabled=dates.length===0;
+  dateHelp.textContent=dates.length>1?`${dates.length} saídas confirmadas disponíveis.`:dates.length===1?"Última saída confirmada disponível.":"As datas encerradas são removidas automaticamente.";
+  q("#whatsappButton").disabled=dates.length===0;
+  renderDepartureSchedule(pkg);
 }
 
-const dateKey=date=>`${date.getFullYear()}-${String(date.getMonth()+1).padStart(2,"0")}-${String(date.getDate()).padStart(2,"0")}`;
 function refreshDates(){
-  const today=dateKey(new Date());
+  const today=travelSchedule.saoPauloDateKey();
   if(dateSelect.dataset.generatedDate===today)return;
   const previous=dateSelect.value;buildDates(packages[selectedKey]);
   if([...dateSelect.options].some(option=>option.value===previous))dateSelect.value=previous;
   updateBooking(false);
 }
 
+const departureFor=(value,pkg=packages[selectedKey])=>pkg.departures.find(departure=>departure.start===value);
+const dateAtNoon=value=>new Date(`${value}T12:00:00-03:00`);
+const shortDay=value=>dateAtNoon(value).toLocaleDateString("pt-BR",{timeZone:"America/Sao_Paulo",weekday:"long",day:"2-digit",month:"2-digit"});
+function formatDeparture(departure){
+  if(!departure)return "Nenhuma data disponível";
+  if(departure.start===departure.end)return dateAtNoon(departure.start).toLocaleDateString("pt-BR",{timeZone:"America/Sao_Paulo",weekday:"long",day:"2-digit",month:"2-digit",year:"numeric"});
+  return `${shortDay(departure.start)} e ${shortDay(departure.end)}/${departure.end.slice(0,4)}`;
+}
 function formatTripDate(value,pkg=packages[selectedKey]){
   if(!value)return "Nenhuma data disponível";
-  const start=new Date(`${value}T12:00:00`);
-  const dayLabel=date=>date.toLocaleDateString("pt-BR",{weekday:"long",day:"2-digit",month:"2-digit"});
-  if(pkg.hotel){const end=new Date(start);end.setDate(start.getDate()+1);return `${dayLabel(start)} e ${dayLabel(end)} de ${end.getFullYear()}`}
-  return start.toLocaleDateString("pt-BR",{weekday:"long",day:"2-digit",month:"2-digit",year:"numeric"});
+  return formatDeparture(departureFor(value,pkg)||{start:value,end:value});
+}
+
+function renderDepartureSchedule(pkg){
+  const available=travelSchedule.available(selectedKey);
+  q("#routeDepartures").innerHTML=available.length?`<div><span>Próximas saídas confirmadas</span><b>Escolha uma destas datas no pedido</b></div><ul>${available.map((departure,index)=>`<li${index===0?' class="is-next"':''}><span>${index===0?'Próxima saída':'Saída seguinte'}</span><strong>${formatDeparture(departure)}</strong></li>`).join("")}</ul>`:`<div class="schedule-ended"><span>Agenda encerrada</span><b>As datas deste destino já passaram. Fale com a equipe sobre a próxima programação.</b></div>`;
 }
 
 function updateBooking(resetOptions=true){
@@ -195,6 +205,7 @@ function updateBooking(resetOptions=true){
   q("#summaryLabel").textContent=`${pkg.duration} • ${adults} adulto${adults===1?"":"s"}${children?` + ${children} criança${children===1?"":"s"}`:""}`;
   q("#totalPrice").textContent=money(total);
   q("#installmentPrice").textContent=`Criança até 12 anos: ${money(pkg.price/2)} • sinal mínimo: ${money(Math.min(total,100*travelers))} (R$ 100 por viajante, limitado ao total do pacote)`;
+  q("#whatsappButton").disabled=!dateSelect.value;
 }
 
 function updatePickupOptions(){
@@ -224,6 +235,7 @@ function buildMessage(record){
 }
 
 function openTerms(){
+  if(!dateSelect.value){dateHelp.textContent="Não há uma saída ativa para este destino no momento.";return;}
   validateBookingFields();if(!q("#bookingForm").reportValidity())return;
   const pkg=packages[selectedKey],{adults,children}=party();
   q('.terms-legal').textContent='Este aceite registra seu pedido no painel e abre o atendimento no WhatsApp. Não gera cobrança nem garante a vaga antes da confirmação da equipe.';q('.terms-legal').style.color='';
@@ -232,13 +244,14 @@ function openTerms(){
   acceptTerms.checked=false;continueWhatsapp.disabled=true;termsDialog.showModal();
 }
 
-q(".package-choice-grid").innerHTML=packageKeys.map(key=>`<button class="choice-button" data-choose="${key}" type="button"><b>${packages[key].title}</b><small>${packages[key].fixedDate?"08/11":packages[key].hotel?"2 dias":"1 dia"} • ${money(packages[key].price)}</small></button>`).join("");
+const nextDepartureLabel=key=>{const next=travelSchedule.available(key)[0];return next?formatDeparture(next).replace(/ de /g," "):"Agenda encerrada"};
+q(".package-choice-grid").innerHTML=packageKeys.map(key=>`<button class="choice-button" data-choose="${key}" type="button"><b>${packages[key].title}</b><small>${packages[key].hotel?"2 dias":"1 dia"} • ${money(packages[key].price)}</small><em>${nextDepartureLabel(key)}</em></button>`).join("");
 q(".destination-tabs").innerHTML=packageKeys.map(key=>`<button class="destination-tab" data-destination="${key}" type="button">${packages[key].title}</button>`).join("");
 q("#destinos .eyebrow").textContent="Doze destinos para escolher";
-q("#destinos .section-heading>p:last-child").textContent="Excursões todos os fins de semana até 20 de dezembro, com várias equipes acompanhando os grupos. Passeios com data especial, como Hopi Hari em 08/11, seguem somente a data indicada.";
+q("#destinos .section-heading>p:last-child").textContent="Agenda confirmada de outubro a dezembro de 2026 e para o verão de janeiro de 2027. As datas encerradas saem automaticamente do site.";
 q(".pickup-box").id="pontos-do-pacote";
 q('.quick-nav a[href="#embarques"]').href="#pontos-do-pacote";
-q(".faq-list details:nth-child(4) p").textContent="Os pacotes de dois dias incluem hotel parceiro e café da manhã. No Guarujá, o embarque é na sexta à noite, com pernoite de sábado para domingo e retorno no domingo. Campos do Jordão, Ilhabela, Paraty, Copacabana e Hopi Hari são passeios de um dia e não incluem hotel.";
+q(".faq-list details:nth-child(4) p").textContent="Os pacotes de dois dias — Arraial do Cabo, Guarujá, Bertioga, Búzios, Cananéia, Capitólio e Angra dos Reis — incluem hotel parceiro e café da manhã. Campos do Jordão, Ilhabela, Paraty, Copacabana e Hopi Hari são passeios de um dia e não incluem hotel.";
 document.querySelectorAll("[data-destination]").forEach(button=>button.addEventListener("click",()=>selectPackage(button.dataset.destination)));
 document.querySelectorAll("[data-choose]").forEach(button=>button.addEventListener("click",()=>selectPackage(button.dataset.choose,true)));
 destinationSelect.addEventListener("change",()=>selectPackage(destinationSelect.value));

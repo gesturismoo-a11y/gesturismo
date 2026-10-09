@@ -1,5 +1,6 @@
 const crypto = require('crypto');
 const { json, readBody, db, requireAdmin, clean } = require('./_lib');
+const travelSchedule = require('../travel-schedule');
 
 const asReservation = row => ({
   id: row.id, code: row.code, customer: row.customer_name, phone: row.phone, email: row.email || '',
@@ -32,6 +33,9 @@ module.exports = async function handler(req, res) {
       const names = travelerNames.split(/\n+/).map(value => value.trim().replace(/\s+/g, ' ')).filter(Boolean);
       if (!fullNamePattern.test(customer) || !/^\d{2}9\d{8}$/.test(phoneDigits) || !emailPattern.test(email) || !destination || !destinationKey || !/^\d{4}-\d{2}-\d{2}$/.test(date) || !pickup || !Number.isInteger(adults) || !Number.isInteger(children) || adults < 1 || children < 0 || adults + children > 6 || names.length !== otherTravelers || names.some(name => !fullNamePattern.test(name)) || !Number.isFinite(total) || total <= 0) {
         return json(res, 400, { error: 'Confira os dados do pedido.' });
+      }
+      if (!travelSchedule.isBookable(destinationKey, date)) {
+        return json(res, 400, { error: 'Essa saída já encerrou ou não pertence à agenda confirmada. Atualize a página e escolha outra data.' });
       }
       const code = `GESS-${Date.now().toString(36).slice(-5).toUpperCase()}${crypto.randomBytes(2).toString('hex').toUpperCase()}`;
       const rows = await db('reservations', {
