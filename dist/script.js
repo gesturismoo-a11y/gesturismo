@@ -4,6 +4,13 @@ document.head.insertAdjacentHTML("beforeend",'<link rel="stylesheet" href="site-
 document.head.insertAdjacentHTML("beforeend",'<link rel="stylesheet" href="mobile-polish.css?v=4">');
 const money = value => new Intl.NumberFormat("pt-BR", {style:"currency", currency:"BRL"}).format(value);
 
+const saoPauloDateKey=()=>{
+  const parts=new Intl.DateTimeFormat("en-US",{timeZone:"America/Sao_Paulo",year:"numeric",month:"2-digit",day:"2-digit"}).formatToParts(new Date());
+  const values=Object.fromEntries(parts.filter(part=>part.type!=="literal").map(part=>[part.type,part.value]));
+  return `${values.year}-${values.month}-${values.day}`;
+};
+const bertiogaPromotionActive=saoPauloDateKey()<="2026-10-18";
+
 const packages = {
   arraial: {
     title:"Arraial do Cabo", location:"Região dos Lagos • RJ", price:500, priceContext:"Lote promocional com hotel e café da manhã", duration:"2 dias • sábado e domingo", transport:"Ônibus de excursão", returnTime:"Saída de Arraial no domingo, às 20h", hotel:true,
@@ -22,7 +29,7 @@ const packages = {
     photos:[["assets/campos-1.jpg","Vila Capivari e paisagens da serra","Campos do Jordão • SP"],["assets/campos-2.jpg","Boulevard Geneve","Campos do Jordão • SP"],["assets/campos-3.jpg","Portal de Campos do Jordão","Serra da Mantiqueira • SP"],["assets/campos-4.jpg","Centro turístico","Campos do Jordão • SP"]]
   },
   guaruja: {
-    title:"Guarujá", location:"Baixada Santista • SP", price:150, priceContext:"Lote promocional por pessoa", duration:"2 dias • sábado e domingo", transport:"Ônibus de excursão", returnTime:"Saída do Guarujá no domingo, às 20h", hotel:true,
+    title:"Guarujá", location:"Baixada Santista • SP", price:250, priceContext:"Valor regular por pessoa", duration:"2 dias • sábado e domingo", transport:"Ônibus de excursão", returnTime:"Saída do Guarujá no domingo, às 20h", hotel:true,
     intro:"Embarque na sexta-feira à noite para aproveitar sábado e domingo na praia. O pacote inclui uma noite no hotel parceiro, de sábado para domingo, e café da manhã. Retorno no domingo.",
     includes:["Ônibus ida e volta","Hotel parceiro","Café da manhã","Coordenador da equipe","Traslados locais de ônibus ou van"],
     days:["Sexta à noite • Embarque nos pontos e horários confirmados no grupo","Sábado • Praia da Enseada, Mirante da Campina e pernoite no hotel parceiro","Domingo • Café da manhã incluído, Pitangueiras, Astúrias e Praia do Tombo; saída às 20h"],
@@ -30,7 +37,7 @@ const packages = {
     photos:[["assets/guaruja-1.jpg","Praia da Enseada","Guarujá • SP"],["assets/guaruja-2.jpg","Enseada","Guarujá • SP"],["assets/guaruja-3.jpg","Orla do Guarujá","Baixada Santista • SP"],["assets/guaruja-1.jpg","Litoral do Guarujá","São Paulo"]]
   },
   bertioga: {
-    title:"Bertioga", location:"Litoral paulista • SP", price:150, priceContext:"Lote promocional por pessoa", duration:"2 dias • sábado e domingo", transport:"Ônibus de excursão", returnTime:"Saída de Bertioga no domingo, às 20h", hotel:true,
+    title:"Bertioga", location:"Litoral paulista • SP", price:bertiogaPromotionActive?150:300, priceContext:bertiogaPromotionActive?"Promoção válida até 18/10/2026":"Valor regular por pessoa", duration:"2 dias • sábado e domingo", transport:"Ônibus de excursão", returnTime:"Saída de Bertioga no domingo, às 20h", hotel:true,
     intro:"Fim de semana entre praias, Mata Atlântica e história, com hotel parceiro e café da manhã incluídos.",
     includes:["Ônibus ida e volta","Hotel parceiro","Café da manhã","Coordenador da equipe","Traslados locais de ônibus ou van"],
     days:["Sábado • Praia da Enseada, Riviera de São Lourenço e check-in no hotel","Domingo • Forte São João pela manhã e tarde de praia em Itaguaré, com saída às 20h"],
