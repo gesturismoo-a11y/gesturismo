@@ -16,7 +16,7 @@ const packages = {
   campos: {
     title:"Campos do Jordão", location:"Serra da Mantiqueira • SP", price:150, priceContext:"Valor promocional do bate-volta", duration:"1 dia • bate-volta", transport:"Ônibus de excursão", returnTime:"Saída de Campos no fim do dia, prevista para 20h", hotel:false,
     intro:"Um dia inteiro na serra, sem hospedagem, com aproximadamente 3 horas de estrada a partir da capital paulista, além do tempo dos embarques.",
-    includes:["Ônibus ida e volta","Café da manhã","Coordenador da equipe","City tour de ônibus ou van","Tempo livre em Capivari"],
+    includes:["Ônibus ida e volta","Café da manhã","Coordenador da equipe","Passeio local de van","Tempo livre em Capivari"],
     days:["Manhã • Portal, Ducha de Prata e Morro do Elefante","Tarde • Vila Capivari, Boulevard Geneve e tempo livre para conhecer a gastronomia local","Noite • Encontro do grupo e saída prevista de Campos do Jordão às 20h"],
     pickupGroups:[{region:"São Paulo",points:["Terminal Rodoviário Jabaquara","Terminal Rodoviário Barra Funda","Terminal Rodoviário Tietê"]}],
     photos:[["assets/campos-1.jpg","Vila Capivari e paisagens da serra","Campos do Jordão • SP"],["assets/campos-2.jpg","Boulevard Geneve","Campos do Jordão • SP"],["assets/campos-3.jpg","Portal de Campos do Jordão","Serra da Mantiqueira • SP"],["assets/campos-4.jpg","Centro turístico","Campos do Jordão • SP"]]
